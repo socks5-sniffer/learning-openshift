@@ -4,9 +4,11 @@ import Link from 'next/link'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Terminal from '../components/Terminal'
+import { useTheme } from '../components/ThemeContext'
 
 
 const Home: NextPage = () => {
+  const { theme, toggleTheme } = useTheme();
   return (
     <div className={styles.container}>
       <Head>
