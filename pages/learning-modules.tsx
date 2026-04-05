@@ -226,49 +226,59 @@ export default function LearningModules() {
   return (
     <div className={styles.container} style={{ position: 'relative' }}>
       <Head>
-        <title>Learning Modules</title>
-        <meta name="description" content="Kubernetes: A Friendly, Slightly Sarcastic Introduction" />
+        <title>Learning Modules | KubeLearn</title>
+        <meta name="description" content="Kubernetes: A comprehensive introduction to container orchestration" />
       </Head>
       
-      {/* Home link in top right */}
-      <div style={{
-        position: 'absolute',
-        top: 20,
-        right: 30,
-        zIndex: 10
-      }}>
-        <Link href="/" legacyBehavior>
-          <a style={{
-            textDecoration: 'none',
-            color: '#636060ff',
-            fontWeight: 'bold',
-            fontSize: '1.1rem',
-            background: 'white',
-            padding: '8px 16px',
-            borderRadius: '6px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-          }}>← Home</a>
-        </Link>
-      </div>
+      {/* Navigation Bar */}
+      <nav className={styles.navbar}>
+        <div className={styles.navContent}>
+          <Link href="/" className={styles.navBrand}>
+            <div className={styles.navLogo}>☸</div>
+            <span className={styles.navTitle}>
+              Kube<span className={styles.navTitleAccent}>Learn</span>
+            </span>
+          </Link>
+          <div className={styles.navLinks}>
+            <Link href="/learning-modules" className={`${styles.navLink} ${styles.navLinkActive}`}>
+              Modules
+            </Link>
+            <Link href="/interactive-learning" className={styles.navLink}>
+              Interactive
+            </Link>
+          </div>
+        </div>
+      </nav>
 
-      <main className={styles.main} style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem' }}>
-        <h1 className={styles.title}>Kubernetes: A Deep-Dive</h1>
+      <main className={styles.main} style={{ maxWidth: '1200px', margin: '0 auto', paddingTop: '5rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+          <div className={styles.badge}>
+            <span className={styles.badgeIcon}></span>
+            Comprehensive Curriculum
+          </div>
+          <h1 className={styles.title} style={{ marginBottom: '1rem' }}>
+            Kubernetes <span className={styles.titleAccent}>Deep Dive</span>
+          </h1>
+          <p className={styles.subtitle}>
+            From container basics to production-ready deployments — learn by building things that fail in interesting ways.
+          </p>
+        </div>
         
-        <section className={styles.spotlight}>
-          <h2>What is Kubernetes?</h2>
-          <p>Kubernetes (often abbreviated as K8s, because engineers hate typing but love complexity) is a system for running applications at scale—whether that scale is "three users and a dream" or "half the internet."</p>
-          <p>At its core, Kubernetes answers questions developers used to avoid:</p>
-          <ul>
-            <li>What happens when my app crashes?</li>
-            <li>How do I run five copies of it?</li>
-            <li>How do I update it without everything catching fire?</li>
-            <li>Why does this YAML hate me?</li>
-          </ul>
-          <p>This tutorial is about exactly that. Learn by building things that fail in interesting ways, then understanding why.</p>
+        <section className={styles.spotlight} style={{ marginBottom: '2rem' }}>
+          <h2 className={styles.spotlightTitle}>
+            <span className={styles.spotlightIcon}>☸️</span>
+            What is Kubernetes?
+          </h2>
+          <p className={styles.spotlightText}>
+            Kubernetes (K8s) is a system for running applications at scale—whether that scale is 
+            &quot;three users and a dream&quot; or &quot;half the internet.&quot; It answers the questions developers 
+            used to avoid: What happens when my app crashes? How do I run five copies of it? 
+            How do I update it without everything catching fire?
+          </p>
         </section>
 
         {/* Search Bar */}
-        <div style={{ marginBottom: '2rem', marginTop: '2rem' }}>
+        <div style={{ marginBottom: '2.5rem' }}>
           <input
             type="text"
             placeholder="🔍 Search modules (e.g., 'Security', 'Pods', 'Networking')..."
@@ -278,20 +288,21 @@ export default function LearningModules() {
               width: '100%',
               padding: '1rem 1.25rem',
               fontSize: '1rem',
-              borderRadius: '12px',
-              border: '2px solid #e2e8f0',
+              borderRadius: '10px',
+              border: '1px solid rgba(148, 163, 184, 0.2)',
               outline: 'none',
               transition: 'all 0.2s ease',
-              background: 'white',
-              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
+              background: 'rgba(30, 41, 59, 0.5)',
+              color: '#f8fafc',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
             }}
             onFocus={(e) => {
-              e.currentTarget.style.borderColor = '#636060ff';
-              e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+              e.currentTarget.style.borderColor = 'rgba(220, 38, 38, 0.5)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(220, 38, 38, 0.15)';
             }}
             onBlur={(e) => {
-              e.currentTarget.style.borderColor = '#e2e8f0';
-              e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.05)';
+              e.currentTarget.style.borderColor = 'rgba(148, 163, 184, 0.2)';
+              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.2)';
             }}
           />
         </div>
