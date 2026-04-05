@@ -1,0 +1,34 @@
+name: "Roedhouse Sentry: Fault Monitor"
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Runs every hour on the hour
+  workflow_dispatch:      # Allows you to run it manually for testing
+
+jobs:
+  check-faults:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Install Hostinger MCP"
+        run: npm install -g hostinger-api-mcp
+
+      - name: "Query Server Health"
+        env:
+          API_TOKEN: ${{ secrets.HOSTINGER_API_TOKEN }}
+          SITE_DOMAIN: ${{ secrets.HOSTINGER_SITE_DOMAIN }}
+        run: |
+          # We use the 'get-resource-usage' tool from your 118 tools
+          # Domain is stored in secrets to avoid exposing it in a public repo
+          RESULTS=$(npx hostinger-api-mcp get-resource-usage --site "$SITE_DOMAIN")
+          
+          echo "Current Status: $RESULTS"
+          
+          # Logic: Search the output for "fault" or "limit reached"
+          if echo "$RESULTS" | grep -iq "fault"; then
+            echo "CRITICAL: Resource fault detected on Roedhouse Studios!"
+            exit 1
+          else
+            echo "System Stable: No faults detected."
+          fi

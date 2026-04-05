@@ -1,0 +1,546 @@
+/* Global Container */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1419 100%);
+  color: #e5e7eb;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  margin-bottom: 5rem;
+  padding: 3rem 0;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #6b0707, #6b0707);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 14px rgba(238, 0, 0, 0.4);
+}
+
+.title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: 1.15rem;
+  color: #94a3b8;
+  font-weight: 400;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Spotlight Section */
+.spotlight {
+  background: linear-gradient(135deg, rgba(238, 0, 0, 0.08), rgba(204, 0, 0, 0.05));
+  border: 1px solid rgba(238, 0, 0, 0.2);
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin-bottom: 4rem;
+  box-shadow: 0 8px 32px rgba(238, 0, 0, 0.15);
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+
+.spotlightTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.spotlightText {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #cbd5e1;
+  max-width: 900px;
+}
+
+/* Section Styles */
+.section {
+  margin-bottom: 4.5rem;
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: #f1f5f9;
+  border-bottom: 2px solid rgba(238, 0, 0, 0.3);
+  padding-bottom: 0.75rem;
+}
+
+.sectionText {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #cbd5e1;
+  max-width: 800px;
+  margin-bottom: 2rem;
+}
+
+/* Grid Layout */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.card {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 12px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(238, 0, 0, 0.4);
+  box-shadow: 0 12px 36px rgba(238, 0, 0, 0.2);
+}
+
+.card h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  color: #f1f5f9;
+}
+
+.techList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.techList li {
+  padding: 0.6rem 0;
+  color: #94a3b8;
+  font-size: 0.95rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+  display: flex;
+  align-items: center;
+}
+
+.techList li:last-child {
+  border-bottom: none;
+}
+
+.techList li::before {
+  content: "▹";
+  color: #ee0000;
+  font-weight: bold;
+  margin-right: 0.75rem;
+  font-size: 1.2rem;
+}
+
+/* Project Card */
+.projectCard {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 14px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.projectHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.projectStatus {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.projectHeader h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+.projectDesc {
+  color: #cbd5e1;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  font-size: 1.05rem;
+}
+
+.techStack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.techBadge {
+  padding: 0.5rem 1rem;
+  background: rgba(238, 0, 0, 0.15);
+  border: 1px solid rgba(238, 0, 0, 0.3);
+  color: #fca5a5;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: 'Monaco', 'Courier New', monospace;
+}
+
+/* Principles Grid */
+.principleGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.principle {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.principle:hover {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(238, 0, 0, 0.3);
+  transform: translateY(-4px);
+}
+
+.principleIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.principle h4 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: #f1f5f9;
+}
+
+.principle p {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  line-height: 1.6;
+}
+
+/* Learning List */
+.learningList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.learningItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+.learningStatus {
+  padding: 0.35rem 0.75rem;
+  background: rgba(238, 0, 0, 0.15);
+  color: #fca5a5;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+/* CTA Section */
+.ctaSection {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, rgba(238, 0, 0, 0.1), rgba(204, 0, 0, 0.05));
+  border: 1px solid rgba(238, 0, 0, 0.2);
+  border-radius: 16px;
+  margin-top: 4rem;
+}
+
+.ctaSection h2 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.ctaSection p {
+  font-size: 1.15rem;
+  color: #cbd5e1;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ctaButtons {
+  display: flex;
+  gap: 1.25rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ctaButton {
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, #ee0000, #cc0000);
+  color: white;
+  font-weight: 700;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(238, 0, 0, 0.3);
+  font-size: 1.05rem;
+}
+
+.ctaButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(238, 0, 0, 0.4);
+}
+
+.ctaButtonSecondary {
+  padding: 1rem 2.5rem;
+  background: transparent;
+  color: #f1f5f9;
+  font-weight: 700;
+  border: 2px solid rgba(238, 0, 0, 0.5);
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 1.05rem;
+}
+
+.ctaButtonSecondary:hover {
+  background: rgba(238, 0, 0, 0.1);
+  border-color: #ee0000;
+  transform: translateY(-3px);
+}
+
+/* Footer */
+.footer {
+  margin-top: 5rem;
+  padding: 2.5rem 1.5rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.footerContent {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.footerBrand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.footerMeta {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main {
+    padding: 2rem 1rem 3rem;
+  }
+  
+  .hero {
+    margin-bottom: 3rem;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+  
+  .spotlight {
+    padding: 1.5rem;
+  }
+  
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .principleGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .footerContent {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .ctaButtons {
+    flex-direction: column;
+  }
+  
+  .ctaButton,
+  .ctaButtonSecondary {
+    width: 100%;
+  }
+}
+/* Terminal Component Styles */
+.terminalWrapper {
+  margin: 2rem auto;
+  max-width: 600px;
+  width: 100%;
+}
+
+.terminalWindow {
+  background-color: #1e1e1e; /* VSCode Dark Grey */
+  border-radius: 8px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  text-align: left;
+  border: 1px solid #333;
+}
+
+.terminalHeader {
+  background-color: #2d2d2d;
+  padding: 10px 15px;
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid #333;
+}
+
+/* The Mac-style dots */
+.redDot, .yellowDot, .greenDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.redDot { background-color: #ff5f56; }
+.yellowDot { background-color: #ffbd2e; }
+.greenDot { background-color: #27c93f; }
+
+.terminalBody {
+  padding: 20px;
+  color: #00ff00; /* Hacker Green */
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+  white-space: pre-wrap; /* Keeps line breaks */
+}
+
+.cursor {
+  display: inline-block;
+  width: 8px;
+  height: 15px;
+  background-color: #00ff00;
+  margin-left: 5px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@media (max-width: 600px) {
+  .subtitle {
+    display: flex;
+    flex-direction: column; /* Stack them vertically */
+    gap: 0.5rem;
+  }
+  
+  /* Hide the pipes on mobile because they look weird in a stack */
+  .subtitle span.separator {
+    display: none;
+  }
+  /* Add to Home.module.css */
+
+.moduleCard {
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.moduleCard:hover {
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.1);
+}
+
+.moduleHeader {
+  padding: 1rem;
+  background: #fbfbfb;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none; /* Hides default triangle */
+}
+
+.moduleHeader::-webkit-details-marker {
+  display: none; /* Hides default triangle in Chrome/Safari */
+}
+
+.moduleContent {
+  padding: 1rem;
+  background: #fff;
+  border-top: 1px solid #eaeaea;
+}
+
+.topicBlock {
+  margin-bottom: 1rem;
+}
+
+.topicBlock h4 {
+  margin: 0 0 0.5rem 0;
+  color: #0070f3; /* Next.js Blue, or pick your own */
+}
+}
