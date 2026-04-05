@@ -90,5 +90,4 @@ random.txt
 *.tsbuildinfo
 .eslintcache
 
-# Package manager
-package-lock.json
+# Package manager lockfiles should be committed for reproducible CI builds
