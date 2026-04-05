@@ -23,7 +23,7 @@ const Home: NextPage = () => {
           <Link href="/" className={styles.navBrand}>
             <div className={styles.navLogo}>☸</div>
             <span className={styles.navTitle}>
-              Kube<span className={styles.navTitleAccent}>Learn</span>
+              <span className={styles.navTitleAccent}>Learn K8's</span>
             </span>
           </Link>
           <div className={styles.navLinks}>
