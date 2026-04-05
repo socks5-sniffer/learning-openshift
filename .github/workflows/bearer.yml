@@ -1,9 +1,24 @@
 # .github/workflows/bearer.yml
+name: Bearer Security Scan
+
+on:
+  push:
+    branches: [main, main1]
+  pull_request:
+    branches: [main, main1]
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly on Sundays
+  workflow_dispatch:  # Allow manual trigger
+
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
   bearer:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
       - name: Run Report
         id: report
@@ -21,7 +36,7 @@ jobs:
           echo "=== First 200 lines of results.sarif ==="
           sed -n '1,200p' results.sarif || true
 
-          python - <<'PY'
+          python3 - <<'PY'
           import json
           p="results.sarif"
           with open(p,"r",encoding="utf-8") as f:
@@ -49,5 +64,3 @@ jobs:
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: results.sarif
-
-          
