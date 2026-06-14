@@ -49,19 +49,19 @@ export default function Module22() {
         
         <div style={{ marginBottom: '2rem' }}>
           <Link href="/module-2-1" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               ← Previous: Pods
             </a>
           </Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
           <Link href="/learning-modules" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               All Modules
             </a>
           </Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
           <Link href="/module-2-3" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               Next: Services →
             </a>
           </Link>
@@ -107,7 +107,7 @@ export default function Module22() {
           <h3>How It Works</h3>
           <div style={{
             background: '#f9fafb',
-            border: '2px solid #e5e7eb',
+            border: '2px solid #475569',
             borderRadius: '8px',
             padding: '20px',
             margin: '20px 0',
@@ -289,7 +289,7 @@ export default function Module22() {
             padding: '20px',
             background: '#f9fafb',
             borderRadius: '8px',
-            border: '2px solid #e5e7eb',
+            border: '2px solid #475569',
             color: '#1e293b'
           }}>
             <div style={{ fontSize: '1.5rem', marginBottom: '10px' }}>⚙️</div>
@@ -312,7 +312,7 @@ export default function Module22() {
           <h3>Interactive Scaling Demo</h3>
           <div style={{
             background: '#f9fafb',
-            border: '2px solid #e5e7eb',
+            border: '2px solid #475569',
             borderRadius: '12px',
             padding: '24px',
             margin: '20px 0'
@@ -446,7 +446,7 @@ export default function Module22() {
           <h3>How Rolling Updates Work</h3>
           <div style={{
             background: '#f9fafb',
-            border: '2px solid #e5e7eb',
+            border: '2px solid #475569',
             borderRadius: '8px',
             padding: '20px',
             margin: '20px 0',
@@ -726,10 +726,10 @@ export default function Module22() {
           <Link href="/module-2-1" legacyBehavior>
             <a style={{
               textDecoration: 'none',
-              color: '#4b5563',
+              color: '#94a3b8',
               fontWeight: 600,
               padding: '12px 24px',
-              border: '2px solid #e5e7eb',
+              border: '2px solid #475569',
               borderRadius: '8px',
               transition: 'all 0.2s',
               display: 'inline-block'

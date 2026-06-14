@@ -42,19 +42,19 @@ export default function Module21() {
         
         <div style={{ marginBottom: '2rem' }}>
           <Link href="/module-1-3" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               ← Previous: Worker Node Components
             </a>
           </Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
           <Link href="/learning-modules" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               All Modules
             </a>
           </Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
           <Link href="/module-2-2" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               Next: ReplicaSets & Deployments →
             </a>
           </Link>
@@ -155,7 +155,7 @@ export default function Module21() {
                 onClick={() => setShowSingleContainer(true)}
                 style={{
                   padding: '10px 20px',
-                  background: showSingleContainer ? '#9c0606ff' : '#e5e7eb',
+                  background: showSingleContainer ? '#9c0606ff' : '#334155',
                   color: showSingleContainer ? '#fff' : '#4b5563',
                   border: 'none',
                   borderRadius: '8px',
@@ -170,7 +170,7 @@ export default function Module21() {
                 onClick={() => setShowSingleContainer(false)}
                 style={{
                   padding: '10px 20px',
-                  background: !showSingleContainer ? '#9c0606ff' : '#e5e7eb',
+                  background: !showSingleContainer ? '#9c0606ff' : '#334155',
                   color: !showSingleContainer ? '#fff' : '#4b5563',
                   border: 'none',
                   borderRadius: '8px',
@@ -410,7 +410,7 @@ export default function Module21() {
             gap: '20px',
             margin: '20px 0'
           }}>
-            <div style={{ border: '2px solid #e5e7eb', borderRadius: '8px', padding: '16px' }}>
+            <div style={{ border: '2px solid #475569', borderRadius: '8px', padding: '16px' }}>
               <h4 style={{ margin: 0, color: '#6b7280' }}>Pending</h4>
               <p style={{ fontSize: '0.9rem', color: '#1e293b' }}>
                 Pod has been accepted but containers aren't running yet. Waiting for scheduling or image pull.
@@ -560,10 +560,10 @@ export default function Module21() {
           <Link href="/module-1-3" legacyBehavior>
             <a style={{
               textDecoration: 'none',
-              color: '#4b5563',
+              color: '#94a3b8',
               fontWeight: 600,
               padding: '12px 24px',
-              border: '2px solid #e5e7eb',
+              border: '2px solid #475569',
               borderRadius: '8px',
               transition: 'all 0.2s',
               display: 'inline-block'

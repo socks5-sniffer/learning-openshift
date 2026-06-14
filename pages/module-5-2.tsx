@@ -95,19 +95,19 @@ export default function Module52() {
         
         <div style={{ marginBottom: '2rem' }}>
           <Link href="/module-5-1" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               ← Previous: Volumes
             </a>
           </Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
           <Link href="/learning-modules" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               All Modules
             </a>
           </Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
           <Link href="/module-5-3" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               Next: StatefulSets →
             </a>
           </Link>
@@ -185,7 +185,7 @@ export default function Module52() {
           
           <div style={{
             background: '#f9fafb',
-            border: '2px solid #e5e7eb',
+            border: '2px solid #475569',
             borderRadius: '12px',
             padding: '24px',
             margin: '20px 0',
@@ -288,7 +288,7 @@ export default function Module52() {
 
           <div style={{
             background: '#f9fafb',
-            border: '2px solid #e5e7eb',
+            border: '2px solid #475569',
             borderRadius: '12px',
             padding: '24px',
             margin: '20px 0'
@@ -326,8 +326,8 @@ export default function Module52() {
                   onClick={() => setAccessMode('ReadWriteOnce')}
                   style={{
                     padding: '10px 16px',
-                    background: accessMode === 'ReadWriteOnce' ? '#22c55e' : '#e5e7eb',
-                    color: accessMode === 'ReadWriteOnce' ? '#fff' : '#1e293b',
+                    background: accessMode === 'ReadWriteOnce' ? '#22c55e' : '#334155',
+                    color: accessMode === 'ReadWriteOnce' ? '#fff' : '#f8fafc',
                     border: 'none',
                     borderRadius: '6px',
                     cursor: 'pointer',
@@ -341,8 +341,8 @@ export default function Module52() {
                   onClick={() => setAccessMode('ReadOnlyMany')}
                   style={{
                     padding: '10px 16px',
-                    background: accessMode === 'ReadOnlyMany' ? '#0ea5e9' : '#e5e7eb',
-                    color: accessMode === 'ReadOnlyMany' ? '#fff' : '#1e293b',
+                    background: accessMode === 'ReadOnlyMany' ? '#0ea5e9' : '#334155',
+                    color: accessMode === 'ReadOnlyMany' ? '#fff' : '#f8fafc',
                     border: 'none',
                     borderRadius: '6px',
                     cursor: 'pointer',
@@ -356,8 +356,8 @@ export default function Module52() {
                   onClick={() => setAccessMode('ReadWriteMany')}
                   style={{
                     padding: '10px 16px',
-                    background: accessMode === 'ReadWriteMany' ? '#f59e0b' : '#e5e7eb',
-                    color: accessMode === 'ReadWriteMany' ? '#fff' : '#1e293b',
+                    background: accessMode === 'ReadWriteMany' ? '#f59e0b' : '#334155',
+                    color: accessMode === 'ReadWriteMany' ? '#fff' : '#f8fafc',
                     border: 'none',
                     borderRadius: '6px',
                     cursor: 'pointer',
@@ -399,8 +399,8 @@ export default function Module52() {
                   onClick={() => setStorageClass('fast')}
                   style={{
                     padding: '10px 16px',
-                    background: storageClass === 'fast' ? '#ef4444' : '#e5e7eb',
-                    color: storageClass === 'fast' ? '#fff' : '#1e293b',
+                    background: storageClass === 'fast' ? '#ef4444' : '#334155',
+                    color: storageClass === 'fast' ? '#fff' : '#f8fafc',
                     border: 'none',
                     borderRadius: '6px',
                     cursor: 'pointer',
@@ -414,8 +414,8 @@ export default function Module52() {
                   onClick={() => setStorageClass('standard')}
                   style={{
                     padding: '10px 16px',
-                    background: storageClass === 'standard' ? '#0ea5e9' : '#e5e7eb',
-                    color: storageClass === 'standard' ? '#fff' : '#1e293b',
+                    background: storageClass === 'standard' ? '#0ea5e9' : '#334155',
+                    color: storageClass === 'standard' ? '#fff' : '#f8fafc',
                     border: 'none',
                     borderRadius: '6px',
                     cursor: 'pointer',
@@ -429,8 +429,8 @@ export default function Module52() {
                   onClick={() => setStorageClass('archive')}
                   style={{
                     padding: '10px 16px',
-                    background: storageClass === 'archive' ? '#6b7280' : '#e5e7eb',
-                    color: storageClass === 'archive' ? '#fff' : '#1e293b',
+                    background: storageClass === 'archive' ? '#6b7280' : '#334155',
+                    color: storageClass === 'archive' ? '#fff' : '#f8fafc',
                     border: 'none',
                     borderRadius: '6px',
                     cursor: 'pointer',
@@ -445,7 +445,7 @@ export default function Module52() {
 
             <div style={{
               background: '#f9fafb',
-              border: '2px solid #e5e7eb',
+              border: '2px solid #475569',
               borderRadius: '8px',
               padding: '16px',
               margin: '16px 0'
@@ -537,7 +537,7 @@ export default function Module52() {
           <h3>PV Reclaim Policies</h3>
           <div style={{
             background: '#f9fafb',
-            border: '2px solid #e5e7eb',
+            border: '2px solid #475569',
             borderRadius: '8px',
             padding: '20px',
             margin: '20px 0',
@@ -1035,10 +1035,10 @@ export default function Module52() {
           <Link href="/module-5-1" legacyBehavior>
             <a style={{
               textDecoration: 'none',
-              color: '#4b5563',
+              color: '#94a3b8',
               fontWeight: 600,
               padding: '12px 24px',
-              border: '2px solid #e5e7eb',
+              border: '2px solid #475569',
               borderRadius: '8px',
               transition: 'all 0.2s',
               display: 'inline-block'

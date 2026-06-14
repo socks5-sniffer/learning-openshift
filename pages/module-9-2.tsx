@@ -173,19 +173,19 @@ export default function GitOps() {
           
           <div style={{ marginBottom: '1.5rem' }}>
             <Link href="/module-9-1" legacyBehavior>
-              <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+              <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
                 ← Previous: Deploying the Right Way
               </a>
             </Link>
             <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
             <Link href="/learning-modules" legacyBehavior>
-              <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+              <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
                 All Modules
               </a>
             </Link>
             <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
             <Link href="/module-10-1" legacyBehavior>
-              <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+              <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
                 Next: Common Failure Scenarios →
               </a>
             </Link>

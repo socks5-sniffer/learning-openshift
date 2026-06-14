@@ -61,19 +61,19 @@ export default function Module61() {
 
         <div style={{ marginBottom: '2rem' }}>
           <Link href="/module-5-3" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               ← Previous: StatefulSets
             </a>
           </Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
           <Link href="/learning-modules" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               All Modules
             </a>
           </Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
           <Link href="/module-6-2" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               Next: Ingress →
             </a>
           </Link>

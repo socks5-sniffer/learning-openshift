@@ -69,19 +69,19 @@ export default function Module42() {
         
         <div style={{ marginBottom: '2rem' }}>
           <Link href="/module-4-1" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               ← Previous: Resource Requests & Limits
             </a>
           </Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
           <Link href="/learning-modules" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               All Modules
             </a>
           </Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
           <Link href="/module-4-3" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               Next: Horizontal Pod Autoscaling →
             </a>
           </Link>
@@ -213,8 +213,8 @@ export default function Module42() {
               onClick={() => setSelectedNode('node1')}
               style={{
                 padding: '12px 24px',
-                background: selectedNode === 'node1' ? '#22c55e' : '#e5e7eb',
-                color: selectedNode === 'node1' ? '#fff' : '#1e293b',
+                background: selectedNode === 'node1' ? '#22c55e' : '#334155',
+                color: selectedNode === 'node1' ? '#fff' : '#f8fafc',
                 border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',
@@ -229,8 +229,8 @@ export default function Module42() {
               onClick={() => setSelectedNode('node2')}
               style={{
                 padding: '12px 24px',
-                background: selectedNode === 'node2' ? '#0ea5e9' : '#e5e7eb',
-                color: selectedNode === 'node2' ? '#fff' : '#1e293b',
+                background: selectedNode === 'node2' ? '#0ea5e9' : '#334155',
+                color: selectedNode === 'node2' ? '#fff' : '#f8fafc',
                 border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',
@@ -245,8 +245,8 @@ export default function Module42() {
               onClick={() => setSelectedNode('node3')}
               style={{
                 padding: '12px 24px',
-                background: selectedNode === 'node3' ? '#f59e0b' : '#e5e7eb',
-                color: selectedNode === 'node3' ? '#fff' : '#1e293b',
+                background: selectedNode === 'node3' ? '#f59e0b' : '#334155',
+                color: selectedNode === 'node3' ? '#fff' : '#f8fafc',
                 border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',
@@ -430,7 +430,7 @@ export default function Module42() {
           <h3>Common Use Cases for Taints</h3>
           <div style={{
             background: '#f9fafb',
-            border: '2px solid #e5e7eb',
+            border: '2px solid #475569',
             borderRadius: '8px',
             padding: '20px',
             margin: '20px 0',
@@ -490,7 +490,7 @@ export default function Module42() {
           <h3>Breaking Down the Rules</h3>
           <div style={{
             background: '#f9fafb',
-            border: '2px solid #e5e7eb',
+            border: '2px solid #475569',
             borderRadius: '12px',
             padding: '24px',
             margin: '20px 0',
@@ -729,7 +729,7 @@ export default function Module42() {
           <h3>Multi-Tier Application</h3>
           <div style={{
             background: '#f9fafb',
-            border: '2px solid #e5e7eb',
+            border: '2px solid #475569',
             borderRadius: '12px',
             padding: '24px',
             margin: '20px 0',
@@ -807,10 +807,10 @@ export default function Module42() {
           <Link href="/module-4-1" legacyBehavior>
             <a style={{
               textDecoration: 'none',
-              color: '#4b5563',
+              color: '#94a3b8',
               fontWeight: 600,
               padding: '12px 24px',
-              border: '2px solid #e5e7eb',
+              border: '2px solid #475569',
               borderRadius: '8px',
               transition: 'all 0.2s',
               display: 'inline-block'

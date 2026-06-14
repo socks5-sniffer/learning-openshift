@@ -43,19 +43,19 @@ export default function Module31() {
         
         <div style={{ marginBottom: '2rem' }}>
           <Link href="/module-2-3" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               ← Previous: Services
             </a>
           </Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
           <Link href="/learning-modules" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               All Modules
             </a>
           </Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
           <Link href="/module-3-2" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               Next: Secrets →
             </a>
           </Link>
@@ -256,8 +256,8 @@ export default function Module31() {
               onClick={() => setConfigType('env')}
               style={{
                 padding: '12px 24px',
-                background: configType === 'env' ? '#9c0606ff' : '#e5e7eb',
-                color: configType === 'env' ? '#fff' : '#1e293b',
+                background: configType === 'env' ? '#9c0606ff' : '#334155',
+                color: configType === 'env' ? '#fff' : '#f8fafc',
                 border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',
@@ -272,8 +272,8 @@ export default function Module31() {
               onClick={() => setConfigType('file')}
               style={{
                 padding: '12px 24px',
-                background: configType === 'file' ? '#9c0606ff' : '#e5e7eb',
-                color: configType === 'file' ? '#fff' : '#1e293b',
+                background: configType === 'file' ? '#9c0606ff' : '#334155',
+                color: configType === 'file' ? '#fff' : '#f8fafc',
                 border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',
@@ -289,7 +289,7 @@ export default function Module31() {
           {configType === 'env' && (
             <div style={{
               background: '#f9fafb',
-              border: '2px solid #e5e7eb',
+              border: '2px solid #475569',
               borderRadius: '12px',
               padding: '24px',
               margin: '20px 0'
@@ -382,7 +382,7 @@ export default function Module31() {
           {configType === 'file' && (
             <div style={{
               background: '#f9fafb',
-              border: '2px solid #e5e7eb',
+              border: '2px solid #475569',
               borderRadius: '12px',
               padding: '24px',
               margin: '20px 0'
@@ -804,10 +804,10 @@ export default function Module31() {
           <Link href="/module-2-3" legacyBehavior>
             <a style={{
               textDecoration: 'none',
-              color: '#4b5563',
+              color: '#94a3b8',
               fontWeight: 600,
               padding: '12px 24px',
-              border: '2px solid #e5e7eb',
+              border: '2px solid #475569',
               borderRadius: '8px',
               transition: 'all 0.2s',
               display: 'inline-block'

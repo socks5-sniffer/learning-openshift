@@ -13,8 +13,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>('dark');
 
   useEffect(() => {
-    // Check localStorage for saved preference
-    const savedTheme = localStorage.getItem('theme') as Theme | null;
+    const raw = localStorage.getItem('theme');
+    const savedTheme: Theme | null = raw === 'dark' || raw === 'light' ? raw : null;
     if (savedTheme) {
       setTheme(savedTheme);
       document.documentElement.setAttribute('data-theme', savedTheme);

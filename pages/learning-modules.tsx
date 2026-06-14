@@ -610,7 +610,7 @@ export default function LearningModules() {
             height: 50,
             borderRadius: '50%',
             border: 'none',
-            background: '#636060ff',
+            background: '#94a3b8',
             color: 'white',
             fontSize: '24px',
             cursor: 'pointer',

@@ -43,19 +43,19 @@ export default function Module02() {
         
         <div style={{ marginBottom: '2rem' }}>
           <Link href="/module-0-1" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               ← Previous: Why Kubernetes Exists
             </a>
           </Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
           <Link href="/learning-modules" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               All Modules
             </a>
           </Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
           <Link href="/module-1-1" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
+            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
               Next: Architecture Overview →
             </a>
           </Link>
@@ -121,7 +121,7 @@ export default function Module02() {
             <div 
               onClick={() => setShowVMDetails(!showVMDetails)}
               style={{
-                border: '2px solid #e5e7eb',
+                border: '2px solid #475569',
                 borderRadius: '12px',
                 padding: '24px',
                 cursor: 'pointer',
@@ -166,7 +166,7 @@ export default function Module02() {
             <div 
               onClick={() => setShowContainerDetails(!showContainerDetails)}
               style={{
-                border: '2px solid #e5e7eb',
+                border: '2px solid #475569',
                 borderRadius: '12px',
                 padding: '24px',
                 cursor: 'pointer',
@@ -482,10 +482,10 @@ export default function Module02() {
           <Link href="/module-0-1" legacyBehavior>
             <a style={{
               textDecoration: 'none',
-              color: '#4b5563',
+              color: '#94a3b8',
               fontWeight: 600,
               padding: '12px 24px',
-              border: '2px solid #e5e7eb',
+              border: '2px solid #475569',
               borderRadius: '8px',
               transition: 'all 0.2s',
               display: 'inline-block'
