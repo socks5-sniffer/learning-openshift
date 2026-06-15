@@ -236,11 +236,7 @@ export default function CommonFailureScenarios() {
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         {/* Header */}
         <div style={{ marginBottom: '2rem' }}>
-          <Link href="/learning-modules" legacyBehavior>
-            <a style={{ color: '#64748b', textDecoration: 'none', fontSize: '0.9rem' }}>
-              ← Back to Learning Modules
-            </a>
-          </Link>
+          <Link href="/learning-modules" style={{ color: '#64748b', textDecoration: 'none', fontSize: '0.9rem' }}>← Back to Learning Modules</Link>
         </div>
 
         <div style={{ 
@@ -267,23 +263,11 @@ export default function CommonFailureScenarios() {
           </h1>
           
           <div style={{ marginBottom: '1.5rem' }}>
-            <Link href="/module-9-2" legacyBehavior>
-              <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
-                ← Previous: GitOps
-              </a>
-            </Link>
+            <Link href="/module-9-2" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: GitOps</Link>
             <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-            <Link href="/learning-modules" legacyBehavior>
-              <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
-                All Modules
-              </a>
-            </Link>
+            <Link href="/learning-modules" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>All Modules</Link>
             <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-            <Link href="/module-10-2" legacyBehavior>
-              <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
-                Next: Managed Kubernetes →
-              </a>
-            </Link>
+            <Link href="/module-10-2" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: Managed Kubernetes →</Link>
           </div>
           
           <p style={{ fontSize: '1.1rem', color: '#64748b', lineHeight: 1.6 }}>
@@ -709,8 +693,7 @@ export default function CommonFailureScenarios() {
           paddingTop: '2rem',
           borderTop: '2px solid #e2e8f0'
         }}>
-          <Link href="/module-9-2" legacyBehavior>
-            <a style={{
+          <Link href="/module-9-2" style={{
               padding: '0.75rem 1.5rem',
               background: '#f8fafc',
               border: '2px solid #e2e8f0',
@@ -718,22 +701,15 @@ export default function CommonFailureScenarios() {
               color: '#1e293b',
               textDecoration: 'none',
               fontWeight: 600
-            }}>
-              ← 9.2 GitOps
-            </a>
-          </Link>
-          <Link href="/module-10-2" legacyBehavior>
-            <a style={{
+            }}>← 9.2 GitOps</Link>
+          <Link href="/module-10-2" style={{
               padding: '0.75rem 1.5rem',
               background: '#9c0606',
               borderRadius: 8,
               color: 'white',
               textDecoration: 'none',
               fontWeight: 600
-            }}>
-              10.2 Managed Kubernetes →
-            </a>
-          </Link>
+            }}>10.2 Managed Kubernetes →</Link>
         </div>
       </div>
     </div>

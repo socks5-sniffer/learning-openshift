@@ -17,8 +17,7 @@ export default function Module13() {
         right: 30,
         zIndex: 10
       }}>
-        <Link href="/learning-modules" legacyBehavior>
-          <a style={{
+        <Link href="/learning-modules" style={{
             textDecoration: 'none',
             color: '#9c0606ff',
             fontWeight: 'bold',
@@ -27,8 +26,7 @@ export default function Module13() {
             padding: '8px 16px',
             borderRadius: '6px',
             boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-          }}>All Modules</a>
-        </Link>
+          }}>All Modules</Link>
       </div>
 
       <main className={styles.main}>
@@ -38,23 +36,11 @@ export default function Module13() {
         </p>
         
         <div style={{ marginBottom: '2rem' }}>
-          <Link href="/module-1-2" legacyBehavior>
-            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
-              ← Previous: Control Plane Components
-            </a>
-          </Link>
+          <Link href="/module-1-2" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: Control Plane Components</Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-          <Link href="/learning-modules" legacyBehavior>
-            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
-              All Modules
-            </a>
-          </Link>
+          <Link href="/learning-modules" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>All Modules</Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-          <Link href="/module-2-1" legacyBehavior>
-            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
-              Next: Pods →
-            </a>
-          </Link>
+          <Link href="/module-2-1" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: Pods →</Link>
         </div>
 
         <section className={styles.spotlight}>
@@ -543,8 +529,7 @@ export default function Module13() {
           borderTop: '2px solid #e5e7eb',
           gap: '20px'
         }}>
-          <Link href="/module-1-2" legacyBehavior>
-            <a style={{
+          <Link href="/module-1-2" style={{
               textDecoration: 'none',
               color: '#94a3b8',
               fontWeight: 600,
@@ -553,11 +538,9 @@ export default function Module13() {
               borderRadius: '8px',
               transition: 'all 0.2s',
               display: 'inline-block'
-            }}>← Previous: Control Plane Components</a>
-          </Link>
+            }}>← Previous: Control Plane Components</Link>
           
-          <Link href="/learning-modules" legacyBehavior>
-            <a style={{
+          <Link href="/learning-modules" style={{
               textDecoration: 'none',
               color: '#fff',
               background: '#9c0606ff',
@@ -566,8 +549,7 @@ export default function Module13() {
               borderRadius: '8px',
               transition: 'all 0.2s',
               display: 'inline-block'
-            }}>Back to All Modules</a>
-          </Link>
+            }}>Back to All Modules</Link>
         </div>
       </main>
     </div>

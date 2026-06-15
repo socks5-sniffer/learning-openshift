@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styles from '../styles/Home.module.css';
 
 export default function Module73() {
-  const [selectedPod, setSelectedPod] = useState('frontend');
+  const [selectedPod, setSelectedPod] = useState<'frontend' | 'backend' | 'database'>('frontend');
   const [policyEnabled, setPolicyEnabled] = useState(false);
   const [allowDNS, setAllowDNS] = useState(false);
   const [allowBackend, setAllowBackend] = useState(false);
@@ -66,23 +66,11 @@ export default function Module73() {
         </h1>
 
         <div style={{ marginBottom: '2rem' }}>
-          <Link href="/module-7-2" legacyBehavior>
-            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
-              ← Previous: Pod Security
-            </a>
-          </Link>
+          <Link href="/module-7-2" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: Pod Security</Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-          <Link href="/learning-modules" legacyBehavior>
-            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
-              All Modules
-            </a>
-          </Link>
+          <Link href="/learning-modules" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>All Modules</Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-          <Link href="/module-8-1" legacyBehavior>
-            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
-              Next: Logging →
-            </a>
-          </Link>
+          <Link href="/module-8-1" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: Logging →</Link>
         </div>
 
         <p style={{ fontSize: '1.2rem', lineHeight: '1.8', color: '#1e293b', maxWidth: '800px' }}>
@@ -209,7 +197,7 @@ export default function Module73() {
               return (
                 <button
                   key={key}
-                  onClick={() => setSelectedPod(key)}
+                  onClick={() => setSelectedPod(key as keyof typeof pods)}
                   style={{
                     padding: '1rem',
                     border: selectedPod === key ? `3px solid ${pod.color}` : '2px solid #cbd5e1',
@@ -848,13 +836,8 @@ export default function Module73() {
         </div>
 
         <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Link href="/module-7-2" legacyBehavior>
-            <a style={{ color: '#9c0606ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-              ← Previous: Pod Security
-            </a>
-          </Link>
-          <Link href="/learning-modules" legacyBehavior>
-            <a style={{
+          <Link href="/module-7-2" style={{ color: '#9c0606ff', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: Pod Security</Link>
+          <Link href="/learning-modules" style={{
               background: '#9c0606ff',
               color: 'white',
               padding: '0.75rem 1.5rem',
@@ -862,10 +845,7 @@ export default function Module73() {
               textDecoration: 'none',
               fontSize: '1.1rem',
               fontWeight: 600
-            }}>
-              Complete Part 7 →
-            </a>
-          </Link>
+            }}>Complete Part 7 →</Link>
         </div>
       </main>
     </div>

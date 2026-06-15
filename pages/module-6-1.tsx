@@ -60,23 +60,11 @@ export default function Module61() {
         </h1>
 
         <div style={{ marginBottom: '2rem' }}>
-          <Link href="/module-5-3" legacyBehavior>
-            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
-              ← Previous: StatefulSets
-            </a>
-          </Link>
+          <Link href="/module-5-3" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: StatefulSets</Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-          <Link href="/learning-modules" legacyBehavior>
-            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
-              All Modules
-            </a>
-          </Link>
+          <Link href="/learning-modules" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>All Modules</Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-          <Link href="/module-6-2" legacyBehavior>
-            <a style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>
-              Next: Ingress →
-            </a>
-          </Link>
+          <Link href="/module-6-2" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: Ingress →</Link>
         </div>
 
         <p style={{ fontSize: '1.2rem', lineHeight: '1.8', color: '#1e293b', maxWidth: '800px' }}>
@@ -831,13 +819,8 @@ export default function Module61() {
         </div>
 
         <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Link href="/module-5-3" legacyBehavior>
-            <a style={{ color: '#9c0606ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-              ← Previous: StatefulSets
-            </a>
-          </Link>
-          <Link href="/module-6-2" legacyBehavior>
-            <a style={{
+          <Link href="/module-5-3" style={{ color: '#9c0606ff', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: StatefulSets</Link>
+          <Link href="/module-6-2" style={{
               background: '#9c0606ff',
               color: 'white',
               padding: '0.75rem 1.5rem',
@@ -845,10 +828,7 @@ export default function Module61() {
               textDecoration: 'none',
               fontSize: '1.1rem',
               fontWeight: 600
-            }}>
-              Next: Ingress →
-            </a>
-          </Link>
+            }}>Next: Ingress →</Link>
         </div>
       </main>
     </div>
