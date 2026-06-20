@@ -141,11 +141,7 @@ export default function GitOps() {
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         {/* Header */}
         <div style={{ marginBottom: '2rem' }}>
-          <Link href="/learning-modules" legacyBehavior>
-            <a style={{ color: '#64748b', textDecoration: 'none', fontSize: '0.9rem' }}>
-              ← Back to Learning Modules
-            </a>
-          </Link>
+          <Link href="/learning-modules" style={{ color: '#64748b', textDecoration: 'none', fontSize: '0.9rem' }}>← Back to Learning Modules</Link>
         </div>
 
         <div style={{ 
@@ -172,23 +168,11 @@ export default function GitOps() {
           </h1>
           
           <div style={{ marginBottom: '1.5rem' }}>
-            <Link href="/module-9-1" legacyBehavior>
-              <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-                ← Previous: Deploying the Right Way
-              </a>
-            </Link>
+            <Link href="/module-9-1" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: Deploying the Right Way</Link>
             <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-            <Link href="/learning-modules" legacyBehavior>
-              <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-                All Modules
-              </a>
-            </Link>
+            <Link href="/learning-modules" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>All Modules</Link>
             <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-            <Link href="/module-10-1" legacyBehavior>
-              <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-                Next: Common Failure Scenarios →
-              </a>
-            </Link>
+            <Link href="/module-10-1" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: Common Failure Scenarios →</Link>
           </div>
           
           <p style={{ fontSize: '1.1rem', color: '#64748b', lineHeight: 1.6 }}>
@@ -886,8 +870,7 @@ export default function GitOps() {
           paddingTop: '2rem',
           borderTop: '2px solid #e2e8f0'
         }}>
-          <Link href="/module-9-1" legacyBehavior>
-            <a style={{
+          <Link href="/module-9-1" style={{
               padding: '0.75rem 1.5rem',
               background: '#f8fafc',
               border: '2px solid #e2e8f0',
@@ -895,22 +878,15 @@ export default function GitOps() {
               color: '#1e293b',
               textDecoration: 'none',
               fontWeight: 600
-            }}>
-              ← 9.1 Deploying the Right Way
-            </a>
-          </Link>
-          <Link href="/learning-modules" legacyBehavior>
-            <a style={{
+            }}>← 9.1 Deploying the Right Way</Link>
+          <Link href="/learning-modules" style={{
               padding: '0.75rem 1.5rem',
               background: '#9c0606',
               borderRadius: 8,
               color: 'white',
               textDecoration: 'none',
               fontWeight: 600
-            }}>
-              Back to Modules →
-            </a>
-          </Link>
+            }}>Back to Modules →</Link>
         </div>
       </div>
     </div>

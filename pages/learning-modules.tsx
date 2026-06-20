@@ -322,14 +322,12 @@ export default function LearningModules() {
               </div>
               <div className="module-grid">
                 {filtered.map((module) => (
-            <Link key={module.id} href={`/module-${module.id}`} legacyBehavior>
-              <a className="module-card">
+            <Link key={module.id} href={`/module-${module.id}`} className="module-card">
                 <div className="module-card-icon">{module.icon}</div>
                 <h3 className="module-card-title">{module.title}</h3>
                 <p className="module-card-description">{module.description}</p>
                 <span className="module-card-status status-foundation">Foundation</span>
-              </a>
-            </Link>
+              </Link>
           ))}
               </div>
             </>
@@ -351,14 +349,12 @@ export default function LearningModules() {
               </div>
               <div className="module-grid">
                 {filtered.map((module) => (
-            <Link key={module.id} href={`/module-${module.id}`} legacyBehavior>
-              <a className="module-card">
+            <Link key={module.id} href={`/module-${module.id}`} className="module-card">
                 <div className="module-card-icon">{module.icon}</div>
                 <h3 className="module-card-title">{module.title}</h3>
                 <p className="module-card-description">{module.description}</p>
                 <span className="module-card-status status-architecture">Architecture</span>
-              </a>
-            </Link>
+              </Link>
           ))}
               </div>
             </>
@@ -380,14 +376,12 @@ export default function LearningModules() {
               </div>
               <div className="module-grid">
                 {filtered.map((module) => (
-            <Link key={module.id} href={`/module-${module.id}`} legacyBehavior>
-              <a className="module-card">
+            <Link key={module.id} href={`/module-${module.id}`} className="module-card">
                 <div className="module-card-icon">{module.icon}</div>
                 <h3 className="module-card-title">{module.title}</h3>
                 <p className="module-card-description">{module.description}</p>
                 <span className="module-card-status status-core">Core</span>
-              </a>
-            </Link>
+              </Link>
           ))}
               </div>
             </>
@@ -409,14 +403,12 @@ export default function LearningModules() {
               </div>
               <div className="module-grid">
                 {filtered.map((module) => (
-            <Link key={module.id} href={`/module-${module.id}`} legacyBehavior>
-              <a className="module-card">
+            <Link key={module.id} href={`/module-${module.id}`} className="module-card">
                 <div className="module-card-icon">{module.icon}</div>
                 <h3 className="module-card-title">{module.title}</h3>
                 <p className="module-card-description">{module.description}</p>
                 <span className="module-card-status status-advanced">Advanced</span>
-              </a>
-            </Link>
+              </Link>
           ))}
               </div>
             </>
@@ -438,14 +430,12 @@ export default function LearningModules() {
               </div>
               <div className="module-grid">
                 {filtered.map((module) => (
-            <Link key={module.id} href={`/module-${module.id}`} legacyBehavior>
-              <a className="module-card">
+            <Link key={module.id} href={`/module-${module.id}`} className="module-card">
                 <div className="module-card-icon">{module.icon}</div>
                 <h3 className="module-card-title">{module.title}</h3>
                 <p className="module-card-description">{module.description}</p>
                 <span className="module-card-status status-advanced">Advanced</span>
-              </a>
-            </Link>
+              </Link>
           ))}
               </div>
             </>
@@ -467,14 +457,12 @@ export default function LearningModules() {
               </div>
               <div className="module-grid">
                 {filtered.map((module) => (
-            <Link key={module.id} href={`/module-${module.id}`} legacyBehavior>
-              <a className="module-card">
+            <Link key={module.id} href={`/module-${module.id}`} className="module-card">
                 <div className="module-card-icon">{module.icon}</div>
                 <h3 className="module-card-title">{module.title}</h3>
                 <p className="module-card-description">{module.description}</p>
                 <span className="module-card-status status-advanced">Advanced</span>
-              </a>
-            </Link>
+              </Link>
           ))}
               </div>
             </>
@@ -496,14 +484,12 @@ export default function LearningModules() {
               </div>
               <div className="module-grid">
                 {filtered.map((module) => (
-            <Link key={module.id} href={`/module-${module.id}`} legacyBehavior>
-              <a className="module-card">
+            <Link key={module.id} href={`/module-${module.id}`} className="module-card">
                 <div className="module-card-icon">{module.icon}</div>
                 <h3 className="module-card-title">{module.title}</h3>
                 <p className="module-card-description">{module.description}</p>
                 <span className="module-card-status status-advanced">Advanced</span>
-              </a>
-            </Link>
+              </Link>
           ))}
               </div>
             </>
@@ -525,14 +511,12 @@ export default function LearningModules() {
               </div>
               <div className="module-grid">
                 {filtered.map((module) => (
-            <Link key={module.id} href={`/module-${module.id}`} legacyBehavior>
-              <a className="module-card">
+            <Link key={module.id} href={`/module-${module.id}`} className="module-card">
                 <div className="module-card-icon">{module.icon}</div>
                 <h3 className="module-card-title">{module.title}</h3>
                 <p className="module-card-description">{module.description}</p>
                 <span className="module-card-status status-advanced">Advanced</span>
-              </a>
-            </Link>
+              </Link>
           ))}
               </div>
             </>
@@ -554,14 +538,12 @@ export default function LearningModules() {
               </div>
               <div className="module-grid">
                 {filtered.map((module) => (
-            <Link key={module.id} href={`/module-${module.id}`} legacyBehavior>
-              <a className="module-card">
+            <Link key={module.id} href={`/module-${module.id}`} className="module-card">
                 <div className="module-card-icon">{module.icon}</div>
                 <h3 className="module-card-title">{module.title}</h3>
                 <p className="module-card-description">{module.description}</p>
                 <span className="module-card-status status-advanced">Advanced</span>
-              </a>
-            </Link>
+              </Link>
           ))}
               </div>
             </>
@@ -583,14 +565,12 @@ export default function LearningModules() {
               </div>
               <div className="module-grid">
                 {filtered.map((module) => (
-            <Link key={module.id} href={`/module-${module.id}`} legacyBehavior>
-              <a className="module-card">
+            <Link key={module.id} href={`/module-${module.id}`} className="module-card">
                 <div className="module-card-icon">{module.icon}</div>
                 <h3 className="module-card-title">{module.title}</h3>
                 <p className="module-card-description">{module.description}</p>
                 <span className="module-card-status status-advanced">Advanced</span>
-              </a>
-            </Link>
+              </Link>
           ))}
               </div>
             </>
@@ -610,7 +590,7 @@ export default function LearningModules() {
             height: 50,
             borderRadius: '50%',
             border: 'none',
-            background: '#636060ff',
+            background: '#94a3b8',
             color: 'white',
             fontSize: '24px',
             cursor: 'pointer',

@@ -70,23 +70,11 @@ export default function Module62() {
         </h1>
 
         <div style={{ marginBottom: '2rem' }}>
-          <Link href="/module-6-1" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-              ← Previous: Kubernetes Networking Model
-            </a>
-          </Link>
+          <Link href="/module-6-1" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: Kubernetes Networking Model</Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-          <Link href="/learning-modules" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-              All Modules
-            </a>
-          </Link>
+          <Link href="/learning-modules" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>All Modules</Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-          <Link href="/module-7-1" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-              Next: RBAC →
-            </a>
-          </Link>
+          <Link href="/module-7-1" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: RBAC →</Link>
         </div>
 
         <p style={{ fontSize: '1.2rem', lineHeight: '1.8', color: '#1e293b', maxWidth: '800px' }}>
@@ -1155,13 +1143,8 @@ export default function Module62() {
         </div>
 
         <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Link href="/module-6-1" legacyBehavior>
-            <a style={{ color: '#9c0606ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-              ← Previous: Kubernetes Networking Model
-            </a>
-          </Link>
-          <Link href="/learning-modules" legacyBehavior>
-            <a style={{
+          <Link href="/module-6-1" style={{ color: '#9c0606ff', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: Kubernetes Networking Model</Link>
+          <Link href="/learning-modules" style={{
               background: '#9c0606ff',
               color: 'white',
               padding: '0.75rem 1.5rem',
@@ -1169,10 +1152,7 @@ export default function Module62() {
               textDecoration: 'none',
               fontSize: '1.1rem',
               fontWeight: 600
-            }}>
-              Complete Part 6 →
-            </a>
-          </Link>
+            }}>Complete Part 6 →</Link>
         </div>
       </main>
     </div>

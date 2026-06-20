@@ -53,8 +53,7 @@ export default function Module51() {
         right: 30,
         zIndex: 10
       }}>
-        <Link href="/learning-modules" legacyBehavior>
-          <a style={{
+        <Link href="/learning-modules" style={{
             textDecoration: 'none',
             color: '#9c0606ff',
             fontWeight: 'bold',
@@ -63,8 +62,7 @@ export default function Module51() {
             padding: '8px 16px',
             borderRadius: '6px',
             boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-          }}>All Modules</a>
-        </Link>
+          }}>All Modules</Link>
       </div>
 
       <main className={styles.main}>
@@ -74,23 +72,11 @@ export default function Module51() {
         </p>
         
         <div style={{ marginBottom: '2rem' }}>
-          <Link href="/module-4-3" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-              ← Previous: HPA
-            </a>
-          </Link>
+          <Link href="/module-4-3" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: HPA</Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-          <Link href="/learning-modules" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-              All Modules
-            </a>
-          </Link>
+          <Link href="/learning-modules" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>All Modules</Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-          <Link href="/module-5-2" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-              Next: PersistentVolumes & Claims →
-            </a>
-          </Link>
+          <Link href="/module-5-2" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: PersistentVolumes & Claims →</Link>
         </div>
         
         <section className={styles.spotlight}>
@@ -166,8 +152,8 @@ export default function Module51() {
               onClick={() => setVolumeType('emptyDir')}
               style={{
                 padding: '12px 24px',
-                background: volumeType === 'emptyDir' ? '#f59e0b' : '#e5e7eb',
-                color: volumeType === 'emptyDir' ? '#fff' : '#1e293b',
+                background: volumeType === 'emptyDir' ? '#f59e0b' : '#334155',
+                color: volumeType === 'emptyDir' ? '#fff' : '#f8fafc',
                 border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',
@@ -182,8 +168,8 @@ export default function Module51() {
               onClick={() => setVolumeType('hostPath')}
               style={{
                 padding: '12px 24px',
-                background: volumeType === 'hostPath' ? '#ef4444' : '#e5e7eb',
-                color: volumeType === 'hostPath' ? '#fff' : '#1e293b',
+                background: volumeType === 'hostPath' ? '#ef4444' : '#334155',
+                color: volumeType === 'hostPath' ? '#fff' : '#f8fafc',
                 border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',
@@ -198,8 +184,8 @@ export default function Module51() {
               onClick={() => setVolumeType('configMap')}
               style={{
                 padding: '12px 24px',
-                background: volumeType === 'configMap' ? '#0ea5e9' : '#e5e7eb',
-                color: volumeType === 'configMap' ? '#fff' : '#1e293b',
+                background: volumeType === 'configMap' ? '#0ea5e9' : '#334155',
+                color: volumeType === 'configMap' ? '#fff' : '#f8fafc',
                 border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',
@@ -572,7 +558,7 @@ export default function Module51() {
 
           <div style={{
             background: '#f9fafb',
-            border: '2px solid #e5e7eb',
+            border: '2px solid #475569',
             borderRadius: '12px',
             padding: '24px',
             margin: '20px 0',
@@ -822,21 +808,18 @@ export default function Module51() {
           borderTop: '2px solid #e5e7eb',
           gap: '20px'
         }}>
-          <Link href="/module-4-3" legacyBehavior>
-            <a style={{
+          <Link href="/module-4-3" style={{
               textDecoration: 'none',
-              color: '#4b5563',
+              color: '#94a3b8',
               fontWeight: 600,
               padding: '12px 24px',
-              border: '2px solid #e5e7eb',
+              border: '2px solid #475569',
               borderRadius: '8px',
               transition: 'all 0.2s',
               display: 'inline-block'
-            }}>← Previous: Horizontal Pod Autoscaling</a>
-          </Link>
+            }}>← Previous: Horizontal Pod Autoscaling</Link>
           
-          <Link href="/module-5-2" legacyBehavior>
-            <a style={{
+          <Link href="/module-5-2" style={{
               textDecoration: 'none',
               color: '#fff',
               background: '#9c0606ff',
@@ -845,8 +828,7 @@ export default function Module51() {
               borderRadius: '8px',
               transition: 'all 0.2s',
               display: 'inline-block'
-            }}>Next: PersistentVolumes & Claims →</a>
-          </Link>
+            }}>Next: PersistentVolumes & Claims →</Link>
         </div>
       </main>
     </div>

@@ -7,9 +7,14 @@ export default function Module72() {
   const [privileged, setPrivileged] = useState(false);
   const [readOnlyRoot, setReadOnlyRoot] = useState(false);
   const [allowPrivilegeEscalation, setAllowPrivilegeEscalation] = useState(true);
-  const [selectedStandard, setSelectedStandard] = useState('restricted');
+  const [selectedStandard, setSelectedStandard] = useState<'privileged' | 'baseline' | 'restricted'>('restricted');
 
-  const securityStandards = {
+  interface SecurityStandard {
+    name: string; level: string; color: string; description: string;
+    allows: string[]; forbids?: string[]; useCase: string;
+  }
+
+  const securityStandards: Record<'privileged' | 'baseline' | 'restricted', SecurityStandard> = {
     privileged: {
       name: 'Privileged',
       level: 'Unrestricted',
@@ -92,23 +97,11 @@ export default function Module72() {
         </h1>
 
         <div style={{ marginBottom: '2rem' }}>
-          <Link href="/module-7-1" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-              ← Previous: RBAC
-            </a>
-          </Link>
+          <Link href="/module-7-1" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: RBAC</Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-          <Link href="/learning-modules" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-              All Modules
-            </a>
-          </Link>
+          <Link href="/learning-modules" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>All Modules</Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-          <Link href="/module-7-3" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-              Next: Network Policies →
-            </a>
-          </Link>
+          <Link href="/module-7-3" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: Network Policies →</Link>
         </div>
 
         <p style={{ fontSize: '1.2rem', lineHeight: '1.8', color: '#1e293b', maxWidth: '800px' }}>
@@ -446,7 +439,7 @@ export default function Module72() {
             {Object.entries(securityStandards).map(([key, standard]) => (
               <button
                 key={key}
-                onClick={() => setSelectedStandard(key)}
+                onClick={() => setSelectedStandard(key as keyof typeof securityStandards)}
                 style={{
                   padding: '0.75rem 1.5rem',
                   border: selectedStandard === key ? `2px solid ${standard.color}` : '2px solid #cbd5e1',
@@ -505,7 +498,7 @@ export default function Module72() {
                   ✗ Forbids:
                 </div>
                 <ul style={{ margin: 0, paddingLeft: '1.5rem', color: '#1e293b', lineHeight: '1.8' }}>
-                  {securityStandards[selectedStandard].forbids.map((item, i) => (
+                  {securityStandards[selectedStandard].forbids!.map((item, i) => (
                     <li key={i}>{item}</li>
                   ))}
                 </ul>
@@ -766,13 +759,8 @@ export default function Module72() {
         </div>
 
         <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Link href="/module-7-1" legacyBehavior>
-            <a style={{ color: '#9c0606ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-              ← Previous: RBAC
-            </a>
-          </Link>
-          <Link href="/module-7-3" legacyBehavior>
-            <a style={{
+          <Link href="/module-7-1" style={{ color: '#9c0606ff', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: RBAC</Link>
+          <Link href="/module-7-3" style={{
               background: '#9c0606ff',
               color: 'white',
               padding: '0.75rem 1.5rem',
@@ -780,10 +768,7 @@ export default function Module72() {
               textDecoration: 'none',
               fontSize: '1.1rem',
               fontWeight: 600
-            }}>
-              Next: Network Policies →
-            </a>
-          </Link>
+            }}>Next: Network Policies →</Link>
         </div>
       </main>
     </div>

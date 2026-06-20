@@ -292,11 +292,7 @@ oc get nodes`
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         {/* Header */}
         <div style={{ marginBottom: '2rem' }}>
-          <Link href="/learning-modules" legacyBehavior>
-            <a style={{ color: '#64748b', textDecoration: 'none', fontSize: '0.9rem' }}>
-              ← Back to Learning Modules
-            </a>
-          </Link>
+          <Link href="/learning-modules" style={{ color: '#64748b', textDecoration: 'none', fontSize: '0.9rem' }}>← Back to Learning Modules</Link>
         </div>
 
         <div style={{ 
@@ -323,23 +319,11 @@ oc get nodes`
           </h1>
           
           <div style={{ marginBottom: '1.5rem' }}>
-            <Link href="/module-10-1" legacyBehavior>
-              <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-                ← Previous: Common Failure Scenarios
-              </a>
-            </Link>
+            <Link href="/module-10-1" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: Common Failure Scenarios</Link>
             <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-            <Link href="/learning-modules" legacyBehavior>
-              <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-                All Modules
-              </a>
-            </Link>
+            <Link href="/learning-modules" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>All Modules</Link>
             <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-            <Link href="/module-10-3" legacyBehavior>
-              <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-                Next: When to Say No to Kubernetes →
-              </a>
-            </Link>
+            <Link href="/module-10-3" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: When to Say No to Kubernetes →</Link>
           </div>
           
           <p style={{ fontSize: '1.1rem', color: '#64748b', lineHeight: 1.6 }}>
@@ -895,8 +879,7 @@ oc get nodes`
           paddingTop: '2rem',
           borderTop: '2px solid #e2e8f0'
         }}>
-          <Link href="/module-10-1" legacyBehavior>
-            <a style={{
+          <Link href="/module-10-1" style={{
               padding: '0.75rem 1.5rem',
               background: '#f8fafc',
               border: '2px solid #e2e8f0',
@@ -904,22 +887,15 @@ oc get nodes`
               color: '#1e293b',
               textDecoration: 'none',
               fontWeight: 600
-            }}>
-              ← 10.1 Common Failure Scenarios
-            </a>
-          </Link>
-          <Link href="/module-10-3" legacyBehavior>
-            <a style={{
+            }}>← 10.1 Common Failure Scenarios</Link>
+          <Link href="/module-10-3" style={{
               padding: '0.75rem 1.5rem',
               background: '#9c0606',
               borderRadius: 8,
               color: 'white',
               textDecoration: 'none',
               fontWeight: 600
-            }}>
-              10.3 When to Say "No" to Kubernetes →
-            </a>
-          </Link>
+            }}>10.3 When to Say "No" to Kubernetes →</Link>
         </div>
       </div>
     </div>

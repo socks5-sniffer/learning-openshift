@@ -25,8 +25,7 @@ export default function Module41() {
         right: 30,
         zIndex: 10
       }}>
-        <Link href="/learning-modules" legacyBehavior>
-          <a style={{
+        <Link href="/learning-modules" style={{
             textDecoration: 'none',
             color: '#9c0606ff',
             fontWeight: 'bold',
@@ -35,8 +34,7 @@ export default function Module41() {
             padding: '8px 16px',
             borderRadius: '6px',
             boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-          }}>All Modules</a>
-        </Link>
+          }}>All Modules</Link>
       </div>
 
       <main className={styles.main}>
@@ -46,23 +44,11 @@ export default function Module41() {
         </p>
         
         <div style={{ marginBottom: '2rem' }}>
-          <Link href="/module-3-3" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-              ← Previous: Environment Strategy
-            </a>
-          </Link>
+          <Link href="/module-3-3" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: Environment Strategy</Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-          <Link href="/learning-modules" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-              All Modules
-            </a>
-          </Link>
+          <Link href="/learning-modules" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>All Modules</Link>
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-          <Link href="/module-4-2" legacyBehavior>
-            <a style={{ color: '#636060ff', textDecoration: 'none', fontSize: '1.1rem' }}>
-              Next: Node Scheduling →
-            </a>
-          </Link>
+          <Link href="/module-4-2" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: Node Scheduling →</Link>
         </div>
         
         <section className={styles.spotlight}>
@@ -236,7 +222,7 @@ export default function Module41() {
           <h3>What This Means</h3>
           <div style={{
             background: '#f9fafb',
-            border: '2px solid #e5e7eb',
+            border: '2px solid #475569',
             borderRadius: '8px',
             padding: '20px',
             margin: '20px 0',
@@ -260,7 +246,7 @@ export default function Module41() {
 
           <div style={{
             background: '#f9fafb',
-            border: '2px solid #e5e7eb',
+            border: '2px solid #475569',
             borderRadius: '12px',
             padding: '24px',
             margin: '20px 0'
@@ -784,21 +770,18 @@ export default function Module41() {
           borderTop: '2px solid #e5e7eb',
           gap: '20px'
         }}>
-          <Link href="/module-3-3" legacyBehavior>
-            <a style={{
+          <Link href="/module-3-3" style={{
               textDecoration: 'none',
-              color: '#4b5563',
+              color: '#94a3b8',
               fontWeight: 600,
               padding: '12px 24px',
-              border: '2px solid #e5e7eb',
+              border: '2px solid #475569',
               borderRadius: '8px',
               transition: 'all 0.2s',
               display: 'inline-block'
-            }}>← Previous: Environment Strategy</a>
-          </Link>
+            }}>← Previous: Environment Strategy</Link>
           
-          <Link href="/module-4-2" legacyBehavior>
-            <a style={{
+          <Link href="/module-4-2" style={{
               textDecoration: 'none',
               color: '#fff',
               background: '#9c0606ff',
@@ -807,8 +790,7 @@ export default function Module41() {
               borderRadius: '8px',
               transition: 'all 0.2s',
               display: 'inline-block'
-            }}>Next: Node Scheduling →</a>
-          </Link>
+            }}>Next: Node Scheduling →</Link>
         </div>
       </main>
     </div>
