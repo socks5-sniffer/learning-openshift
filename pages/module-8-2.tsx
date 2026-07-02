@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Monitoring() {
   const [selectedMetric, setSelectedMetric] = useState<'cpu' | 'memory' | 'requests' | 'errors'>('cpu')
@@ -951,6 +952,8 @@ export default function Monitoring() {
               fontWeight: 600
             }}>8.3 Debugging Kubernetes →</Link>
         </div>
+
+        <ModuleCompletion moduleId="8-2" />
       </div>
     </div>
   )

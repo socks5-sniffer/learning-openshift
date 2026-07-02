@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module71() {
   const [selectedRole, setSelectedRole] = useState('developer');
@@ -838,6 +839,8 @@ export default function Module71() {
               fontWeight: 600
             }}>Next: Pod Security →</Link>
         </div>
+        <ModuleCompletion moduleId="7-1" />
+
       </main>
     </div>
   );

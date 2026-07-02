@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module62() {
   const [showTrafficFlow, setShowTrafficFlow] = useState(false);
@@ -1154,6 +1155,8 @@ export default function Module62() {
               fontWeight: 600
             }}>Complete Part 6 →</Link>
         </div>
+        <ModuleCompletion moduleId="6-2" />
+
       </main>
     </div>
   );

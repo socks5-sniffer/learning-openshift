@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Logging() {
   const [selectedApp, setSelectedApp] = useState<'frontend' | 'backend' | 'database'>('frontend')
@@ -789,6 +790,8 @@ export default function Logging() {
               fontWeight: 600
             }}>8.2 Monitoring →</Link>
         </div>
+
+        <ModuleCompletion moduleId="8-1" />
       </div>
     </div>
   )

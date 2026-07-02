@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function CommonFailureScenarios() {
   const [selectedScenario, setSelectedScenario] = useState<'crashloop' | 'probe' | 'resources' | 'dns'>('crashloop')
@@ -711,6 +712,8 @@ export default function CommonFailureScenarios() {
               fontWeight: 600
             }}>10.2 Managed Kubernetes →</Link>
         </div>
+
+        <ModuleCompletion moduleId="10-1" />
       </div>
     </div>
   )

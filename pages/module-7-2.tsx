@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module72() {
   const [runAsUser, setRunAsUser] = useState(1000);
@@ -770,6 +771,8 @@ export default function Module72() {
               fontWeight: 600
             }}>Next: Network Policies →</Link>
         </div>
+        <ModuleCompletion moduleId="7-2" />
+
       </main>
     </div>
   );

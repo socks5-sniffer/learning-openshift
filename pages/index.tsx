@@ -5,10 +5,15 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Terminal from '../components/Terminal'
 import { useTheme } from '../components/ThemeContext'
+import { useProgress } from '../components/ProgressContext'
+import { getModuleById } from '../data/modules'
 
 
 const Home: NextPage = () => {
   const { theme, toggleTheme } = useTheme();
+  const { completedCount, totalCount, loaded, nextModule } = useProgress();
+  const nextId = nextModule();
+  const nextInfo = getModuleById(nextId);
   return (
     <div className={styles.container}>
       <Head>
@@ -54,9 +59,85 @@ const Home: NextPage = () => {
           </div>
 
           <p className={styles.subtitle}>
-            A hands-on learning platform for Kubernetes, container orchestration, 
+            A hands-on learning platform for Kubernetes, container orchestration,
             and modern cloud infrastructure — built by practitioners, for practitioners.
           </p>
+
+          {/* Continue / start learning */}
+          {loaded && (
+            <div
+              style={{
+                marginTop: '2rem',
+                display: 'inline-flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '0.75rem',
+                padding: '1.5rem 2rem',
+                borderRadius: 14,
+                border: '1px solid rgba(148, 163, 184, 0.2)',
+                background: 'rgba(30, 41, 59, 0.5)',
+              }}
+            >
+              {completedCount > 0 ? (
+                <>
+                  <div style={{ color: '#cbd5e1', fontSize: '0.95rem' }}>
+                    You&apos;ve completed <strong style={{ color: '#22c55e' }}>{completedCount} of {totalCount}</strong> modules
+                  </div>
+                  <div
+                    style={{
+                      width: 260,
+                      height: 8,
+                      borderRadius: 4,
+                      background: 'rgba(148, 163, 184, 0.15)',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: `${Math.round((completedCount / totalCount) * 100)}%`,
+                        height: '100%',
+                        background: 'linear-gradient(90deg, #16a34a, #22c55e)',
+                      }}
+                    />
+                  </div>
+                  <Link
+                    href={`/module-${nextId}`}
+                    style={{
+                      background: '#9c0606',
+                      color: 'white',
+                      padding: '12px 26px',
+                      borderRadius: 8,
+                      textDecoration: 'none',
+                      fontWeight: 600,
+                    }}
+                  >
+                    {completedCount === totalCount
+                      ? 'Review the curriculum →'
+                      : `Continue: ${nextInfo ? nextInfo.title : 'next module'} →`}
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <div style={{ color: '#cbd5e1', fontSize: '0.95rem' }}>
+                    {totalCount} modules, from container basics to production Kubernetes
+                  </div>
+                  <Link
+                    href={`/module-${nextId}`}
+                    style={{
+                      background: '#9c0606',
+                      color: 'white',
+                      padding: '12px 26px',
+                      borderRadius: 8,
+                      textDecoration: 'none',
+                      fontWeight: 600,
+                    }}
+                  >
+                    Start learning →
+                  </Link>
+                </>
+              )}
+            </div>
+          )}
         </section>
 
         {/* My Approach */}

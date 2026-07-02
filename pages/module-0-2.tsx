@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module02() {
   const [showVMDetails, setShowVMDetails] = useState(false);
@@ -487,6 +488,8 @@ export default function Module02() {
               display: 'inline-block'
             }}>Back to All Modules</Link>
         </div>
+        <ModuleCompletion moduleId="0-2" />
+
       </main>
     </div>
   );

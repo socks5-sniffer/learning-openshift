@@ -1,6 +1,59 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
+import Quiz from '../components/Quiz';
+
+const quizQuestions = [
+  {
+    question: 'What are the two types of nodes in a Kubernetes cluster?',
+    options: [
+      'Primary nodes and backup nodes',
+      'Control plane nodes and worker nodes',
+      'Master nodes and slave containers',
+      'Frontend nodes and backend nodes',
+    ],
+    correctIndex: 1,
+    explanation:
+      'A cluster is made of control plane nodes (the brains — deciding what runs where) and worker nodes (the muscle — actually running your application Pods).',
+  },
+  {
+    question: 'What is the control plane responsible for?',
+    options: [
+      'Running your application containers directly',
+      'Making cluster-wide decisions: scheduling workloads and maintaining desired state',
+      'Serving web traffic to end users',
+      'Storing your application data on disk',
+    ],
+    correctIndex: 1,
+    explanation:
+      'The control plane makes the global decisions — where Pods run, watching cluster state, reacting to failures. Your application workloads run on worker nodes, not (typically) on the control plane.',
+  },
+  {
+    question: 'What does "a cluster is a promise, not a machine" mean?',
+    options: [
+      'Kubernetes guarantees your app will never crash',
+      'The cluster is only rented, not owned',
+      'You declare a desired state, and the cluster continuously works to make reality match it',
+      'Nodes promise never to go offline',
+    ],
+    correctIndex: 2,
+    explanation:
+      'You tell Kubernetes what you want ("run 3 replicas of this app") and it continuously reconciles reality toward that desired state — restarting, rescheduling, and replacing as needed.',
+  },
+  {
+    question: 'In Kubernetes terminology, a node is:',
+    options: [
+      'A single container running in the cluster',
+      'A machine (virtual or physical) that is part of the cluster',
+      'A network connection between two Pods',
+      'A copy of the etcd database',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Nodes are the building blocks of a cluster: each one is a VM or physical machine contributing CPU and memory that Kubernetes can schedule workloads onto.',
+  },
+];
 
 export default function Module11() {
   return (
@@ -419,6 +472,10 @@ export default function Module11() {
               display: 'inline-block'
             }}>Next: Control Plane Components →</Link>
         </div>
+        <Quiz moduleId="1-1" questions={quizQuestions} />
+
+        <ModuleCompletion moduleId="1-1" />
+
       </main>
     </div>
   );

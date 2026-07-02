@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module41() {
   const [cpuRequest, setCpuRequest] = useState(0.5);
@@ -792,6 +793,8 @@ export default function Module41() {
               display: 'inline-block'
             }}>Next: Node Scheduling →</Link>
         </div>
+        <ModuleCompletion moduleId="4-1" />
+
       </main>
     </div>
   );

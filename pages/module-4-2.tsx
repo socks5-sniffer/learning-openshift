@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module42() {
   const [selectedNode, setSelectedNode] = useState<'node1' | 'node2' | 'node3'>('node1');
@@ -812,6 +813,8 @@ export default function Module42() {
               display: 'inline-block'
             }}>Next: Horizontal Pod Autoscaling →</Link>
         </div>
+        <ModuleCompletion moduleId="4-2" />
+
       </main>
     </div>
   );

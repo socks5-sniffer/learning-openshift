@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function GitOps() {
   const [selectedTool, setSelectedTool] = useState<'argocd' | 'flux' | 'manual'>('argocd')
@@ -888,6 +889,8 @@ export default function GitOps() {
               fontWeight: 600
             }}>Back to Modules →</Link>
         </div>
+
+        <ModuleCompletion moduleId="9-2" />
       </div>
     </div>
   )

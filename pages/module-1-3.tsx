@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module13() {
   return (
@@ -551,6 +552,8 @@ export default function Module13() {
               display: 'inline-block'
             }}>Back to All Modules</Link>
         </div>
+        <ModuleCompletion moduleId="1-3" />
+
       </main>
     </div>
   );

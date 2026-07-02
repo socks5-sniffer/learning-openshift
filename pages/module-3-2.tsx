@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module32() {
   const [encodedSecret, setEncodedSecret] = useState('');
@@ -780,6 +781,8 @@ export default function Module32() {
               display: 'inline-block'
             }}>Next: Environment Strategy →</Link>
         </div>
+        <ModuleCompletion moduleId="3-2" />
+
       </main>
     </div>
   );

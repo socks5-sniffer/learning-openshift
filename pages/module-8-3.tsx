@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function DebuggingKubernetes() {
   const [selectedCommand, setSelectedCommand] = useState<'describe' | 'logs' | 'exec' | 'events'>('describe')
@@ -869,6 +870,8 @@ search production.svc.cluster.local`,
               fontWeight: 600
             }}>Back to Modules →</Link>
         </div>
+
+        <ModuleCompletion moduleId="8-3" />
       </div>
     </div>
   )

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module73() {
   const [selectedPod, setSelectedPod] = useState<'frontend' | 'backend' | 'database'>('frontend');
@@ -847,6 +848,8 @@ export default function Module73() {
               fontWeight: 600
             }}>Complete Part 7 →</Link>
         </div>
+        <ModuleCompletion moduleId="7-3" />
+
       </main>
     </div>
   );

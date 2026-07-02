@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module12() {
   return (
@@ -465,6 +466,8 @@ export default function Module12() {
               textAlign: 'center'
             }}>Next: Worker Node Components →</Link>
         </div>
+        <ModuleCompletion moduleId="1-2" />
+
       </main>
     </div>
   );

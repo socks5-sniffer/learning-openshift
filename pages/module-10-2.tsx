@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function ManagedKubernetes() {
   const [selectedProvider, setSelectedProvider] = useState<'eks' | 'gke' | 'aks' | 'openshift'>('eks')
@@ -897,6 +898,8 @@ oc get nodes`
               fontWeight: 600
             }}>10.3 When to Say "No" to Kubernetes →</Link>
         </div>
+
+        <ModuleCompletion moduleId="10-2" />
       </div>
     </div>
   )

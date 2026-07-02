@@ -1,6 +1,59 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
+import Quiz from '../components/Quiz';
+
+const quizQuestions = [
+  {
+    question: 'What is the core problem Kubernetes was built to solve?',
+    options: [
+      'Making individual containers start faster',
+      'Automatically running, healing, and scaling containerized applications across many machines',
+      'Replacing the need for containers entirely',
+      'Compiling application code for the cloud',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Kubernetes is an orchestrator: it schedules containers across machines, restarts them when they crash, scales them up and down, and rolls out updates — the operational work humans used to do by hand.',
+  },
+  {
+    question: 'In the "pets vs cattle" analogy, treating servers as cattle means:',
+    options: [
+      'Giving each server a memorable hostname and nursing it back to health when it breaks',
+      'Running servers only in large herds of 100 or more',
+      'Servers are interchangeable and disposable — if one misbehaves, replace it',
+      'Never patching or updating servers',
+    ],
+    correctIndex: 2,
+    explanation:
+      'Cattle-style infrastructure means no server is special. Instead of lovingly repairing a broken machine (a pet), you terminate it and spin up an identical replacement.',
+  },
+  {
+    question: 'Which situation suggests Kubernetes is probably overkill?',
+    options: [
+      'A small app with a handful of users that runs comfortably on one server',
+      'Dozens of microservices that need independent scaling',
+      'A team that needs zero-downtime rolling deployments across many machines',
+      'Workloads with unpredictable spikes that need automatic scaling',
+    ],
+    correctIndex: 0,
+    explanation:
+      'Kubernetes adds significant operational complexity. If your app fits on a single server and traffic is modest, simpler options (a VM, a PaaS, or plain containers) will serve you better.',
+  },
+  {
+    question: 'Compared to a monolith, a microservices architecture primarily trades:',
+    options: [
+      'Performance for security',
+      'Simplicity for independent deployment and scaling of each service',
+      'Cost for programming language flexibility',
+      'Reliability for developer happiness',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Microservices let teams deploy and scale services independently, but you pay for it with distributed-system complexity — which is exactly the complexity Kubernetes exists to help manage.',
+  },
+];
 
 export default function Module01() {
   return (
@@ -280,6 +333,10 @@ export default function Module01() {
               display: 'inline-block'
             }}>Next: Containers 101 →</Link>
         </div>
+        <Quiz moduleId="0-1" questions={quizQuestions} />
+
+        <ModuleCompletion moduleId="0-1" />
+
       </main>
     </div>
   );

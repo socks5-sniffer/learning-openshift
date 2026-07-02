@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module61() {
   const [selectedPod, setSelectedPod] = useState<string | null>(null);
@@ -830,6 +831,8 @@ export default function Module61() {
               fontWeight: 600
             }}>Next: Ingress →</Link>
         </div>
+        <ModuleCompletion moduleId="6-1" />
+
       </main>
     </div>
   );
