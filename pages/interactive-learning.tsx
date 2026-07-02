@@ -53,9 +53,9 @@ export default function InteractiveLearning() {
             The Lab Is Open
           </h2>
           <p className={styles.spotlightText}>
-            Three labs are live: build real Kubernetes manifests with instant validation feedback in the
-            Pod Builder, test permissions in the RBAC Simulator, or drill the whole curriculum with
-            Flashcards. Service discovery visualization is on the way.
+            All four labs are live: build manifests in the Pod Builder, watch label selectors route
+            traffic in Service Discovery, test permissions in the RBAC Simulator, and drill the whole
+            curriculum with Flashcards.
           </p>
         </section>
 
@@ -99,23 +99,24 @@ export default function InteractiveLearning() {
             </span>
           </Link>
 
-          <div className={styles.card} style={{ opacity: 0.6 }}>
+          <Link href="/service-discovery" className={styles.card} style={{ textDecoration: 'none' }}>
             <h3><span className={styles.cardIcon}>🌐</span> Service Discovery</h3>
             <p style={{ color: '#94a3b8', lineHeight: 1.6 }}>
               Visualize how services connect and route traffic within a Kubernetes cluster.
             </p>
-            <span style={{ 
-              display: 'inline-block', 
-              padding: '4px 10px', 
-              background: 'rgba(148, 163, 184, 0.15)', 
-              borderRadius: '4px', 
+            <span style={{
+              display: 'inline-block',
+              padding: '4px 10px',
+              background: 'rgba(34, 197, 94, 0.15)',
+              borderRadius: '4px',
               fontSize: '0.75rem',
-              color: '#94a3b8',
+              color: '#22c55e',
+              fontWeight: 700,
               marginTop: '1rem'
             }}>
-              In Development
+              ● Live — Try it now
             </span>
-          </div>
+          </Link>
 
           <Link href="/rbac-simulator" className={styles.card} style={{ textDecoration: 'none' }}>
             <h3><span className={styles.cardIcon}>🔐</span> RBAC Simulator</h3>

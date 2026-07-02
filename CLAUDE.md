@@ -36,7 +36,7 @@ For TypeScript type checking (used in CI on dependabot PRs): `npx tsc --noEmit`
 
 **Code copy buttons**: `components/CodeCopy.tsx` (mounted in `_app.tsx`) attaches copy buttons to `<pre>` and monospace-styled blocks via DOM enhancement on route change. Opt an element out with `data-codecopy="skip"` (used by the Terminal animation and Pod Builder's YAML pane).
 
-**Interactive labs**: linked from `pages/interactive-learning.tsx`. `pages/pod-builder.tsx` is a client-side Pod/Deployment YAML builder with live validation hints; `pages/rbac-simulator.tsx` is a Role/RoleBinding builder with a `kubectl auth can-i` tester that traces each authorization step; `pages/flashcards.tsx` is the quiz-bank flashcard deck.
+**Interactive labs**: linked from `pages/interactive-learning.tsx`. `pages/pod-builder.tsx` is a client-side Pod/Deployment YAML builder with live validation hints; `pages/rbac-simulator.tsx` is a Role/RoleBinding builder with a `kubectl auth can-i` tester that traces each authorization step; `pages/service-discovery.tsx` visualizes label-selector → endpoint routing with simulated requests; `pages/flashcards.tsx` is the quiz-bank flashcard deck.
 
 **Module ribbon**: `components/ModuleRibbon.tsx` (mounted in `_app.tsx`) renders a fixed bottom navigation bar on every `/module-*` route — prev/next links, "X of 30" position, section, estimated reading time, and completion state. No per-page wiring; it activates by route match.
 
