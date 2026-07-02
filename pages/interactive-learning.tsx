@@ -53,9 +53,9 @@ export default function InteractiveLearning() {
             The Lab Is Open
           </h2>
           <p className={styles.spotlightText}>
-            Two labs are live: build real Kubernetes manifests with instant validation feedback in the
-            Pod Builder, or drill the whole curriculum with Flashcards. More labs — service discovery
-            visualization and an RBAC simulator — are on the way.
+            Three labs are live: build real Kubernetes manifests with instant validation feedback in the
+            Pod Builder, test permissions in the RBAC Simulator, or drill the whole curriculum with
+            Flashcards. Service discovery visualization is on the way.
           </p>
         </section>
 
@@ -117,23 +117,24 @@ export default function InteractiveLearning() {
             </span>
           </div>
 
-          <div className={styles.card} style={{ opacity: 0.6 }}>
+          <Link href="/rbac-simulator" className={styles.card} style={{ textDecoration: 'none' }}>
             <h3><span className={styles.cardIcon}>🔐</span> RBAC Simulator</h3>
             <p style={{ color: '#94a3b8', lineHeight: 1.6 }}>
               Practice configuring roles, bindings, and permissions in a safe sandbox environment.
             </p>
-            <span style={{ 
-              display: 'inline-block', 
-              padding: '4px 10px', 
-              background: 'rgba(148, 163, 184, 0.15)', 
-              borderRadius: '4px', 
+            <span style={{
+              display: 'inline-block',
+              padding: '4px 10px',
+              background: 'rgba(34, 197, 94, 0.15)',
+              borderRadius: '4px',
               fontSize: '0.75rem',
-              color: '#94a3b8',
+              color: '#22c55e',
+              fontWeight: 700,
               marginTop: '1rem'
             }}>
-              In Development
+              ● Live — Try it now
             </span>
-          </div>
+          </Link>
         </div>
       </main>
     </div>
