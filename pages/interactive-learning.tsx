@@ -53,9 +53,9 @@ export default function InteractiveLearning() {
             The Lab Is Open
           </h2>
           <p className={styles.spotlightText}>
-            The first interactive lab is live: build real Kubernetes manifests with instant validation
-            feedback in the Pod Builder. More labs — service discovery visualization and an RBAC
-            simulator — are on the way.
+            Two labs are live: build real Kubernetes manifests with instant validation feedback in the
+            Pod Builder, or drill the whole curriculum with Flashcards. More labs — service discovery
+            visualization and an RBAC simulator — are on the way.
           </p>
         </section>
 
@@ -64,6 +64,26 @@ export default function InteractiveLearning() {
             <h3><span className={styles.cardIcon}>📦</span> Pod Builder</h3>
             <p style={{ color: '#94a3b8', lineHeight: 1.6 }}>
               Build and deploy pods interactively with instant feedback on your YAML configurations.
+            </p>
+            <span style={{
+              display: 'inline-block',
+              padding: '4px 10px',
+              background: 'rgba(34, 197, 94, 0.15)',
+              borderRadius: '4px',
+              fontSize: '0.75rem',
+              color: '#22c55e',
+              fontWeight: 700,
+              marginTop: '1rem'
+            }}>
+              ● Live — Try it now
+            </span>
+          </Link>
+
+          <Link href="/flashcards" className={styles.card} style={{ textDecoration: 'none' }}>
+            <h3><span className={styles.cardIcon}>🃏</span> Flashcards</h3>
+            <p style={{ color: '#94a3b8', lineHeight: 1.6 }}>
+              120 cards built from every module&apos;s knowledge checks — flip, self-grade, and find the
+              topics that need another pass.
             </p>
             <span style={{
               display: 'inline-block',

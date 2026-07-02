@@ -42,6 +42,8 @@ For TypeScript type checking (used in CI on dependabot PRs): `npx tsc --noEmit`
 
 **Cheat sheet**: `pages/kubectl-cheatsheet.tsx` is a grouped kubectl command reference with links back to the modules that teach each topic. Linked from all navbars.
 
+**Flashcards**: `pages/flashcards.tsx` builds a self-graded flip-card deck from `data/quizzes.ts` (question → correct answer + explanation), with section filters and keyboard shortcuts (space/1/2). Adding quiz questions automatically adds flashcards.
+
 **Security headers**: Defined in `next.config.js` via `headers()`. The CSP allows `'unsafe-inline'` for scripts (documented trade-off in `SECURITY.md`). The policy self-hosts fonts via `@fontsource` — do not add external font CDN references.
 
 **API routes**: Currently only `pages/api/hello.ts` exists as a reference. It demonstrates the pattern: GET-only guard, security headers on the response, JSON response.
