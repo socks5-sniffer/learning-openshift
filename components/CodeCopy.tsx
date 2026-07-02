@@ -46,14 +46,43 @@ function attachButtons() {
       color: '#94a3b8',
       cursor: 'pointer',
       opacity: '0',
+      pointerEvents: 'none',
       transition: 'opacity 0.15s ease',
       zIndex: '5',
     } as CSSStyleDeclaration);
 
-    el.addEventListener('mouseenter', () => (button.style.opacity = '1'));
-    el.addEventListener('mouseleave', () => (button.style.opacity = '0'));
-    // keep it reachable on touch devices, where hover never fires
+    // Visible (and clickable) on hover OR keyboard focus, so a Tab press
+    // never lands on an invisible control — and pointer-events stays off
+    // while hidden so the mouse can't land a phantom click on it either.
+    let hovered = false;
+    let focused = false;
+    const updateVisibility = () => {
+      const visible = hovered || focused;
+      button.style.opacity = visible ? '1' : '0';
+      button.style.pointerEvents = visible ? 'auto' : 'none';
+    };
+
+    el.addEventListener('mouseenter', () => {
+      hovered = true;
+      updateVisibility();
+    });
+    el.addEventListener('mouseleave', () => {
+      hovered = false;
+      updateVisibility();
+    });
+    button.addEventListener('focus', () => {
+      focused = true;
+      updateVisibility();
+    });
+    button.addEventListener('blur', () => {
+      focused = false;
+      updateVisibility();
+    });
+
+    // keep it visible and interactive on touch devices, where hover never fires
     if (typeof window.matchMedia === 'function' && window.matchMedia('(hover: none)').matches) {
+      hovered = true;
+      updateVisibility();
       button.style.opacity = '0.7';
     }
 
