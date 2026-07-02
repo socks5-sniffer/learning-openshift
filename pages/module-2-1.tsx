@@ -3,58 +3,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 import styles from '../styles/Home.module.css';
 import ModuleCompletion from '../components/ModuleCompletion';
-import Quiz from '../components/Quiz';
-
-const quizQuestions = [
-  {
-    question: 'What is a Pod?',
-    options: [
-      'Another name for a container',
-      'A wrapper around one or more containers that share networking, storage, and lifecycle',
-      'A virtual machine that runs Kubernetes',
-      'A group of worker nodes',
-    ],
-    correctIndex: 1,
-    explanation:
-      'A Pod is the smallest deployable unit in Kubernetes — not a container, but a "logical host" grouping containers that share the same network namespace, volumes, and lifecycle.',
-  },
-  {
-    question: 'How do containers inside the same Pod communicate with each other?',
-    options: [
-      'Through the Kubernetes API server',
-      'Via localhost, since they share the same network namespace and IP address',
-      'They cannot communicate directly',
-      'Through an Ingress controller',
-    ],
-    correctIndex: 1,
-    explanation:
-      'All containers in a Pod share one IP address and port space, so they talk to each other over localhost — one of the main reasons Pods exist at all.',
-  },
-  {
-    question: 'Why do you almost never create Pods directly?',
-    options: [
-      'Creating Pods requires cluster-admin permissions',
-      'Pods are deprecated in modern Kubernetes',
-      'A bare Pod is not rescheduled or replaced when it dies — controllers like Deployments handle that',
-      'Pods are too expensive to run individually',
-    ],
-    correctIndex: 2,
-    explanation:
-      'A Pod created by hand has no self-healing: if its node dies, the Pod is gone. Deployments (via ReplicaSets) recreate Pods automatically, which is why they manage almost all Pods in practice.',
-  },
-  {
-    question: 'How many containers do most Pods contain in practice?',
-    options: [
-      'Exactly one',
-      'At least two — one app container and one sidecar',
-      'Ten or more',
-      'Zero — Pods are just configuration',
-    ],
-    correctIndex: 0,
-    explanation:
-      'While Pods can hold multiple containers (e.g., sidecars), the common case is a single container per Pod. Multi-container Pods are for tightly coupled helpers, not general grouping.',
-  },
-];
 
 export default function Module21() {
   const [showSingleContainer, setShowSingleContainer] = useState(true);
@@ -618,7 +566,6 @@ export default function Module21() {
               display: 'inline-block'
             }}>Next: ReplicaSets & Deployments →</Link>
         </div>
-        <Quiz moduleId="2-1" questions={quizQuestions} />
 
         <ModuleCompletion moduleId="2-1" />
 

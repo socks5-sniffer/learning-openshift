@@ -47,32 +47,34 @@ export default function InteractiveLearning() {
         <section className={styles.spotlight}>
           <h2 className={styles.spotlightTitle}>
             <span className={styles.spotlightIcon}>🧪</span>
-            Coming Soon
+            The Lab Is Open
           </h2>
           <p className={styles.spotlightText}>
-            Interactive labs and exercises are in development. Check back soon for hands-on Kubernetes 
-            challenges, YAML builders, and deployment simulators.
+            The first interactive lab is live: build real Kubernetes manifests with instant validation
+            feedback in the Pod Builder. More labs — service discovery visualization and an RBAC
+            simulator — are on the way.
           </p>
         </section>
 
         <div className={styles.grid} style={{ marginTop: '2rem' }}>
-          <div className={styles.card} style={{ opacity: 0.6 }}>
+          <Link href="/pod-builder" className={styles.card} style={{ textDecoration: 'none' }}>
             <h3><span className={styles.cardIcon}>📦</span> Pod Builder</h3>
             <p style={{ color: '#94a3b8', lineHeight: 1.6 }}>
               Build and deploy pods interactively with instant feedback on your YAML configurations.
             </p>
-            <span style={{ 
-              display: 'inline-block', 
-              padding: '4px 10px', 
-              background: 'rgba(148, 163, 184, 0.15)', 
-              borderRadius: '4px', 
+            <span style={{
+              display: 'inline-block',
+              padding: '4px 10px',
+              background: 'rgba(34, 197, 94, 0.15)',
+              borderRadius: '4px',
               fontSize: '0.75rem',
-              color: '#94a3b8',
+              color: '#22c55e',
+              fontWeight: 700,
               marginTop: '1rem'
             }}>
-              In Development
+              ● Live — Try it now
             </span>
-          </div>
+          </Link>
 
           <div className={styles.card} style={{ opacity: 0.6 }}>
             <h3><span className={styles.cardIcon}>🌐</span> Service Discovery</h3>

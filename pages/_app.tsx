@@ -10,12 +10,14 @@ import '@fontsource/jetbrains-mono/600.css'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from '../components/ThemeContext'
 import { ProgressProvider } from '../components/ProgressContext'
+import CodeCopy from '../components/CodeCopy'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider>
       <ProgressProvider>
         <Component {...pageProps} />
+        <CodeCopy />
       </ProgressProvider>
     </ThemeProvider>
   )

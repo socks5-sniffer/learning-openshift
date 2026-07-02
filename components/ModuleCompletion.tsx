@@ -1,12 +1,15 @@
 import { useEffect } from 'react';
 import { useProgress } from './ProgressContext';
 import { getModuleById, allModules } from '../data/modules';
+import { quizzes } from '../data/quizzes';
+import Quiz from './Quiz';
 
 interface ModuleCompletionProps {
   moduleId: string;
 }
 
-// Completion card shown at the bottom of every module page.
+// Completion card shown at the bottom of every module page, with the module's
+// knowledge check (from data/quizzes.ts) rendered above it when one exists.
 // Also records the visit so the landing page can offer "continue where you left off".
 export default function ModuleCompletion({ moduleId }: ModuleCompletionProps) {
   const { isComplete, markComplete, unmarkComplete, recordVisit, completedCount, totalCount } = useProgress();
@@ -18,8 +21,11 @@ export default function ModuleCompletion({ moduleId }: ModuleCompletionProps) {
   const complete = isComplete(moduleId);
   const moduleInfo = getModuleById(moduleId);
   const position = allModules.findIndex((m) => m.id === moduleId) + 1;
+  const questions = quizzes[moduleId];
 
   return (
+    <>
+      {questions && <Quiz moduleId={moduleId} questions={questions} />}
     <div
       style={{
         margin: '3rem auto 1rem',
@@ -92,5 +98,6 @@ export default function ModuleCompletion({ moduleId }: ModuleCompletionProps) {
         </>
       )}
     </div>
+    </>
   );
 }
