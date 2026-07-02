@@ -44,7 +44,7 @@ For TypeScript type checking (used in CI on dependabot PRs): `npx tsc --noEmit`
 
 **Flashcards**: `pages/flashcards.tsx` builds a self-graded flip-card deck from `data/quizzes.ts` (question → correct answer + explanation), with section filters and keyboard shortcuts (space/1/2). Adding quiz questions automatically adds flashcards.
 
-**Security headers**: Defined in `next.config.js` via `headers()`. The CSP allows `'unsafe-inline'` for scripts (documented trade-off in `SECURITY.md`). The policy self-hosts fonts via `@fontsource` — do not add external font CDN references.
+**Security headers**: Static headers (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, `Strict-Transport-Security`) are defined in `next.config.js` via `headers()`. The Content-Security-Policy is set separately in `middleware.ts`, which generates a per-request nonce for `script-src` — no `'unsafe-inline'` for scripts; `style-src` still allows `'unsafe-inline'` (documented trade-off in `SECURITY.md`). In development only, `script-src` also allows `'unsafe-eval'` because Next.js Fast Refresh requires it; production keeps it removed. The policy self-hosts fonts via `@fontsource` — do not add external font CDN references.
 
 **API routes**: Currently only `pages/api/hello.ts` exists as a reference. It demonstrates the pattern: GET-only guard, security headers on the response, JSON response.
 
