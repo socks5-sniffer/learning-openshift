@@ -87,8 +87,17 @@ export default function Flashcards() {
 
   // keyboard: space flips, 1/2 answer after flipping
   useEffect(() => {
+    const NATIVE_CONTROL_TAGS = new Set(['BUTTON', 'INPUT', 'SELECT', 'TEXTAREA', 'A']);
+    const focusIsNativeControl = () => {
+      const el = document.activeElement;
+      if (!el) return false;
+      return NATIVE_CONTROL_TAGS.has(el.tagName) || (el as HTMLElement).isContentEditable;
+    };
     const handler = (e: KeyboardEvent) => {
       if (e.key === ' ') {
+        // A focused button/input etc. should get its own native Space
+        // activation instead of having it hijacked into flipping the card.
+        if (focusIsNativeControl()) return;
         e.preventDefault();
         setFlipped((f) => !f);
       } else if (flipped && e.key === '1') {

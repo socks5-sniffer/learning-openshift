@@ -33,9 +33,9 @@ export default function ServiceDiscovery() {
   const endpoints = pods.filter((p) => p.app === selector && p.ready);
 
   const setApp = (name: string, app: SimPod['app']) =>
-    setPods(pods.map((p) => (p.name === name ? { ...p, app } : p)));
+    setPods((prev) => prev.map((p) => (p.name === name ? { ...p, app } : p)));
   const toggleReady = (name: string) =>
-    setPods(pods.map((p) => (p.name === name ? { ...p, ready: !p.ready } : p)));
+    setPods((prev) => prev.map((p) => (p.name === name ? { ...p, ready: !p.ready } : p)));
 
   const sendRequest = () => {
     if (endpoints.length === 0) {

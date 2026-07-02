@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import styles from '../styles/Home.module.css';
 
@@ -158,11 +158,19 @@ export default function PodBuilder() {
     ].join('\n');
   }
 
+  const copiedTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    return () => {
+      if (copiedTimeout.current) clearTimeout(copiedTimeout.current);
+    };
+  }, []);
+
   const copyYaml = async () => {
     try {
       await navigator.clipboard.writeText(yaml);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      if (copiedTimeout.current) clearTimeout(copiedTimeout.current);
+      copiedTimeout.current = setTimeout(() => setCopied(false), 2000);
     } catch {
       // clipboard unavailable (e.g. non-secure context) — nothing to do
     }
