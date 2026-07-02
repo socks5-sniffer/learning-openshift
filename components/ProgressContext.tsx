@@ -27,7 +27,8 @@ function readStoredProgress(): string[] {
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
     const validIds = new Set(allModules.map((m) => m.id));
-    return parsed.filter((id): id is string => typeof id === 'string' && validIds.has(id));
+    const valid = parsed.filter((id): id is string => typeof id === 'string' && validIds.has(id));
+    return Array.from(new Set(valid));
   } catch {
     return [];
   }

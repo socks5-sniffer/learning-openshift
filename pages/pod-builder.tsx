@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
+import type { CSSProperties } from 'react';
 import styles from '../styles/Home.module.css';
 
 interface EnvVar {
@@ -106,7 +107,7 @@ export default function PodBuilder() {
       lines.push(`${indent(base)}  env:`);
       validEnv.forEach((ev) => {
         lines.push(`${indent(base)}    - name: ${ev.key}`);
-        lines.push(`${indent(base)}      value: "${ev.value}"`);
+        lines.push(`${indent(base)}      value: ${JSON.stringify(ev.value)}`);
       });
     }
     if (addResources) {
@@ -167,7 +168,7 @@ export default function PodBuilder() {
     }
   };
 
-  const inputStyle: React.CSSProperties = {
+  const inputStyle: CSSProperties = {
     width: '100%',
     padding: '10px 12px',
     borderRadius: 8,
@@ -177,7 +178,7 @@ export default function PodBuilder() {
     fontSize: '0.95rem',
     outline: 'none',
   };
-  const labelStyle: React.CSSProperties = {
+  const labelStyle: CSSProperties = {
     display: 'block',
     color: '#cbd5e1',
     fontSize: '0.85rem',
@@ -185,7 +186,7 @@ export default function PodBuilder() {
     marginBottom: 6,
     marginTop: '1.1rem',
   };
-  const toggleStyle = (active: boolean): React.CSSProperties => ({
+  const toggleStyle = (active: boolean): CSSProperties => ({
     padding: '10px 20px',
     background: active ? '#9c0606' : 'rgba(51, 65, 85, 0.6)',
     color: active ? '#fff' : '#94a3b8',

@@ -1,7 +1,9 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
+import type { CSSProperties } from 'react';
 import styles from '../styles/Home.module.css';
+import { randomInt } from '../lib/random';
 
 interface SimPod {
   name: string;
@@ -43,14 +45,14 @@ export default function ServiceDiscovery() {
       );
       return;
     }
-    const target = endpoints[Math.floor(Math.random() * endpoints.length)];
+    const target = endpoints[randomInt(endpoints.length)];
     setLastHit(target.name);
     setRequestLog((log) =>
       [`✓ curl http://${selector}-svc → routed to ${target.name} (${target.ip})`, ...log].slice(0, 6)
     );
   };
 
-  const chip = (active: boolean, color = '#dc2626'): React.CSSProperties => ({
+  const chip = (active: boolean, color = '#dc2626'): CSSProperties => ({
     padding: '5px 12px',
     borderRadius: 999,
     fontSize: '0.8rem',

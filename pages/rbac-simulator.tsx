@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
+import type { CSSProperties } from 'react';
 import styles from '../styles/Home.module.css';
 
 const RESOURCES = ['pods', 'deployments', 'services', 'configmaps', 'secrets', 'pods/log'];
@@ -98,7 +99,7 @@ roleRef:
     subjectKind === 'ServiceAccount' ? `system:serviceaccount:${saNamespace}:${testSubject}` : testSubject
   }`;
 
-  const chip = (active: boolean): React.CSSProperties => ({
+  const chip = (active: boolean): CSSProperties => ({
     padding: '5px 12px',
     borderRadius: 999,
     fontSize: '0.8rem',
@@ -108,7 +109,7 @@ roleRef:
     background: active ? 'rgba(220, 38, 38, 0.18)' : 'transparent',
     color: active ? '#fca5a5' : '#94a3b8',
   });
-  const inputStyle: React.CSSProperties = {
+  const inputStyle: CSSProperties = {
     width: '100%',
     padding: '9px 12px',
     borderRadius: 8,
@@ -118,7 +119,7 @@ roleRef:
     fontSize: '0.9rem',
     outline: 'none',
   };
-  const labelStyle: React.CSSProperties = {
+  const labelStyle: CSSProperties = {
     display: 'block',
     color: '#cbd5e1',
     fontSize: '0.82rem',
@@ -126,7 +127,7 @@ roleRef:
     marginBottom: 6,
     marginTop: '1rem',
   };
-  const panelStyle: React.CSSProperties = {
+  const panelStyle: CSSProperties = {
     padding: '1.5rem',
     borderRadius: 12,
     border: '1px solid rgba(148, 163, 184, 0.2)',

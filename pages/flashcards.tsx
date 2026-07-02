@@ -1,9 +1,11 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent } from 'react';
 import styles from '../styles/Home.module.css';
 import { quizzes } from '../data/quizzes';
 import { sections, getModuleById } from '../data/modules';
+import { randomInt } from '../lib/random';
 
 interface Card {
   moduleId: string;
@@ -37,7 +39,7 @@ function sectionLabel(heading: string): string {
 function shuffle<T>(arr: T[]): T[] {
   const out = [...arr];
   for (let i = out.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = randomInt(i + 1);
     [out[i], out[j]] = [out[j], out[i]];
   }
   return out;
@@ -99,7 +101,7 @@ export default function Flashcards() {
     return () => window.removeEventListener('keydown', handler);
   }, [flipped, advance]);
 
-  const actionButton = (label: string, color: string, onClick: () => void): React.CSSProperties & { label: string; onClick: () => void } => ({
+  const actionButton = (label: string, color: string, onClick: () => void): CSSProperties & { label: string; onClick: () => void } => ({
     label,
     onClick,
     padding: '12px 24px',
@@ -201,6 +203,17 @@ export default function Flashcards() {
           <>
             <div
               onClick={() => setFlipped((f) => !f)}
+              role="button"
+              tabIndex={0}
+              aria-pressed={flipped}
+              aria-label={flipped ? 'Showing answer, activate to show question' : 'Showing question, activate to reveal answer'}
+              onKeyDown={(e: ReactKeyboardEvent<HTMLDivElement>) => {
+                // Space is handled by the window-level shortcut; only Enter needs a local handler.
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  setFlipped((f) => !f);
+                }
+              }}
               style={{
                 minHeight: 280,
                 borderRadius: 16,

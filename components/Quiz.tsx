@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import type { CSSProperties } from 'react';
 import { useProgress } from './ProgressContext';
 
 export interface QuizQuestion {
@@ -26,24 +27,25 @@ export default function Quiz({ moduleId, questions, passThreshold = 0.7 }: QuizP
   const allAnswered = answeredCount === questions.length;
   const passed = allAnswered && correctCount / questions.length >= passThreshold;
 
-  const selectAnswer = (questionIndex: number, optionIndex: number) => {
-    if (answers[questionIndex] !== null) return; // locked after first pick
-    const next = [...answers];
-    next[questionIndex] = optionIndex;
-    setAnswers(next);
+  // Mark complete from the derived `passed` state rather than inside the
+  // click handler, so it's correct even if setAnswers batches updates from
+  // rapid clicks.
+  useEffect(() => {
+    if (passed) markComplete(moduleId);
+  }, [passed, moduleId, markComplete]);
 
-    const willBeComplete = next.every((a) => a !== null);
-    if (willBeComplete) {
-      const correct = next.filter((a, i) => a === questions[i].correctIndex).length;
-      if (correct / questions.length >= passThreshold) {
-        markComplete(moduleId);
-      }
-    }
+  const selectAnswer = (questionIndex: number, optionIndex: number) => {
+    setAnswers((prev) => {
+      if (prev[questionIndex] !== null) return prev; // locked after first pick
+      const next = [...prev];
+      next[questionIndex] = optionIndex;
+      return next;
+    });
   };
 
   const reset = () => setAnswers(questions.map(() => null));
 
-  const optionStyle = (questionIndex: number, optionIndex: number): React.CSSProperties => {
+  const optionStyle = (questionIndex: number, optionIndex: number): CSSProperties => {
     const picked = answers[questionIndex];
     const isCorrect = optionIndex === questions[questionIndex].correctIndex;
     const isPicked = picked === optionIndex;

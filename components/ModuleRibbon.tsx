@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import type { CSSProperties } from 'react';
 import { allModules, sections } from '../data/modules';
 import { useProgress } from './ProgressContext';
 
@@ -32,7 +33,13 @@ export default function ModuleRibbon() {
     if (!active) return;
     setReadMinutes(null);
     const timer = setTimeout(() => {
-      const words = (document.querySelector('main') ?? document.body).innerText.split(/\s+/).length;
+      // innerText on a detached clone is unreliable (no layout), so instead
+      // subtract the (still-attached) copy buttons' own word counts from the total.
+      const container = document.querySelector('main') ?? document.body;
+      const countWords = (text: string) => text.split(/\s+/).filter(Boolean).length;
+      const copyButtons = container.querySelectorAll<HTMLElement>('[aria-label="Copy code to clipboard"]');
+      const buttonWords = Array.from(copyButtons).reduce((sum, btn) => sum + countWords(btn.innerText), 0);
+      const words = Math.max(0, countWords(container.innerText) - buttonWords);
       setReadMinutes(Math.max(1, Math.round(words / 200)));
     }, 150);
     return () => clearTimeout(timer);
@@ -47,7 +54,7 @@ export default function ModuleRibbon() {
   const done = loaded && isComplete(current.id);
   const progressPercent = totalCount === 0 ? 0 : (completedCount / totalCount) * 100;
 
-  const navLinkStyle: React.CSSProperties = {
+  const navLinkStyle: CSSProperties = {
     color: '#94a3b8',
     textDecoration: 'none',
     fontSize: '0.85rem',

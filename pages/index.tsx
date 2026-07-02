@@ -104,7 +104,7 @@ const Home: NextPage = () => {
                     />
                   </div>
                   <Link
-                    href={`/module-${nextId}`}
+                    href={completedCount === totalCount ? '/learning-modules' : `/module-${nextId}`}
                     style={{
                       background: '#9c0606',
                       color: 'white',
