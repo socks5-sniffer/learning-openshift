@@ -218,6 +218,9 @@ export default function PodBuilder() {
             <Link href="/interactive-learning" className={`${styles.navLink} ${styles.navLinkActive}`}>
               Interactive
             </Link>
+            <Link href="/kubectl-cheatsheet" className={styles.navLink}>
+              Cheat Sheet
+            </Link>
           </div>
         </div>
       </nav>

@@ -11,6 +11,7 @@ import type { AppProps } from 'next/app'
 import { ThemeProvider } from '../components/ThemeContext'
 import { ProgressProvider } from '../components/ProgressContext'
 import CodeCopy from '../components/CodeCopy'
+import ModuleRibbon from '../components/ModuleRibbon'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -18,6 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ProgressProvider>
         <Component {...pageProps} />
         <CodeCopy />
+        <ModuleRibbon />
       </ProgressProvider>
     </ThemeProvider>
   )

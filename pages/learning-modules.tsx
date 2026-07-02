@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from '../styles/Home.module.css';
 import { sections } from '../data/modules';
 import { useProgress } from '../components/ProgressContext';
@@ -8,14 +8,30 @@ import { useProgress } from '../components/ProgressContext';
 export default function LearningModules() {
   const [showArrow, setShowArrow] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const searchRef = useRef<HTMLInputElement>(null);
   const { isComplete, completedCount, totalCount, loaded, nextModule } = useProgress();
 
   useEffect(() => {
     const handleScroll = () => {
       setShowArrow(window.scrollY > 200);
     };
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === '/' && document.activeElement?.tagName !== 'INPUT') {
+        e.preventDefault();
+        searchRef.current?.focus();
+        searchRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      if (e.key === 'Escape' && document.activeElement === searchRef.current) {
+        setSearchTerm('');
+        searchRef.current?.blur();
+      }
+    };
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('keydown', handleKey);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('keydown', handleKey);
+    };
   }, []);
 
   const scrollToTop = () => {
@@ -46,6 +62,9 @@ export default function LearningModules() {
             </Link>
             <Link href="/interactive-learning" className={styles.navLink}>
               Interactive
+            </Link>
+            <Link href="/kubectl-cheatsheet" className={styles.navLink}>
+              Cheat Sheet
             </Link>
           </div>
         </div>
@@ -139,8 +158,9 @@ export default function LearningModules() {
         {/* Search Bar */}
         <div style={{ marginBottom: '2.5rem' }}>
           <input
+            ref={searchRef}
             type="text"
-            placeholder="🔍 Search modules (e.g., 'Security', 'Pods', 'Networking')..."
+            placeholder="🔍 Search modules — press / to focus (e.g., 'Security', 'Pods', 'Networking')..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{

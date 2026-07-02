@@ -38,6 +38,10 @@ For TypeScript type checking (used in CI on dependabot PRs): `npx tsc --noEmit`
 
 **Interactive labs**: `pages/pod-builder.tsx` is a client-side Pod/Deployment YAML builder with live validation hints that cross-reference modules. Labs are linked from `pages/interactive-learning.tsx`.
 
+**Module ribbon**: `components/ModuleRibbon.tsx` (mounted in `_app.tsx`) renders a fixed bottom navigation bar on every `/module-*` route — prev/next links, "X of 30" position, section, estimated reading time, and completion state. No per-page wiring; it activates by route match.
+
+**Cheat sheet**: `pages/kubectl-cheatsheet.tsx` is a grouped kubectl command reference with links back to the modules that teach each topic. Linked from all navbars.
+
 **Security headers**: Defined in `next.config.js` via `headers()`. The CSP allows `'unsafe-inline'` for scripts (documented trade-off in `SECURITY.md`). The policy self-hosts fonts via `@fontsource` — do not add external font CDN references.
 
 **API routes**: Currently only `pages/api/hello.ts` exists as a reference. It demonstrates the pattern: GET-only guard, security headers on the response, JSON response.
