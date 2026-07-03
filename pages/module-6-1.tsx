@@ -47,7 +47,7 @@ export default function Module61() {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <h1 className={styles.title} style={{ color: '#1e293b' }}>
+        <h1 className={styles.title}>
           6.1 Kubernetes Networking Model
         </h1>
 
@@ -58,6 +58,10 @@ export default function Module61() {
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
           <Link href="/module-6-2" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: Ingress →</Link>
         </div>
+
+        {/* Content sits on a light card so the dark text below (originally
+            authored for a light page) stays readable against the dark theme. */}
+        <div style={{ background: 'white', borderRadius: 16, padding: '2rem 2.5rem' }}>
 
         <p style={{ fontSize: '1.2rem', lineHeight: '1.8', color: '#1e293b', maxWidth: '800px' }}>
           Kubernetes networking is weird. Every Pod gets its own IP. Pods can talk to other Pods without NAT.
@@ -778,6 +782,8 @@ export default function Module61() {
             you to understand the details. Choose your CNI plugin based on your needs (simplicity vs features vs
             performance), and trust that the fundamental model—flat networking, no NAT—works.
           </p>
+        </div>
+
         </div>
 
         <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

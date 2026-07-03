@@ -53,7 +53,7 @@ export default function Module71() {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <h1 className={styles.title} style={{ color: '#1e293b' }}>
+        <h1 className={styles.title}>
           7.1 RBAC (Role-Based Access Control)
         </h1>
 
@@ -65,6 +65,9 @@ export default function Module71() {
           <Link href="/module-7-2" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: Pod Security →</Link>
         </div>
 
+        {/* Content sits on a light card so the dark text below (originally
+            authored for a light page) stays readable against the dark theme. */}
+        <div style={{ background: 'white', borderRadius: 16, padding: '2rem 2.5rem' }}>
         <p style={{ fontSize: '1.2rem', lineHeight: '1.8', color: '#1e293b', maxWidth: '800px' }}>
           By default, Kubernetes gives you way too much power. RBAC (Role-Based Access Control) is how you
           limit who can do what. It's the difference between "anyone can delete production" and "only
@@ -825,6 +828,8 @@ export default function Module71() {
             add permissions as needed. It's easier to grant access later than to revoke overly-broad permissions
             after someone relies on them.
           </p>
+        </div>
+
         </div>
 
         <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

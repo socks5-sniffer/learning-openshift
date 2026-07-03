@@ -66,7 +66,7 @@ export default function Module62() {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <h1 className={styles.title} style={{ color: '#1e293b' }}>
+        <h1 className={styles.title}>
           6.2 Ingress
         </h1>
 
@@ -77,6 +77,10 @@ export default function Module62() {
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
           <Link href="/module-7-1" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: RBAC →</Link>
         </div>
+
+        {/* Content sits on a light card so the dark text below (originally
+            authored for a light page) stays readable against the dark theme. */}
+        <div style={{ background: 'white', borderRadius: 16, padding: '2rem 2.5rem' }}>
 
         <p style={{ fontSize: '1.2rem', lineHeight: '1.8', color: '#1e293b', maxWidth: '800px' }}>
           Services give you load balancing <em>inside</em> the cluster. Ingress gives you load balancing
@@ -1141,6 +1145,8 @@ export default function Module62() {
             doing the work. Understanding this separation helps debug issues—check the controller logs, not the
             Ingress YAML, when traffic isn't flowing.
           </p>
+        </div>
+
         </div>
 
         <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

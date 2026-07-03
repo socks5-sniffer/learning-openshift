@@ -93,7 +93,7 @@ export default function Module72() {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <h1 className={styles.title} style={{ color: '#1e293b' }}>
+        <h1 className={styles.title}>
           7.2 Pod Security
         </h1>
 
@@ -105,6 +105,9 @@ export default function Module72() {
           <Link href="/module-7-3" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: Network Policies →</Link>
         </div>
 
+        {/* Content sits on a light card so the dark text below (originally
+            authored for a light page) stays readable against the dark theme. */}
+        <div style={{ background: 'white', borderRadius: 16, padding: '2rem 2.5rem' }}>
         <p style={{ fontSize: '1.2rem', lineHeight: '1.8', color: '#1e293b', maxWidth: '800px' }}>
           By default, containers run as root with a lot of privileges. This is terrifying from a security
           perspective. Pod Security Standards and SecurityContext let you lock down containers so a
@@ -757,6 +760,8 @@ export default function Module72() {
             SecurityContext settings limit the blast radius. Always run as non-root, drop capabilities,
             and use read-only filesystems. Your future self (debugging a breach) will thank you.
           </p>
+        </div>
+
         </div>
 
         <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
