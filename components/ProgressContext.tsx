@@ -34,6 +34,25 @@ function readStoredProgress(): string[] {
   }
 }
 
+// localStorage.setItem/removeItem can throw (private browsing with storage
+// disabled, quota exceeded). These swallow that so progress tracking
+// degrades to in-memory-only for the session instead of crashing the app.
+function safeSetItem(key: string, value: string) {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    // ignore — state still updates in memory via the caller's setState
+  }
+}
+
+function safeRemoveItem(key: string) {
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    // ignore
+  }
+}
+
 export function ProgressProvider({ children }: { children: ReactNode }) {
   const [completed, setCompleted] = useState<string[]>([]);
   const [lastVisited, setLastVisited] = useState<string | null>(null);
@@ -50,14 +69,14 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
 
   const persist = (ids: string[]) => {
     setCompleted(ids);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+    safeSetItem(STORAGE_KEY, JSON.stringify(ids));
   };
 
   const markComplete = useCallback((moduleId: string) => {
     setCompleted((prev) => {
       if (prev.includes(moduleId)) return prev;
       const next = [...prev, moduleId];
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      safeSetItem(STORAGE_KEY, JSON.stringify(next));
       return next;
     });
   }, []);
@@ -66,14 +85,14 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     setCompleted((prev) => {
       if (!prev.includes(moduleId)) return prev;
       const next = prev.filter((id) => id !== moduleId);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      safeSetItem(STORAGE_KEY, JSON.stringify(next));
       return next;
     });
   }, []);
 
   const recordVisit = useCallback((moduleId: string) => {
     setLastVisited(moduleId);
-    localStorage.setItem(LAST_VISITED_KEY, moduleId);
+    safeSetItem(LAST_VISITED_KEY, moduleId);
   }, []);
 
   const isComplete = useCallback(
@@ -92,7 +111,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   const resetProgress = useCallback(() => {
     persist([]);
     setLastVisited(null);
-    localStorage.removeItem(LAST_VISITED_KEY);
+    safeRemoveItem(LAST_VISITED_KEY);
   }, []);
 
   return (

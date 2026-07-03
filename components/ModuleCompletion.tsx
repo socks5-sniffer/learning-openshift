@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useProgress } from './ProgressContext';
 import { getModuleById, allModules } from '../data/modules';
-import { quizzes } from '../data/quizzes';
+import type { QuizQuestion } from './Quiz';
 import Quiz from './Quiz';
 
 interface ModuleCompletionProps {
@@ -13,15 +13,27 @@ interface ModuleCompletionProps {
 // Also records the visit so the landing page can offer "continue where you left off".
 export default function ModuleCompletion({ moduleId }: ModuleCompletionProps) {
   const { isComplete, markComplete, unmarkComplete, recordVisit, completedCount, totalCount } = useProgress();
+  const [questions, setQuestions] = useState<QuizQuestion[] | undefined>(undefined);
 
   useEffect(() => {
     recordVisit(moduleId);
   }, [moduleId, recordVisit]);
 
+  // Load the quiz bank lazily so its ~120 questions across 30 modules aren't
+  // part of every module page's initial JS bundle — only fetched after mount.
+  useEffect(() => {
+    let cancelled = false;
+    import('../data/quizzes').then(({ quizzes }) => {
+      if (!cancelled) setQuestions(quizzes[moduleId]);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [moduleId]);
+
   const complete = isComplete(moduleId);
   const moduleInfo = getModuleById(moduleId);
   const position = allModules.findIndex((m) => m.id === moduleId) + 1;
-  const questions = quizzes[moduleId];
 
   return (
     <>
