@@ -80,7 +80,7 @@ export default function LearningModules() {
             Kubernetes <span className={styles.titleAccent}>Deep Dive</span>
           </h1>
           <p className={styles.subtitle}>
-            From container basics to production-ready deployments — learn by building things that fail in interesting ways.
+            From container basics to production-ready deployments.  Learn by building things that fail in interesting ways.
           </p>
         </div>
 
@@ -148,7 +148,7 @@ export default function LearningModules() {
             What is Kubernetes?
           </h2>
           <p className={styles.spotlightText}>
-            Kubernetes (K8s) is a system for running applications at scale—whether that scale is
+            Kubernetes (K8s) is a system for running applications at scale, whether that scale is
             &quot;three users and a dream&quot; or &quot;half the internet.&quot; It answers the questions developers
             used to avoid: What happens when my app crashes? How do I run five copies of it?
             How do I update it without everything catching fire?
@@ -160,7 +160,7 @@ export default function LearningModules() {
           <input
             ref={searchRef}
             type="text"
-            placeholder="🔍 Search modules — press / to focus (e.g., 'Security', 'Pods', 'Networking')..."
+            placeholder="🔍 Search modules: press / to focus (e.g., 'Security', 'Pods', 'Networking')..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{

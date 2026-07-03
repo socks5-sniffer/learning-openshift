@@ -63,7 +63,7 @@ const Home: NextPage = () => {
 
           <p className={styles.subtitle}>
             A hands-on learning platform for Kubernetes, container orchestration,
-            and modern cloud infrastructure — built by practitioners, for practitioners.
+            and modern cloud infrastructure.  Built by practitioners, for practitioners.
           </p>
 
           {/* Continue / start learning */}
@@ -151,7 +151,7 @@ const Home: NextPage = () => {
           </h2>
           <p className={styles.spotlightText}>
             I approach learning with intention. I ship working code, 
-            document my mistakes, and iterate based on feedback. This platform itself is proof—I&apos;m 
+            document my mistakes, and iterate based on feedback. This platform itself is evidence I&apos;m 
             learning Next.js and OpenShift by actually deploying to production.
           </p>
         </section>
@@ -208,7 +208,7 @@ const Home: NextPage = () => {
               <h3>Learning & Portfolio Workspace</h3>
             </div>
             <p className={styles.projectDesc}>
-              This isn&apos;t a polished product—it&apos;s a working lab. I deployed a Next.js app to 
+              This isn&apos;t a polished product, it&apos;s a working lab. I deployed a Next.js app to 
               OpenShift to understand how containerized applications work in practice. The codebase 
               is navigable, changes are tracked, and patterns are documented for learning.
             </p>
@@ -289,7 +289,7 @@ const Home: NextPage = () => {
             Why Solutions Architecture?
           </h2>
           <p className={styles.sectionText}>
-            Drawn to the strategic side of technology—understanding how pieces fit together 
+            Drawn to the strategic side of technology, understanding how pieces fit together 
             to solve business problems. Developing the mindset: asking why certain approaches work, 
             thinking about tradeoffs, and connecting technology to outcomes. The goal is to grow 
             into a role helping teams make informed architectural decisions.
@@ -303,6 +303,9 @@ const Home: NextPage = () => {
           <div className={styles.ctaButtons}>
             <a href="https://github.com/socks5-sniffer" className={styles.ctaButton}>
               View GitHub →
+            </a>
+            <a href="https://linkedin.com/in/erik-roed" className={styles.ctaButton}>
+              View LinkedIn →
             </a>
           </div>
         </section>
