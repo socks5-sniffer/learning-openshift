@@ -290,61 +290,50 @@ oc get nodes`
         <title>10.2 Managed Kubernetes - Kubernetes Learning</title>
       </Head>
 
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        {/* Header */}
+      {/* Home link in top right */}
+      <div style={{
+        position: 'absolute',
+        top: 20,
+        right: 30,
+        zIndex: 10
+      }}>
+        <Link href="/learning-modules" style={{
+            textDecoration: 'none',
+            color: '#9c0606ff',
+            fontWeight: 'bold',
+            fontSize: '1.1rem',
+            background: 'rgba(255,255,255,0.85)',
+            padding: '8px 16px',
+            borderRadius: '6px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+          }}>All Modules</Link>
+      </div>
+
+      <main className={styles.main}>
+        <h1 className={styles.title}>Module 10.2: Managed Kubernetes</h1>
+        <p style={{ fontSize: '1.1rem', color: '#6b7280', marginTop: '-10px' }}>
+          Part 10: Real-World Kubernetes
+        </p>
+
         <div style={{ marginBottom: '2rem' }}>
-          <Link href="/learning-modules" style={{ color: '#64748b', textDecoration: 'none', fontSize: '0.9rem' }}>← Back to Learning Modules</Link>
+          <Link href="/module-10-1" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: Common Failure Scenarios</Link>
+          <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
+          <Link href="/learning-modules" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>All Modules</Link>
+          <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
+          <Link href="/module-10-3" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: When to Say "No" to Kubernetes →</Link>
         </div>
 
-        <div style={{ 
-          background: 'white',
-          borderRadius: 12,
-          padding: '2rem',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-          marginBottom: '2rem'
-        }}>
-          <div style={{ 
-            display: 'inline-block',
-            background: '#9c0606',
-            color: 'white',
-            padding: '0.25rem 0.75rem',
-            borderRadius: 6,
-            fontSize: '0.875rem',
-            fontWeight: 600,
-            marginBottom: '1rem'
-          }}>
-            Part 10: Real-World Kubernetes
-          </div>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: 700, color: '#1e293b', marginBottom: '1rem' }}>
-            10.2 Managed Kubernetes
-          </h1>
-          
-          <div style={{ marginBottom: '1.5rem' }}>
-            <Link href="/module-10-1" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: Common Failure Scenarios</Link>
-            <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-            <Link href="/learning-modules" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>All Modules</Link>
-            <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-            <Link href="/module-10-3" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: When to Say No to Kubernetes →</Link>
-          </div>
-          
+        {/* Provider Selector */}
+        <section className={styles.spotlight}>
+          <div style={{ background: 'white', borderRadius: 12, padding: '2rem' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#1e293b', marginBottom: '1.5rem' }}>
+            ☁️ Select a Managed Kubernetes Provider
+          </h2>
           <p style={{ fontSize: '1.1rem', color: '#64748b', lineHeight: 1.6 }}>
             Running Kubernetes yourself is a full-time job. Managed providers handle the control plane,
             upgrades, and infrastructure so you can focus on your applications. But they're not all the same.
             Let's compare the big players.
           </p>
-        </div>
-
-        {/* Provider Selector */}
-        <div style={{
-          background: 'white',
-          borderRadius: 12,
-          padding: '2rem',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-          marginBottom: '2rem'
-        }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#1e293b', marginBottom: '1.5rem' }}>
-            ☁️ Select a Managed Kubernetes Provider
-          </h2>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
             {(Object.keys(providers) as Array<keyof typeof providers>).map(provider => (
@@ -571,16 +560,12 @@ oc get nodes`
               </div>
             </div>
           </div>
-        </div>
+          </div>
+        </section>
 
         {/* Comparison Matrix */}
-        <div style={{
-          background: 'white',
-          borderRadius: 12,
-          padding: '2rem',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-          marginBottom: '2rem'
-        }}>
+        <section className={styles.spotlight}>
+          <div style={{ background: 'white', borderRadius: 12, padding: '2rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#1e293b', marginBottom: '1.5rem' }}>
             📊 Quick Comparison Matrix
           </h2>
@@ -701,16 +686,12 @@ oc get nodes`
               </tbody>
             </table>
           </div>
-        </div>
+          </div>
+        </section>
 
         {/* Common Gotchas */}
-        <div style={{
-          background: 'white',
-          borderRadius: 12,
-          padding: '2rem',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-          marginBottom: '2rem'
-        }}>
+        <section className={styles.spotlight}>
+          <div style={{ background: 'white', borderRadius: 12, padding: '2rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#1e293b', marginBottom: '1.5rem' }}>
             ⚠️ Common Gotchas Across All Providers
           </h2>
@@ -773,16 +754,12 @@ oc get nodes`
               </div>
             ))}
           </div>
-        </div>
+          </div>
+        </section>
 
         {/* Decision Guide */}
-        <div style={{
-          background: 'white',
-          borderRadius: 12,
-          padding: '2rem',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-          marginBottom: '2rem'
-        }}>
+        <section className={styles.spotlight}>
+          <div style={{ background: 'white', borderRadius: 12, padding: '2rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#1e293b', marginBottom: '1.5rem' }}>
             🤔 Which One Should You Choose?
           </h2>
@@ -870,37 +847,46 @@ oc get nodes`
               </div>
             ))}
           </div>
-        </div>
+          </div>
+        </section>
 
         {/* Navigation */}
-        <div style={{ 
-          display: 'flex', 
+        <div style={{
+          display: 'flex',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
-          paddingTop: '2rem',
-          borderTop: '2px solid #e2e8f0'
+          alignItems: 'center',
+          marginTop: '60px',
+          paddingTop: '30px',
+          borderTop: '2px solid #e5e7eb',
+          gap: '20px'
         }}>
           <Link href="/module-10-1" style={{
-              padding: '0.75rem 1.5rem',
-              background: '#f8fafc',
-              border: '2px solid #e2e8f0',
-              borderRadius: 8,
-              color: '#1e293b',
               textDecoration: 'none',
-              fontWeight: 600
-            }}>← 10.1 Common Failure Scenarios</Link>
+              color: '#94a3b8',
+              fontWeight: 600,
+              padding: '12px 24px',
+              border: '2px solid #475569',
+              borderRadius: '8px',
+              transition: 'all 0.2s',
+              display: 'inline-block'
+            }}>← Previous: Common Failure Scenarios</Link>
+
           <Link href="/module-10-3" style={{
-              padding: '0.75rem 1.5rem',
-              background: '#9c0606',
-              borderRadius: 8,
-              color: 'white',
               textDecoration: 'none',
-              fontWeight: 600
-            }}>10.3 When to Say "No" to Kubernetes →</Link>
+              color: '#fff',
+              background: '#9c0606ff',
+              fontWeight: 600,
+              padding: '12px 24px',
+              borderRadius: '8px',
+              transition: 'all 0.2s',
+              display: 'inline-block'
+            }}>Next: When to Say "No" to Kubernetes →</Link>
         </div>
 
         <ModuleCompletion moduleId="10-2" />
-      </div>
+
+      </main>
     </div>
   )
 }

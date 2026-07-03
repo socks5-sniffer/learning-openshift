@@ -287,43 +287,45 @@ export default function WhenToSayNo() {
         <title>10.3 When to Say "No" to Kubernetes - Kubernetes Learning</title>
       </Head>
 
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        {/* Header */}
+      {/* Home link in top right */}
+      <div style={{
+        position: 'absolute',
+        top: 20,
+        right: 30,
+        zIndex: 10
+      }}>
+        <Link href="/learning-modules" style={{
+            textDecoration: 'none',
+            color: '#9c0606ff',
+            fontWeight: 'bold',
+            fontSize: '1.1rem',
+            background: 'rgba(255,255,255,0.85)',
+            padding: '8px 16px',
+            borderRadius: '6px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+          }}>All Modules</Link>
+      </div>
+
+      <main className={styles.main}>
+        <h1 className={styles.title}>Module 10.3: When to Say "No" to Kubernetes</h1>
+        <p style={{ fontSize: '1.1rem', color: '#6b7280', marginTop: '-10px' }}>
+          Part 10: Real-World Kubernetes
+        </p>
+
         <div style={{ marginBottom: '2rem' }}>
-          <Link href="/learning-modules" style={{ color: '#64748b', textDecoration: 'none', fontSize: '0.9rem' }}>← Back to Learning Modules</Link>
+          <Link href="/module-10-2" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: Managed Kubernetes</Link>
+          <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
+          <Link href="/learning-modules" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>All Modules</Link>
         </div>
 
-        <div style={{ 
-          background: 'white',
-          borderRadius: 12,
-          padding: '2rem',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-          marginBottom: '2rem'
-        }}>
-          <div style={{ 
-            display: 'inline-block',
-            background: '#9c0606',
-            color: 'white',
-            padding: '0.25rem 0.75rem',
-            borderRadius: 6,
-            fontSize: '0.875rem',
-            fontWeight: 600,
-            marginBottom: '1rem'
-          }}>
-            Part 10: Real-World Kubernetes
-          </div>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: 700, color: '#1e293b', marginBottom: '1rem' }}>
-            10.3 When to Say "No" to Kubernetes
-          </h1>
-          
-          <div style={{ marginBottom: '1.5rem' }}>
-            <Link href="/module-10-2" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: Managed Kubernetes</Link>
-            <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-            <Link href="/learning-modules" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>All Modules</Link>
-          </div>
-          
-          <p style={{ fontSize: '1.1rem', color: '#64748b', lineHeight: 1.6, marginBottom: '1rem' }}>
-            The most important Kubernetes lesson: <strong style={{ color: '#1e293b' }}>you probably don't need it</strong>.
+        {/* Scenario Selector */}
+        <section className={styles.spotlight}>
+          <div style={{ background: 'white', borderRadius: 12, padding: '2rem' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#1e293b', marginBottom: '1.5rem' }}>
+            🚫 Common "Skip Kubernetes" Scenarios
+          </h2>
+          <p style={{ fontSize: '1.1rem', color: '#64748b', lineHeight: 1.6 }}>
+            The most important Kubernetes lesson: <strong>you probably don't need it</strong>.
             K8s is powerful, but it's also complex, expensive, and overkill for most use cases.
             Here's when to skip it and what to use instead.
           </p>
@@ -333,24 +335,12 @@ export default function WhenToSayNo() {
             borderRadius: 8,
             padding: '1.5rem',
             fontSize: '1rem',
-            color: '#991b1b'
+            color: '#991b1b',
+            marginBottom: '1.5rem'
           }}>
             <strong>⚠️ Truth Bomb:</strong> If you're asking "Do I need Kubernetes?", the answer is probably no.
             If you NEED it, you'll know. The pain will be obvious.
           </div>
-        </div>
-
-        {/* Scenario Selector */}
-        <div style={{
-          background: 'white',
-          borderRadius: 12,
-          padding: '2rem',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-          marginBottom: '2rem'
-        }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#1e293b', marginBottom: '1.5rem' }}>
-            🚫 Common "Skip Kubernetes" Scenarios
-          </h2>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
             {(Object.keys(scenarios) as Array<keyof typeof scenarios>).map(scenario => (
@@ -509,16 +499,12 @@ export default function WhenToSayNo() {
               </div>
             </div>
           </div>
-        </div>
+          </div>
+        </section>
 
         {/* Do You Need Kubernetes? Calculator */}
-        <div style={{
-          background: 'white',
-          borderRadius: 12,
-          padding: '2rem',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-          marginBottom: '2rem'
-        }}>
+        <section className={styles.spotlight}>
+          <div style={{ background: 'white', borderRadius: 12, padding: '2rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#1e293b', marginBottom: '1.5rem' }}>
             🧮 Do You Actually Need Kubernetes?
           </h2>
@@ -614,16 +600,12 @@ export default function WhenToSayNo() {
               </div>
             </div>
           </div>
-        </div>
+          </div>
+        </section>
 
         {/* When You DO Need Kubernetes */}
-        <div style={{
-          background: 'white',
-          borderRadius: 12,
-          padding: '2rem',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-          marginBottom: '2rem'
-        }}>
+        <section className={styles.spotlight}>
+          <div style={{ background: 'white', borderRadius: 12, padding: '2rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#1e293b', marginBottom: '1.5rem' }}>
             ✅ OK, When DO You Need Kubernetes?
           </h2>
@@ -705,16 +687,12 @@ export default function WhenToSayNo() {
               </div>
             ))}
           </div>
-        </div>
+          </div>
+        </section>
 
         {/* Cost Reality Check */}
-        <div style={{
-          background: 'white',
-          borderRadius: 12,
-          padding: '2rem',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-          marginBottom: '2rem'
-        }}>
+        <section className={styles.spotlight}>
+          <div style={{ background: 'white', borderRadius: 12, padding: '2rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#1e293b', marginBottom: '1.5rem' }}>
             💰 The Real Cost of Kubernetes
           </h2>
@@ -813,7 +791,8 @@ export default function WhenToSayNo() {
               </div>
             </div>
           </div>
-        </div>
+          </div>
+        </section>
 
         {/* Final Wisdom */}
         <div style={{
@@ -850,14 +829,8 @@ export default function WhenToSayNo() {
         </div>
 
         {/* Congratulations */}
-        <div style={{
-          background: 'white',
-          borderRadius: 12,
-          padding: '3rem',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-          textAlign: 'center',
-          marginBottom: '2rem'
-        }}>
+        <section className={styles.spotlight}>
+          <div style={{ background: 'white', borderRadius: 12, padding: '3rem', textAlign: 'center' }}>
           <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🎉</div>
           <h2 style={{ fontSize: '2rem', fontWeight: 700, color: '#1e293b', marginBottom: '1rem' }}>
             Congratulations! You've Completed the Course!
@@ -907,37 +880,46 @@ export default function WhenToSayNo() {
           }}>
             You're now equipped to make informed decisions about Kubernetes. Go build something amazing! 🚀
           </div>
-        </div>
+          </div>
+        </section>
 
         {/* Navigation */}
-        <div style={{ 
-          display: 'flex', 
+        <div style={{
+          display: 'flex',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
-          paddingTop: '2rem',
-          borderTop: '2px solid #e2e8f0'
+          alignItems: 'center',
+          marginTop: '60px',
+          paddingTop: '30px',
+          borderTop: '2px solid #e5e7eb',
+          gap: '20px'
         }}>
           <Link href="/module-10-2" style={{
-              padding: '0.75rem 1.5rem',
-              background: '#f8fafc',
-              border: '2px solid #e2e8f0',
-              borderRadius: 8,
-              color: '#1e293b',
               textDecoration: 'none',
-              fontWeight: 600
-            }}>← 10.2 Managed Kubernetes</Link>
+              color: '#94a3b8',
+              fontWeight: 600,
+              padding: '12px 24px',
+              border: '2px solid #475569',
+              borderRadius: '8px',
+              transition: 'all 0.2s',
+              display: 'inline-block'
+            }}>← Previous: Managed Kubernetes</Link>
+
           <Link href="/learning-modules" style={{
-              padding: '0.75rem 1.5rem',
-              background: '#9c0606',
-              borderRadius: 8,
-              color: 'white',
               textDecoration: 'none',
-              fontWeight: 600
+              color: '#fff',
+              background: '#9c0606ff',
+              fontWeight: 600,
+              padding: '12px 24px',
+              borderRadius: '8px',
+              transition: 'all 0.2s',
+              display: 'inline-block'
             }}>🏠 Back to Learning Modules</Link>
         </div>
 
         <ModuleCompletion moduleId="10-3" />
-      </div>
+
+      </main>
     </div>
   )
 }
