@@ -33,15 +33,6 @@ export default function Module61() {
       complexity: 'Low',
       useCase: 'Simple clusters, learning'
     },
-    weave: {
-      name: 'Weave Net',
-      routing: 'Mesh network',
-      encapsulation: 'Sleeve (UDP)',
-      networkPolicy: 'Yes',
-      performance: 'Medium',
-      complexity: 'Low',
-      useCase: 'Multi-cloud, ease of use'
-    },
     cilium: {
       name: 'Cilium',
       routing: 'eBPF',
@@ -527,36 +518,6 @@ export default function Module61() {
               {"        protocol: TCP"}
             </div>
           </div>
-
-          <div style={{
-            background: 'white',
-            padding: '1.5rem',
-            borderRadius: '8px',
-            border: '2px solid #e2e8f0'
-          }}>
-            <h4 style={{ marginTop: 0, color: '#1e293b' }}>Weave Net</h4>
-            <p style={{ color: '#1e293b', lineHeight: '1.6' }}>
-              Creates a mesh network where every node talks to every other node. Automatically handles
-              multi-cloud scenarios. Uses "fast datapath" (kernel-based) when possible, falls back to
-              "sleeve" mode (userspace) when needed. Good for hybrid cloud.
-            </p>
-            <div style={{
-              fontFamily: 'monospace',
-              fontSize: '0.9rem',
-              background: '#1e293b',
-              color: '#10b981',
-              padding: '1rem',
-              borderRadius: '6px',
-              marginTop: '0.5rem',
-              overflowX: 'auto'
-            }}>
-              # Install Weave<br />
-              kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml<br />
-              <br />
-              # Each node runs a weave router<br />
-              # Automatically discovers peers and forms mesh
-            </div>
-          </div>
         </div>
 
         <h2 style={{ color: '#1e293b', marginTop: '3rem' }}>What About Services?</h2>
@@ -690,7 +651,7 @@ export default function Module61() {
               borderRadius: '6px',
               marginTop: '0.5rem'
             }}>
-              kubectl get pods -n kube-system | grep -E 'calico|cilium|flannel|weave'<br />
+              kubectl get pods -n kube-system | grep -E 'calico|cilium|flannel'<br />
               ip route  # On the node<br />
               kubectl logs -n kube-system calico-node-xxxxx
             </div>

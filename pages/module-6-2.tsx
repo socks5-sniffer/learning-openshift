@@ -676,7 +676,7 @@ export default function Module62() {
             overflowX: 'auto'
           }}>
             # Install cert-manager<br />
-            kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.0/cert-manager.yaml<br />
+            kubectl apply -f https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml<br />
             <br />
             # Create ClusterIssuer for Let's Encrypt<br />
             {"apiVersion: cert-manager.io/v1"}<br />

@@ -51,7 +51,7 @@ export default function ManagedKubernetes() {
       ],
       bestFor: 'Already on AWS, need deep integration, enterprise workloads',
       setupExample: `# Install eksctl
-curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+curl --silent --location "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
 sudo mv /tmp/eksctl /usr/local/bin
 
 # Create cluster
