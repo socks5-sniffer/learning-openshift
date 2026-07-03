@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-A Kubernetes/OpenShift learning platform built with Next.js and TypeScript, deployed on Red Hat OpenShift Dev Spaces. It contains 29 comprehensive learning modules covering the full Kubernetes curriculum from containers basics through GitOps and failure scenarios.
+A Kubernetes/OpenShift learning platform built with Next.js and TypeScript, deployed on Red Hat OpenShift Dev Spaces. It contains 30 comprehensive learning modules covering the full Kubernetes curriculum from containers basics through GitOps and failure scenarios, with per-module quizzes, localStorage-based progress tracking, and interactive labs.
 
 ## Commands
 
@@ -26,9 +26,25 @@ For TypeScript type checking (used in CI on dependabot PRs): `npx tsc --noEmit`
 
 **Theme system**: `components/ThemeContext.tsx` provides a React context for dark/light mode with `localStorage` persistence. Dark mode is the default. Wrap new pages in `useTheme()` to access `isDarkMode`.
 
-**Learning modules**: 29 page files named `pages/module-[0-10]-[1-3].tsx`. Each module is a self-contained page with inline styles derived from the theme context. New modules follow this naming convention and must be linked from `pages/learning-modules.tsx`.
+**Learning modules**: 30 page files named `pages/module-[0-10]-[1-3].tsx`. Each module is a self-contained page with inline styles derived from the theme context. New modules follow this naming convention and must be added to `data/modules.ts` (the module list page renders from it).
 
-**Security headers**: Defined in `next.config.js` via `headers()`. The CSP allows `'unsafe-inline'` for scripts (documented trade-off in `SECURITY.md`). The policy self-hosts fonts via `@fontsource` — do not add external font CDN references.
+**Module catalog**: `data/modules.ts` is the single source of truth for module ids, titles, descriptions, and section grouping. `pages/learning-modules.tsx` and the landing page render from it.
+
+**Progress system**: `components/ProgressContext.tsx` tracks completed modules and last-visited module in `localStorage` (keys `kubelearn-progress`, `kubelearn-last-visited`). Every module page renders `components/ModuleCompletion.tsx` at the bottom, which records the visit, shows a mark-complete card, and auto-renders the module's quiz when one exists.
+
+**Quizzes**: `data/quizzes.ts` maps module id → questions. `components/Quiz.tsx` renders them with instant feedback; scoring ≥70% marks the module complete via ProgressContext. No per-page wiring needed — ModuleCompletion picks quizzes up automatically.
+
+**Code copy buttons**: `components/CodeCopy.tsx` (mounted in `_app.tsx`) attaches copy buttons to `<pre>` and monospace-styled blocks via DOM enhancement on route change. Opt an element out with `data-codecopy="skip"` (used by the Terminal animation and Pod Builder's YAML pane).
+
+**Interactive labs**: linked from `pages/interactive-learning.tsx`. `pages/pod-builder.tsx` is a client-side Pod/Deployment YAML builder with live validation hints; `pages/rbac-simulator.tsx` is a Role/RoleBinding builder with a `kubectl auth can-i` tester that traces each authorization step; `pages/service-discovery.tsx` visualizes label-selector → endpoint routing with simulated requests; `pages/flashcards.tsx` is the quiz-bank flashcard deck.
+
+**Module ribbon**: `components/ModuleRibbon.tsx` (mounted in `_app.tsx`) renders a fixed bottom navigation bar on every `/module-*` route — prev/next links, "X of 30" position, section, estimated reading time, and completion state. No per-page wiring; it activates by route match.
+
+**Cheat sheet**: `pages/kubectl-cheatsheet.tsx` is a grouped kubectl command reference with links back to the modules that teach each topic. Linked from all navbars.
+
+**Flashcards**: `pages/flashcards.tsx` builds a self-graded flip-card deck from `data/quizzes.ts` (question → correct answer + explanation), with section filters and keyboard shortcuts (space/1/2). Adding quiz questions automatically adds flashcards.
+
+**Security headers**: Static headers (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, `Strict-Transport-Security`) are defined in `next.config.js` via `headers()`. The Content-Security-Policy is set separately in `middleware.ts`, which generates a per-request nonce for `script-src` — no `'unsafe-inline'` for scripts; `style-src` still allows `'unsafe-inline'` (documented trade-off in `SECURITY.md`). In development only, `script-src` also allows `'unsafe-eval'` because Next.js Fast Refresh requires it; production keeps it removed. The policy self-hosts fonts via `@fontsource` — do not add external font CDN references.
 
 **API routes**: Currently only `pages/api/hello.ts` exists as a reference. It demonstrates the pattern: GET-only guard, security headers on the response, JSON response.
 

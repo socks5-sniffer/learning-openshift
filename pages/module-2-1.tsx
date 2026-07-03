@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module21() {
   const [showSingleContainer, setShowSingleContainer] = useState(true);
@@ -565,6 +566,9 @@ export default function Module21() {
               display: 'inline-block'
             }}>Next: ReplicaSets & Deployments →</Link>
         </div>
+
+        <ModuleCompletion moduleId="2-1" />
+
       </main>
     </div>
   );

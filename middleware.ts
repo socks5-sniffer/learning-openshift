@@ -4,9 +4,15 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const nonce = btoa(crypto.randomUUID());
 
+  // Next.js Fast Refresh (dev only) evaluates its HMR runtime via eval(),
+  // which the production CSP intentionally forbids (see SECURITY.md). Allow
+  // it only in development so `npm run dev` isn't blocked by its own CSP.
+  const isDev = process.env.NODE_ENV === 'development';
+  const scriptSrc = isDev ? `'self' 'unsafe-eval' 'nonce-${nonce}'` : `'self' 'nonce-${nonce}'`;
+
   const csp = [
     "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}'`,
+    `script-src ${scriptSrc}`,
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: https:",
     "font-src 'self' data:",

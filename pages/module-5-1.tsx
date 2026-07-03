@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module51() {
   const [volumeType, setVolumeType] = useState<'emptyDir' | 'hostPath' | 'configMap'>('emptyDir');
@@ -830,6 +831,8 @@ export default function Module51() {
               display: 'inline-block'
             }}>Next: PersistentVolumes & Claims →</Link>
         </div>
+        <ModuleCompletion moduleId="5-1" />
+
       </main>
     </div>
   );

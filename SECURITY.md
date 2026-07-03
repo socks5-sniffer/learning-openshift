@@ -86,7 +86,7 @@ Please provide as much detail as possible:
 This project implements the following security measures:
 
 ### HTTP Security Headers
-- `Content-Security-Policy` — restricts resource origins; `'unsafe-eval'` removed from `script-src`; fonts and styles are served from `'self'`
+- `Content-Security-Policy` (set in `middleware.ts`, not `next.config.js`) — restricts resource origins; `script-src` uses a per-request nonce instead of `'unsafe-inline'`, and `'unsafe-eval'` is removed in production (allowed only when `NODE_ENV=development`, where Next.js Fast Refresh requires it); `style-src` still allows `'unsafe-inline'`; fonts are served from `'self'`
 - `X-Content-Type-Options: nosniff` — prevents MIME-type sniffing
 - `X-Frame-Options: DENY` — prevents clickjacking
 - `Strict-Transport-Security: max-age=31536000; includeSubDomains; preload` — enforces HTTPS for all subdomains (appropriate for OpenShift/production HTTPS deployment)
@@ -119,19 +119,19 @@ The following hardening improvements were made in the v1.5.x release:
 | Removed legacy `X-XSS-Protection` header | This header is deprecated in modern browsers and superseded by CSP; removing avoids false sense of security |
 | Self-hosted fonts via `@fontsource` packages | Fonts (Inter, JetBrains Mono) are bundled via npm at install time and served from `'self'`; eliminates runtime third-party dependency on `fonts.googleapis.com` and `fonts.gstatic.com`, improving privacy and CSP alignment |
 | Removed Google Fonts `@import` from CSS | Removes the browser-level request to the Google Fonts CDN |
+| Nonce-based CSP for `script-src` | `middleware.ts` generates a per-request nonce injected into both the CSP header and Next.js's inline bootstrap scripts (via `pages/_document.tsx`), removing the need for `'unsafe-inline'` in `script-src` |
 
 ---
 
 ## Remaining Risks & Recommendations
 
-### `'unsafe-inline'` in `script-src`
+### `'unsafe-inline'` in `style-src`
 
-The CSP still includes `'unsafe-inline'` for `script-src`. This is currently required because Next.js Pages Router injects inline data-bootstrapping scripts at SSR time. Options to address this in the future:
+The CSP still includes `'unsafe-inline'` for `style-src`, because the app uses inline `style={{ ... }}` props extensively and Next.js Pages Router injects some inline styles at SSR time. `script-src` no longer needs this (see "Recent Security Improvements" — it uses a per-request nonce instead). Removing `'unsafe-inline'` from `style-src` would require converting inline styles to CSS classes or nonce'd `<style>` tags, which is a larger refactor not currently planned.
 
-- **Nonce-based CSP:** Use Next.js middleware to generate a per-request nonce and inject it into both the CSP header and the Next.js inline scripts. This is the most robust approach.
-- **App Router migration:** Next.js App Router has better built-in CSP nonce support via middleware.
+### `'unsafe-eval'` in development
 
-Until nonce-based CSP is implemented, `'unsafe-inline'` must remain in `script-src` for the app to function correctly.
+`middleware.ts` allows `'unsafe-eval'` in `script-src` only when `NODE_ENV=development`, because Next.js Fast Refresh's hot-reload runtime evaluates code via `eval()`. This does not apply to production builds (`next build && next start`) — the production CSP has no `'unsafe-eval'`.
 
 ### HSTS with `preload`
 

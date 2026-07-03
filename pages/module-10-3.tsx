@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function WhenToSayNo() {
   const [selectedScenario, setSelectedScenario] = useState<'simple' | 'cost' | 'team' | 'startup' | 'stateful'>('simple')
@@ -934,6 +935,8 @@ export default function WhenToSayNo() {
               fontWeight: 600
             }}>🏠 Back to Learning Modules</Link>
         </div>
+
+        <ModuleCompletion moduleId="10-3" />
       </div>
     </div>
   )

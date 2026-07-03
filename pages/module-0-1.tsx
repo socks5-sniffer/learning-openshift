@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module01() {
   return (
@@ -280,6 +281,9 @@ export default function Module01() {
               display: 'inline-block'
             }}>Next: Containers 101 →</Link>
         </div>
+
+        <ModuleCompletion moduleId="0-1" />
+
       </main>
     </div>
   );

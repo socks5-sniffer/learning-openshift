@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module61() {
   const [selectedPod, setSelectedPod] = useState<string | null>(null);
@@ -32,15 +33,6 @@ export default function Module61() {
       complexity: 'Low',
       useCase: 'Simple clusters, learning'
     },
-    weave: {
-      name: 'Weave Net',
-      routing: 'Mesh network',
-      encapsulation: 'Sleeve (UDP)',
-      networkPolicy: 'Yes',
-      performance: 'Medium',
-      complexity: 'Low',
-      useCase: 'Multi-cloud, ease of use'
-    },
     cilium: {
       name: 'Cilium',
       routing: 'eBPF',
@@ -55,7 +47,7 @@ export default function Module61() {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <h1 className={styles.title} style={{ color: '#1e293b' }}>
+        <h1 className={styles.title}>
           6.1 Kubernetes Networking Model
         </h1>
 
@@ -66,6 +58,10 @@ export default function Module61() {
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
           <Link href="/module-6-2" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: Ingress →</Link>
         </div>
+
+        {/* Content sits on a light card so the dark text below (originally
+            authored for a light page) stays readable against the dark theme. */}
+        <div style={{ background: 'white', borderRadius: 16, padding: '2rem 2.5rem' }}>
 
         <p style={{ fontSize: '1.2rem', lineHeight: '1.8', color: '#1e293b', maxWidth: '800px' }}>
           Kubernetes networking is weird. Every Pod gets its own IP. Pods can talk to other Pods without NAT.
@@ -526,36 +522,6 @@ export default function Module61() {
               {"        protocol: TCP"}
             </div>
           </div>
-
-          <div style={{
-            background: 'white',
-            padding: '1.5rem',
-            borderRadius: '8px',
-            border: '2px solid #e2e8f0'
-          }}>
-            <h4 style={{ marginTop: 0, color: '#1e293b' }}>Weave Net</h4>
-            <p style={{ color: '#1e293b', lineHeight: '1.6' }}>
-              Creates a mesh network where every node talks to every other node. Automatically handles
-              multi-cloud scenarios. Uses "fast datapath" (kernel-based) when possible, falls back to
-              "sleeve" mode (userspace) when needed. Good for hybrid cloud.
-            </p>
-            <div style={{
-              fontFamily: 'monospace',
-              fontSize: '0.9rem',
-              background: '#1e293b',
-              color: '#10b981',
-              padding: '1rem',
-              borderRadius: '6px',
-              marginTop: '0.5rem',
-              overflowX: 'auto'
-            }}>
-              # Install Weave<br />
-              kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml<br />
-              <br />
-              # Each node runs a weave router<br />
-              # Automatically discovers peers and forms mesh
-            </div>
-          </div>
         </div>
 
         <h2 style={{ color: '#1e293b', marginTop: '3rem' }}>What About Services?</h2>
@@ -689,7 +655,7 @@ export default function Module61() {
               borderRadius: '6px',
               marginTop: '0.5rem'
             }}>
-              kubectl get pods -n kube-system | grep -E 'calico|cilium|flannel|weave'<br />
+              kubectl get pods -n kube-system | grep -E 'calico|cilium|flannel'<br />
               ip route  # On the node<br />
               kubectl logs -n kube-system calico-node-xxxxx
             </div>
@@ -818,6 +784,8 @@ export default function Module61() {
           </p>
         </div>
 
+        </div>
+
         <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Link href="/module-5-3" style={{ color: '#9c0606ff', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: StatefulSets</Link>
           <Link href="/module-6-2" style={{
@@ -830,6 +798,8 @@ export default function Module61() {
               fontWeight: 600
             }}>Next: Ingress →</Link>
         </div>
+        <ModuleCompletion moduleId="6-1" />
+
       </main>
     </div>
   );

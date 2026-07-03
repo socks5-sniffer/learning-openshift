@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module22() {
   const [replicaCount, setReplicaCount] = useState(3);
@@ -731,6 +732,8 @@ export default function Module22() {
               display: 'inline-block'
             }}>Next: Services →</Link>
         </div>
+        <ModuleCompletion moduleId="2-2" />
+
       </main>
     </div>
   );

@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module52() {
   const [storageSize, setStorageSize] = useState(10);
@@ -1040,6 +1041,8 @@ export default function Module52() {
               display: 'inline-block'
             }}>Next: StatefulSets →</Link>
         </div>
+        <ModuleCompletion moduleId="5-2" />
+
       </main>
     </div>
   );

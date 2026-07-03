@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module72() {
   const [runAsUser, setRunAsUser] = useState(1000);
@@ -92,7 +93,7 @@ export default function Module72() {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <h1 className={styles.title} style={{ color: '#1e293b' }}>
+        <h1 className={styles.title}>
           7.2 Pod Security
         </h1>
 
@@ -104,6 +105,9 @@ export default function Module72() {
           <Link href="/module-7-3" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: Network Policies →</Link>
         </div>
 
+        {/* Content sits on a light card so the dark text below (originally
+            authored for a light page) stays readable against the dark theme. */}
+        <div style={{ background: 'white', borderRadius: 16, padding: '2rem 2.5rem' }}>
         <p style={{ fontSize: '1.2rem', lineHeight: '1.8', color: '#1e293b', maxWidth: '800px' }}>
           By default, containers run as root with a lot of privileges. This is terrifying from a security
           perspective. Pod Security Standards and SecurityContext let you lock down containers so a
@@ -758,6 +762,8 @@ export default function Module72() {
           </p>
         </div>
 
+        </div>
+
         <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Link href="/module-7-1" style={{ color: '#9c0606ff', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: RBAC</Link>
           <Link href="/module-7-3" style={{
@@ -770,6 +776,8 @@ export default function Module72() {
               fontWeight: 600
             }}>Next: Network Policies →</Link>
         </div>
+        <ModuleCompletion moduleId="7-2" />
+
       </main>
     </div>
   );

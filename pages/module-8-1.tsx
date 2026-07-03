@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Logging() {
   const [selectedApp, setSelectedApp] = useState<'frontend' | 'backend' | 'database'>('frontend')
@@ -109,34 +110,7 @@ export default function Logging() {
           boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
           marginBottom: '2rem'
         }}>
-          <div style={{ 
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'space-between',
-          flexWrap: 'wrap',
-            marginBottom: '1.5rem'
-          }}>
-            <div>
-              <h1 style={{ 
-                fontSize: '2.5rem', 
-                fontWeight: 700, 
-                color: '#1e293b',
-                margin: 0,
-                marginBottom: '0.5rem'
-              }}>
-                8.1 Logging
-              </h1>
-              
-              <div style={{ marginBottom: '1.5rem', marginTop: '1rem' }}>
-                <Link href="/module-7-3" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: Network Policies</Link>
-                <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-                <Link href="/learning-modules" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>All Modules</Link>
-                <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
-                <Link href="/module-8-2" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: Metrics & Monitoring →</Link>
-              </div>
-            </div>
-          </div>
-          <div style={{ 
+          <div style={{
             display: 'inline-block',
             background: '#9c0606',
             color: 'white',
@@ -151,6 +125,13 @@ export default function Logging() {
           <h1 style={{ fontSize: '2.5rem', fontWeight: 700, color: '#1e293b', marginBottom: '1rem' }}>
             8.1 Logging
           </h1>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <Link href="/module-7-3" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: Network Policies</Link>
+            <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
+            <Link href="/learning-modules" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>All Modules</Link>
+            <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
+            <Link href="/module-8-2" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: Metrics & Monitoring →</Link>
+          </div>
           <p style={{ fontSize: '1.1rem', color: '#64748b', lineHeight: 1.6 }}>
             In Kubernetes, containers write to stdout/stderr. That's it. No log files to manage,
             no rotation policies, no disk to fill up. Just print to the console and let the platform
@@ -789,6 +770,8 @@ export default function Logging() {
               fontWeight: 600
             }}>8.2 Monitoring →</Link>
         </div>
+
+        <ModuleCompletion moduleId="8-1" />
       </div>
     </div>
   )

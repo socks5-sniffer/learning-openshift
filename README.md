@@ -59,11 +59,28 @@ This site is a personal learning project, focused on:
 
 ## Project Structure
 
-- `pages/` – Next.js pages (including API routes)
+- `pages/` – Next.js pages (including API routes and interactive labs)
+- `components/` – Shared React components (theme, progress tracking, quizzes, navigation)
+- `data/` – Module catalog and quiz question bank (single source of truth)
+- `lib/` – Small shared utilities
 - `public/` – Static assets
 - `styles/` – CSS modules and global styles
+- `middleware.ts` – Content-Security-Policy header generation (per-request nonce)
 - `tsconfig.json` – TypeScript configuration
 - `eslint.config.mjs` – ESLint configuration
+
+---
+
+## Features
+
+Beyond the module content itself, the platform includes:
+
+- **Progress tracking** – Mark modules complete, resume where you left off, and see per-section completion on the module list, all stored in `localStorage` (no account needed).
+- **Knowledge-check quizzes** – Every module ends with a short quiz; scoring 70%+ automatically marks it complete.
+- **Interactive labs** (`/interactive-learning`) – A client-side **Pod Builder** (YAML with live validation), an **RBAC Simulator** (`kubectl auth can-i`-style permission testing), a **Service Discovery** visualizer (label selectors → live endpoints), and a **Flashcards** deck built from the quiz bank.
+- **kubectl cheat sheet** (`/kubectl-cheatsheet`) – Commands grouped by task, each linking back to the module that teaches it.
+- **Module navigation ribbon** – A fixed bottom bar on every module page showing your position in the curriculum, section, estimated reading time, and completion state.
+- **Copy-to-clipboard** – Every code block across the modules and cheat sheet gets a copy button automatically.
 
 ---
 
@@ -75,7 +92,7 @@ This project includes a sample API route at `/api/hello` which returns a simple 
 
 ## Learning Modules
 
-The site includes an interactive Kubernetes learning curriculum split across 29 modules in 10 topic areas. Each module is a standalone page with explanations, diagrams, and interactive elements.
+The site includes an interactive Kubernetes learning curriculum split across 30 modules in 10 topic areas. Each module is a standalone page with explanations, diagrams, a knowledge-check quiz, and interactive elements.
 
 ### 🎯 Module 0 – Foundation
 

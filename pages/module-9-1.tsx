@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function DeployingTheRightWay() {
   const [selectedStrategy, setSelectedStrategy] = useState<'latest' | 'semver' | 'sha' | 'hybrid'>('latest')
@@ -840,6 +841,8 @@ deployment "myapp" successfully rolled out ✅`}</pre>
               fontWeight: 600
             }}>9.2 GitOps →</Link>
         </div>
+
+        <ModuleCompletion moduleId="9-1" />
       </div>
     </div>
   )

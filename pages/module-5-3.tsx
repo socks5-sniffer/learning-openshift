@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module53() {
   const [showScale, setShowScale] = useState(false);
@@ -816,6 +817,8 @@ export default function Module53() {
               display: 'inline-block'
             }}>Part 5 Complete! →</Link>
         </div>
+        <ModuleCompletion moduleId="5-3" />
+
       </main>
     </div>
   );

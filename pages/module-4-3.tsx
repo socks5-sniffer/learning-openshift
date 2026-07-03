@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module43() {
   const [currentLoad, setCurrentLoad] = useState(30);
@@ -810,6 +811,8 @@ export default function Module43() {
               display: 'inline-block'
             }}>Part 4 Complete! →</Link>
         </div>
+        <ModuleCompletion moduleId="4-3" />
+
       </main>
     </div>
   );

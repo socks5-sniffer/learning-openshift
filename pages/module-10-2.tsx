@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function ManagedKubernetes() {
   const [selectedProvider, setSelectedProvider] = useState<'eks' | 'gke' | 'aks' | 'openshift'>('eks')
@@ -50,7 +51,7 @@ export default function ManagedKubernetes() {
       ],
       bestFor: 'Already on AWS, need deep integration, enterprise workloads',
       setupExample: `# Install eksctl
-curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+curl --silent --location "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
 sudo mv /tmp/eksctl /usr/local/bin
 
 # Create cluster
@@ -897,6 +898,8 @@ oc get nodes`
               fontWeight: 600
             }}>10.3 When to Say "No" to Kubernetes →</Link>
         </div>
+
+        <ModuleCompletion moduleId="10-2" />
       </div>
     </div>
   )

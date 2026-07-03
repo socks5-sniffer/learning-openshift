@@ -26,6 +26,9 @@ export default function InteractiveLearning() {
             <Link href="/interactive-learning" className={`${styles.navLink} ${styles.navLinkActive}`}>
               Interactive
             </Link>
+            <Link href="/kubectl-cheatsheet" className={styles.navLink}>
+              Cheat Sheet
+            </Link>
           </div>
         </div>
       </nav>
@@ -47,68 +50,92 @@ export default function InteractiveLearning() {
         <section className={styles.spotlight}>
           <h2 className={styles.spotlightTitle}>
             <span className={styles.spotlightIcon}>🧪</span>
-            Coming Soon
+            The Lab Is Open
           </h2>
           <p className={styles.spotlightText}>
-            Interactive labs and exercises are in development. Check back soon for hands-on Kubernetes 
-            challenges, YAML builders, and deployment simulators.
+            All four labs are live: build manifests in the Pod Builder, watch label selectors route
+            traffic in Service Discovery, test permissions in the RBAC Simulator, and drill the whole
+            curriculum with Flashcards.
           </p>
         </section>
 
         <div className={styles.grid} style={{ marginTop: '2rem' }}>
-          <div className={styles.card} style={{ opacity: 0.6 }}>
+          <Link href="/pod-builder" className={styles.card} style={{ textDecoration: 'none' }}>
             <h3><span className={styles.cardIcon}>📦</span> Pod Builder</h3>
             <p style={{ color: '#94a3b8', lineHeight: 1.6 }}>
               Build and deploy pods interactively with instant feedback on your YAML configurations.
             </p>
-            <span style={{ 
-              display: 'inline-block', 
-              padding: '4px 10px', 
-              background: 'rgba(148, 163, 184, 0.15)', 
-              borderRadius: '4px', 
+            <span style={{
+              display: 'inline-block',
+              padding: '4px 10px',
+              background: 'rgba(34, 197, 94, 0.15)',
+              borderRadius: '4px',
               fontSize: '0.75rem',
-              color: '#94a3b8',
+              color: '#22c55e',
+              fontWeight: 700,
               marginTop: '1rem'
             }}>
-              In Development
+              ● Live — Try it now
             </span>
-          </div>
+          </Link>
 
-          <div className={styles.card} style={{ opacity: 0.6 }}>
+          <Link href="/flashcards" className={styles.card} style={{ textDecoration: 'none' }}>
+            <h3><span className={styles.cardIcon}>🃏</span> Flashcards</h3>
+            <p style={{ color: '#94a3b8', lineHeight: 1.6 }}>
+              120 cards built from every module&apos;s knowledge checks — flip, self-grade, and find the
+              topics that need another pass.
+            </p>
+            <span style={{
+              display: 'inline-block',
+              padding: '4px 10px',
+              background: 'rgba(34, 197, 94, 0.15)',
+              borderRadius: '4px',
+              fontSize: '0.75rem',
+              color: '#22c55e',
+              fontWeight: 700,
+              marginTop: '1rem'
+            }}>
+              ● Live — Try it now
+            </span>
+          </Link>
+
+          <Link href="/service-discovery" className={styles.card} style={{ textDecoration: 'none' }}>
             <h3><span className={styles.cardIcon}>🌐</span> Service Discovery</h3>
             <p style={{ color: '#94a3b8', lineHeight: 1.6 }}>
               Visualize how services connect and route traffic within a Kubernetes cluster.
             </p>
-            <span style={{ 
-              display: 'inline-block', 
-              padding: '4px 10px', 
-              background: 'rgba(148, 163, 184, 0.15)', 
-              borderRadius: '4px', 
+            <span style={{
+              display: 'inline-block',
+              padding: '4px 10px',
+              background: 'rgba(34, 197, 94, 0.15)',
+              borderRadius: '4px',
               fontSize: '0.75rem',
-              color: '#94a3b8',
+              color: '#22c55e',
+              fontWeight: 700,
               marginTop: '1rem'
             }}>
-              In Development
+              ● Live — Try it now
             </span>
-          </div>
+          </Link>
 
-          <div className={styles.card} style={{ opacity: 0.6 }}>
+          <Link href="/rbac-simulator" className={styles.card} style={{ textDecoration: 'none' }}>
             <h3><span className={styles.cardIcon}>🔐</span> RBAC Simulator</h3>
             <p style={{ color: '#94a3b8', lineHeight: 1.6 }}>
               Practice configuring roles, bindings, and permissions in a safe sandbox environment.
             </p>
-            <span style={{ 
-              display: 'inline-block', 
-              padding: '4px 10px', 
-              background: 'rgba(148, 163, 184, 0.15)', 
-              borderRadius: '4px', 
+            <span style={{
+              display: 'inline-block',
+              padding: '4px 10px',
+              background: 'rgba(34, 197, 94, 0.15)',
+              borderRadius: '4px',
               fontSize: '0.75rem',
-              color: '#94a3b8',
+              color: '#22c55e',
+              fontWeight: 700,
               marginTop: '1rem'
             }}>
-              In Development
+              ● Live — Try it now
             </span>
-          </div>
+          </Link>
         </div>
       </main>
     </div>

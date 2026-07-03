@@ -40,7 +40,7 @@ const Terminal = () => {
         <span className={styles.terminalTitle}>kubectl — production</span>
         <div style={{ width: 52 }}></div>
       </div>
-      <pre className={styles.terminalBody}>
+      <pre className={styles.terminalBody} data-codecopy="skip">
         {text}
         <span className={styles.cursor}>█</span>
       </pre>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module62() {
   const [showTrafficFlow, setShowTrafficFlow] = useState(false);
@@ -65,7 +66,7 @@ export default function Module62() {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <h1 className={styles.title} style={{ color: '#1e293b' }}>
+        <h1 className={styles.title}>
           6.2 Ingress
         </h1>
 
@@ -76,6 +77,10 @@ export default function Module62() {
           <span style={{ margin: '0 1rem', color: '#64748b' }}>|</span>
           <Link href="/module-7-1" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '1.1rem' }}>Next: RBAC →</Link>
         </div>
+
+        {/* Content sits on a light card so the dark text below (originally
+            authored for a light page) stays readable against the dark theme. */}
+        <div style={{ background: 'white', borderRadius: 16, padding: '2rem 2.5rem' }}>
 
         <p style={{ fontSize: '1.2rem', lineHeight: '1.8', color: '#1e293b', maxWidth: '800px' }}>
           Services give you load balancing <em>inside</em> the cluster. Ingress gives you load balancing
@@ -675,7 +680,7 @@ export default function Module62() {
             overflowX: 'auto'
           }}>
             # Install cert-manager<br />
-            kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.0/cert-manager.yaml<br />
+            kubectl apply -f https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml<br />
             <br />
             # Create ClusterIssuer for Let's Encrypt<br />
             {"apiVersion: cert-manager.io/v1"}<br />
@@ -1142,6 +1147,8 @@ export default function Module62() {
           </p>
         </div>
 
+        </div>
+
         <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Link href="/module-6-1" style={{ color: '#9c0606ff', textDecoration: 'none', fontSize: '1.1rem' }}>← Previous: Kubernetes Networking Model</Link>
           <Link href="/learning-modules" style={{
@@ -1154,6 +1161,8 @@ export default function Module62() {
               fontWeight: 600
             }}>Complete Part 6 →</Link>
         </div>
+        <ModuleCompletion moduleId="6-2" />
+
       </main>
     </div>
   );

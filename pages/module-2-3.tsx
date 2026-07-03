@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module23() {
   const [simulationRunning, setSimulationRunning] = useState(false);
@@ -761,6 +762,8 @@ export default function Module23() {
               display: 'inline-block'
             }}>Back to All Modules</Link>
         </div>
+        <ModuleCompletion moduleId="2-3" />
+
       </main>
     </div>
   );

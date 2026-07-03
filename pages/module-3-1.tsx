@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module31() {
   const [configType, setConfigType] = useState<'env' | 'file'>('env');
@@ -809,6 +810,8 @@ export default function Module31() {
               display: 'inline-block'
             }}>Next: Secrets →</Link>
         </div>
+        <ModuleCompletion moduleId="3-1" />
+
       </main>
     </div>
   );

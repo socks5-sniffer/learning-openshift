@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module33() {
   const [selectedEnv, setSelectedEnv] = useState<'dev' | 'staging' | 'prod'>('dev');
@@ -757,6 +758,8 @@ export default function Module33() {
               display: 'inline-block'
             }}>Back to All Modules</Link>
         </div>
+        <ModuleCompletion moduleId="3-3" />
+
       </main>
     </div>
   );

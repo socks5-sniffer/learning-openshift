@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import styles from '../styles/Home.module.css';
+import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module11() {
   return (
@@ -419,6 +420,9 @@ export default function Module11() {
               display: 'inline-block'
             }}>Next: Control Plane Components →</Link>
         </div>
+
+        <ModuleCompletion moduleId="1-1" />
+
       </main>
     </div>
   );
