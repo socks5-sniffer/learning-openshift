@@ -37,6 +37,14 @@ function readStoredProgress(): string[] {
 // localStorage.setItem/removeItem can throw (private browsing with storage
 // disabled, quota exceeded). These swallow that so progress tracking
 // degrades to in-memory-only for the session instead of crashing the app.
+function safeGetItem(key: string): string | null {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
 function safeSetItem(key: string, value: string) {
   try {
     localStorage.setItem(key, value);
@@ -60,7 +68,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     setCompleted(readStoredProgress());
-    const visited = localStorage.getItem(LAST_VISITED_KEY);
+    const visited = safeGetItem(LAST_VISITED_KEY);
     if (visited && allModules.some((m) => m.id === visited)) {
       setLastVisited(visited);
     }

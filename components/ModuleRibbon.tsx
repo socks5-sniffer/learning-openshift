@@ -33,13 +33,14 @@ export default function ModuleRibbon() {
     if (!active) return;
     setReadMinutes(null);
     const timer = setTimeout(() => {
-      // innerText on a detached clone is unreliable (no layout), so instead
-      // subtract the (still-attached) copy buttons' own word counts from the total.
+      // textContent avoids the forced layout/reflow that innerText triggers
+      // (this runs on every module navigation); nothing on these pages relies
+      // on display:none to hide text, so the word count comes out the same.
       const container = document.querySelector('main') ?? document.body;
       const countWords = (text: string) => text.split(/\s+/).filter(Boolean).length;
       const copyButtons = container.querySelectorAll<HTMLElement>('[aria-label="Copy code to clipboard"]');
-      const buttonWords = Array.from(copyButtons).reduce((sum, btn) => sum + countWords(btn.innerText), 0);
-      const words = Math.max(0, countWords(container.innerText) - buttonWords);
+      const buttonWords = Array.from(copyButtons).reduce((sum, btn) => sum + countWords(btn.textContent ?? ''), 0);
+      const words = Math.max(0, countWords(container.textContent ?? '') - buttonWords);
       setReadMinutes(Math.max(1, Math.round(words / 200)));
     }, 150);
     return () => clearTimeout(timer);
