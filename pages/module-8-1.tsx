@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
@@ -9,6 +9,11 @@ export default function Logging() {
   const [logLevel, setLogLevel] = useState<'debug' | 'info' | 'warn' | 'error'>('info')
   const [showStructured, setShowStructured] = useState(false)
   const [selectedPattern, setSelectedPattern] = useState<'sidecar' | 'daemonset' | 'direct'>('sidecar')
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const apps = {
     frontend: {
@@ -237,7 +242,7 @@ export default function Logging() {
                     <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>{getStructuredLog(log)}</pre>
                   ) : (
                     <div>
-                      <span style={{ color: '#64748b' }}>{new Date().toISOString()}</span>
+                      <span style={{ color: '#64748b' }}>{mounted ? new Date().toISOString() : ''}</span>
                       {' '}
                       <span style={{ color: apps[selectedApp].color }}>[{apps[selectedApp].name}]</span>
                       {' '}
