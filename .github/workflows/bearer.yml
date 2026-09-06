@@ -3,9 +3,9 @@ name: Bearer Security Scan
 
 on:
   push:
-    branches: [main, main1]
+    branches: [main]
   pull_request:
-    branches: [main, main1]
+    branches: [main]
   schedule:
     - cron: '0 0 * * 0'  # Weekly on Sundays
   workflow_dispatch:  # Allow manual trigger
