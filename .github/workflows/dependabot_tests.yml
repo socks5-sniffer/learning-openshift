@@ -3,7 +3,7 @@ name: Dependabot Tests
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-    branches: [main, main1]
+    branches: [main]
     paths-ignore:
       - '**.md'
       - 'SECURITY.md'
