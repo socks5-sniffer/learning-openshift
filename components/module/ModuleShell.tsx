@@ -24,6 +24,10 @@ export default function ModuleShell({ id, subtitle, children }: ModuleShellProps
   const index = allModules.findIndex((m) => m.id === id);
   const prev = index > 0 ? allModules[index - 1] : null;
   const next = index >= 0 && index < allModules.length - 1 ? allModules[index + 1] : null;
+  // Only the genuine final module gets the "Finish" action. When id isn't in
+  // the catalog (index === -1) next is also null, but that's an unknown module,
+  // not the end of the course — fall back to a plain "All Modules" link.
+  const isLastModule = index >= 0 && index === allModules.length - 1;
 
   const heading = info ? `Module ${id.replace('-', '.')}: ${info.title}` : `Module ${id}`;
   const description = info?.description ?? '';
@@ -49,7 +53,7 @@ export default function ModuleShell({ id, subtitle, children }: ModuleShellProps
               <Link href={`/module-${prev.id}`} className={styles.topNavLink}>
                 ← Previous: {prev.title}
               </Link>
-              <span className={styles.topNavSep}>|</span>
+              <span className={styles.topNavSep} aria-hidden="true">|</span>
             </>
           )}
           <Link href="/learning-modules" className={styles.topNavLink}>
@@ -57,7 +61,7 @@ export default function ModuleShell({ id, subtitle, children }: ModuleShellProps
           </Link>
           {next && (
             <>
-              <span className={styles.topNavSep}>|</span>
+              <span className={styles.topNavSep} aria-hidden="true">|</span>
               <Link href={`/module-${next.id}`} className={styles.topNavLink}>
                 Next: {next.title} →
               </Link>
@@ -83,7 +87,7 @@ export default function ModuleShell({ id, subtitle, children }: ModuleShellProps
             </Link>
           ) : (
             <Link href="/learning-modules" className={`${styles.navButton} ${styles.navButtonPrimary}`}>
-              Finish 🎉
+              {isLastModule ? 'Finish 🎉' : '← All Modules'}
             </Link>
           )}
         </div>
