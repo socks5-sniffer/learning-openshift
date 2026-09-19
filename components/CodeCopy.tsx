@@ -11,7 +11,10 @@ const DIAGRAM_CHARS = /[┌┐└┘├┤│─▼▲]/;
 
 function attachButtons() {
   const candidates = document.querySelectorAll<HTMLElement>(
-    'pre, div[style*="monospace"], div[style*="JetBrains"]'
+    // <pre> and inline monospace divs, plus blocks that opt in explicitly
+    // (e.g. TermBox, which sets its monospace font via a CSS class rather
+    // than an inline style and so isn't caught by the style selectors).
+    'pre, div[style*="monospace"], div[style*="JetBrains"], [data-codecopy-scan]'
   );
 
   candidates.forEach((el) => {
