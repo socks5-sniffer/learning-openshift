@@ -44,16 +44,14 @@ export default function ModuleShell({ id, subtitle, children }: ModuleShellProps
         {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
 
         <nav className={styles.topNav} aria-label="Module navigation">
-          {prev ? (
-            <Link href={`/module-${prev.id}`} className={styles.topNavLink}>
-              ← Previous: {prev.title}
-            </Link>
-          ) : (
-            <Link href="/learning-modules" className={styles.topNavLink}>
-              ← All Modules
-            </Link>
+          {prev && (
+            <>
+              <Link href={`/module-${prev.id}`} className={styles.topNavLink}>
+                ← Previous: {prev.title}
+              </Link>
+              <span className={styles.topNavSep}>|</span>
+            </>
           )}
-          <span className={styles.topNavSep}>|</span>
           <Link href="/learning-modules" className={styles.topNavLink}>
             All Modules
           </Link>

@@ -128,7 +128,7 @@ export default function Module11() {
         </p>
 
         <h3>The Old Way (Pets)</h3>
-        <TermBox copyable={false}>
+        <TermBox>
           <div style={{ color: '#64748b' }}>// Traditional deployment</div>
           <div style={{ color: '#ef4444' }}>ssh web-server-01</div>
           <div style={{ color: '#ef4444' }}>sudo systemctl restart nginx</div>
@@ -142,7 +142,7 @@ export default function Module11() {
         </p>
 
         <h3>The Kubernetes Way (Cattle)</h3>
-        <TermBox copyable={false}>
+        <TermBox>
           <div style={{ color: '#64748b' }}>// Kubernetes deployment</div>
           <div style={{ color: '#22c55e' }}>kubectl apply -f deployment.yaml</div>
           <div style={{ color: '#64748b' }}>// That's it. Kubernetes handles the rest.</div>
