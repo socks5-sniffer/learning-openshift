@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/build.cjs",
     "start": "next start",
     "lint": "eslint ."
   },

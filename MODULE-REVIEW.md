@@ -1,6 +1,6 @@
 # Module review (September 2026)
 
-This is a source-level audit of the 30 lessons, their routes, quizzes, examples, and interactive controls. Every catalog entry has a page, matching completion ID, and four quiz questions with valid answer indexes. Literal links between modules resolve. ESLint and TypeScript pass. These checks do **not** prove every control works in a browser or that every example can be applied to a live cluster. A production build could not finish in this Windows environment: the existing `.next/trace` was inaccessible, and a retry using a separate output directory failed when Next.js tried to spawn a process (`EPERM`).
+This is a source-level audit of the 30 lessons, their routes, quizzes, examples, and interactive controls. Every catalog entry has a page, matching completion ID, and four quiz questions with valid answer indexes. Literal links between modules resolve. ESLint, TypeScript, and the production build pass; the build generated all 41 pages. These checks do **not** prove every control works in a browser or that every example can be applied to a live cluster.
 
 | Module | Static review result |
 | --- | --- |
