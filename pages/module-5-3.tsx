@@ -1,12 +1,17 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from '../styles/Home.module.css';
 import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module53() {
   const [showScale, setShowScale] = useState(false);
   const [replicas, setReplicas] = useState(3);
+  const scaleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => {
+    if (scaleTimer.current) clearTimeout(scaleTimer.current);
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -174,7 +179,11 @@ export default function Module53() {
                 onChange={(e) => {
                   setReplicas(Number(e.target.value));
                   setShowScale(true);
-                  setTimeout(() => setShowScale(false), 3000);
+                  if (scaleTimer.current) clearTimeout(scaleTimer.current);
+                  scaleTimer.current = setTimeout(() => {
+                    setShowScale(false);
+                    scaleTimer.current = null;
+                  }, 3000);
                 }}
                 style={{ width: '100%' }}
               />

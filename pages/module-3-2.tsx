@@ -231,7 +231,8 @@ export default function Module32() {
 
           <h3>Method 2: From YAML File (Manual Base64 Encoding)</h3>
           <p style={{ color: '#1e293b' }}>
-            If you write a Secret in YAML, you must Base64-encode values yourself:
+            If you use the <code>data</code> field in Secret YAML, Base64-encode values. The
+            <code> stringData</code> field accepts plain text and Kubernetes converts it on creation:
           </p>
 
           <div style={{

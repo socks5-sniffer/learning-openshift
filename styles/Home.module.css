@@ -153,6 +153,105 @@
   padding: 4rem 0 3rem;
 }
 
+.landingMain {
+  padding-top: 4.75rem;
+  padding-bottom: 0;
+}
+
+.landingHero {
+  margin-bottom: 0;
+  padding: 1.5rem 0 3rem;
+}
+
+.landingHero .title {
+  font-size: clamp(2.25rem, 4.5vw, 3rem);
+  margin-bottom: 1.25rem;
+}
+
+.landingHero .terminalWrapper {
+  max-width: 450px;
+  margin: 1.75rem auto 2rem;
+}
+
+.learningCta {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: rgba(30, 41, 59, 0.5);
+}
+
+.learningCtaText {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+}
+
+.learningCtaText strong {
+  color: #22c55e;
+}
+
+.progressTrack {
+  width: 260px;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: rgba(148, 163, 184, 0.15);
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #16a34a, #22c55e);
+}
+
+.learningButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.35rem;
+  border-radius: 8px;
+  background: #9c0606;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 150ms ease, transform 150ms ease;
+}
+
+.learningButton:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+}
+
+.aboutHeader {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.aboutHeader .title {
+  margin-bottom: 1rem;
+}
+
+.aboutLinkWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.principle h3 {
+  margin: 0.75rem 0 0.5rem;
+  color: var(--color-text-primary);
+  font-size: 1.05rem;
+}
+
+.principle p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
 .badge {
   display: inline-flex;
   align-items: center;
@@ -880,6 +979,27 @@
   
   .terminalWrapper {
     margin: 1.5rem auto;
+  }
+
+  .landingMain {
+    padding-top: 4.5rem;
+    padding-bottom: 0;
+  }
+
+  .landingHero {
+    margin-bottom: 0;
+    padding: 1.25rem 0 2rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .navLinks {
+    gap: 0;
+  }
+
+  .navLink {
+    padding: 8px 7px;
+    font-size: 0.75rem;
   }
 }
 

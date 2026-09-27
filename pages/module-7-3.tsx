@@ -143,7 +143,10 @@ export default function Module73() {
           border: '2px solid #e2e8f0'
         }}>
           <p style={{ color: '#1e293b', marginBottom: '1rem' }}>
-            See how NetworkPolicies restrict traffic in a 3-tier application:
+            See how a set of default-deny ingress and egress policies plus explicit allow rules
+            could restrict new connections in a 3-tier application. The backend-to-database rule
+            is preconfigured; use the checkboxes to add the other rules. Replies to allowed
+            connections are allowed automatically. A supporting network plugin is required.
           </p>
 
           <div style={{ marginBottom: '1.5rem' }}>
@@ -674,6 +677,7 @@ export default function Module73() {
           <br />
           {"---"}<br />
           {"# 3. Frontend: Allow from Ingress, allow to Backend"}<br />
+          {"# Replace ingress-system with your controller's namespace"}<br />
           {"apiVersion: networking.k8s.io/v1"}<br />
           {"kind: NetworkPolicy"}<br />
           {"metadata:"}<br />
@@ -685,7 +689,7 @@ export default function Module73() {
           {"  ingress:"}<br />
           {"  - from:"}<br />
           {"    - namespaceSelector:"}<br />
-          {"        matchLabels: {name: ingress-nginx}"}<br />
+          {"        matchLabels: {kubernetes.io/metadata.name: ingress-system}"}<br />
           {"    ports:"}<br />
           {"    - {protocol: TCP, port: 80}"}<br />
           {"  egress:"}<br />

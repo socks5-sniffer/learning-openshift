@@ -428,9 +428,9 @@ export default function Module61() {
           }}>
             <h4 style={{ marginTop: 0, color: '#1e293b' }}>Calico</h4>
             <p style={{ color: '#1e293b', lineHeight: '1.6' }}>
-              Uses BGP (Border Gateway Protocol) to program routes directly in the kernel routing table.
-              No overlay by default—just pure IP routing. Can optionally use VXLAN for environments that
-              don't support BGP. Strong NetworkPolicy implementation with iptables or eBPF.
+              Supports several networking modes, including routed and overlay configurations.
+              It can enforce Kubernetes NetworkPolicy. The installation method and data plane
+              depend on your cluster and Calico configuration.
             </p>
             <div style={{
               fontFamily: 'monospace',
@@ -442,8 +442,7 @@ export default function Module61() {
               marginTop: '0.5rem',
               overflowX: 'auto'
             }}>
-              # Install Calico<br />
-              kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml<br />
+              # Illustrative routed network (not an installation command):<br />
               <br />
               # Each node gets routes like this:<br />
               10.244.1.0/24 via 192.168.1.10 dev eth0<br />
@@ -460,9 +459,9 @@ export default function Module61() {
           }}>
             <h4 style={{ marginTop: 0, color: '#1e293b' }}>Flannel</h4>
             <p style={{ color: '#1e293b', lineHeight: '1.6' }}>
-              The simplest CNI. Uses VXLAN to create an overlay network. Every packet gets wrapped in a VXLAN
-              header with the destination node's IP. Easy to set up, but no NetworkPolicy support (you need
-              Calico on top for that—yes, you can run both).
+              Flannel provides Pod networking using a configurable backend such as VXLAN.
+              Flannel itself does not enforce Kubernetes NetworkPolicy; choose a compatible
+              policy implementation if your workloads need traffic rules.
             </p>
             <div style={{
               fontFamily: 'monospace',
@@ -474,8 +473,7 @@ export default function Module61() {
               marginTop: '0.5rem',
               overflowX: 'auto'
             }}>
-              # Install Flannel<br />
-              kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml<br />
+              # Illustrative VXLAN setup (not an installation command):<br />
               <br />
               # Creates a flannel.1 interface on each node<br />
               # All Pod traffic goes through the VXLAN tunnel
@@ -697,8 +695,9 @@ export default function Module61() {
           }}>
             <h4 style={{ marginTop: 0, color: '#1e293b' }}>Problem: NetworkPolicy blocks everything</h4>
             <p style={{ color: '#1e293b', lineHeight: '1.6', margin: 0 }}>
-              <strong>Diagnosis:</strong> By default, Pods accept all traffic. Once you create <em>any</em>
-              NetworkPolicy that selects a Pod, it becomes deny-by-default. You need to explicitly allow DNS.
+              <strong>Diagnosis:</strong> Pods are non-isolated by default. A policy isolates selected Pods
+              only for the directions in its <code>policyTypes</code>. If egress is restricted, allow DNS
+              explicitly when the workload needs name resolution.
             </p>
             <div style={{
               fontFamily: 'monospace',
@@ -709,12 +708,12 @@ export default function Module61() {
               borderRadius: '6px',
               marginTop: '0.5rem'
             }}>
-              # Always allow DNS:<br />
+              # Example DNS egress rule (add to an Egress policy):<br />
               {"egress:"}<br />
               {"- to:"}<br />
               {"  - namespaceSelector:"}<br />
               {"      matchLabels:"}<br />
-              {"        name: kube-system"}<br />
+              {"        kubernetes.io/metadata.name: kube-system"}<br />
               {"  ports:"}<br />
               {"  - protocol: UDP"}<br />
               {"    port: 53"}

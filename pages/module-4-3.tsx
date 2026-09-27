@@ -7,21 +7,23 @@ import ModuleCompletion from '../components/ModuleCompletion';
 export default function Module43() {
   const [currentLoad, setCurrentLoad] = useState(30);
   const [targetCPU, setTargetCPU] = useState(70);
+  const [currentReplicas, setCurrentReplicas] = useState(3);
   const [minReplicas, setMinReplicas] = useState(2);
   const [maxReplicas, setMaxReplicas] = useState(10);
 
-  // Calculate desired replicas based on current load
+  // Simplified instantaneous HPA recommendation. Real HPA also considers
+  // readiness, missing metrics, scaling policies, and stabilization windows.
   const calculateReplicas = () => {
-    if (currentLoad <= targetCPU) {
-      return minReplicas;
-    }
-    const desired = Math.ceil((currentLoad / targetCPU) * minReplicas);
+    const ratio = currentLoad / targetCPU;
+    const desired = Math.abs(1 - ratio) <= 0.1
+      ? currentReplicas
+      : Math.ceil(ratio * currentReplicas);
     return Math.min(Math.max(desired, minReplicas), maxReplicas);
   };
 
   const desiredReplicas = calculateReplicas();
-  const isScalingUp = currentLoad > targetCPU;
-  const isScalingDown = currentLoad < targetCPU && desiredReplicas > minReplicas;
+  const isScalingUp = desiredReplicas > currentReplicas;
+  const isScalingDown = desiredReplicas < currentReplicas;
 
   return (
     <div className={styles.container}>
@@ -98,8 +100,8 @@ export default function Module43() {
             <p style={{ marginBottom: 0 }}>
               HPA scales <strong>Pods</strong>, not <strong>nodes</strong>. If your cluster is 
               out of CPU/memory capacity, new Pods will be <code>Pending</code>. You need 
-              <strong>Cluster Autoscaler</strong> (adds nodes) or <strong>Vertical Pod 
-              Autoscaler</strong> (adjusts resource requests).
+              a node autoscaler or more cluster capacity to schedule them. Vertical Pod
+              Autoscaler adjusts resource requests; it does not add nodes.
             </p>
           </div>
         </section>
@@ -107,7 +109,7 @@ export default function Module43() {
         <section className={styles.spotlight}>
           <h2>Interactive: HPA Simulation</h2>
           <p>
-            Adjust the current CPU load and observe how HPA scales the number of replicas:
+            Adjust CPU utilization and the current replica count to see a simplified HPA recommendation:
           </p>
 
           <div style={{
@@ -124,7 +126,7 @@ export default function Module43() {
                 marginBottom: '8px',
                 color: '#1e293b'
               }}>
-                Current CPU Usage: {currentLoad}%
+                Current Average CPU Utilization: {currentLoad}% of request
               </label>
               <input
                 type="range"
@@ -132,6 +134,20 @@ export default function Module43() {
                 max="100"
                 value={currentLoad}
                 onChange={(e) => setCurrentLoad(Number(e.target.value))}
+                style={{ width: '100%' }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '20px' }}>
+              <label style={{ display: 'block', fontWeight: 600, marginBottom: '8px', color: '#1e293b' }}>
+                Current Replicas: {currentReplicas}
+              </label>
+              <input
+                type="range"
+                min="1"
+                max="20"
+                value={currentReplicas}
+                onChange={(e) => setCurrentReplicas(Number(e.target.value))}
                 style={{ width: '100%' }}
               />
             </div>
@@ -224,9 +240,9 @@ export default function Module43() {
                 Desired Replicas
               </div>
               <div style={{ fontSize: '0.9rem', color: '#6b7280' }}>
-                {isScalingUp && `🔥 Scaling UP (CPU ${currentLoad}% > target ${targetCPU}%)`}
-                {isScalingDown && `❄️ Scaling DOWN (CPU ${currentLoad}% < target ${targetCPU}%)`}
-                {!isScalingUp && !isScalingDown && `✅ Stable (CPU within target)`}
+                {isScalingUp && `🔥 Scale up from ${currentReplicas}`}
+                {isScalingDown && `❄️ Scale down from ${currentReplicas}`}
+                {!isScalingUp && !isScalingDown && '✅ Keep the current replica count'}
               </div>
             </div>
 
@@ -241,9 +257,9 @@ export default function Module43() {
             }}>
               <div style={{ color: '#64748b' }}># Calculated formula:</div>
               <div>desiredReplicas = ceil((currentLoad / targetCPU) * currentReplicas)</div>
-              <div>desiredReplicas = ceil(({currentLoad} / {targetCPU}) * {minReplicas}) = <span style={{ color: '#22c55e' }}>{desiredReplicas}</span></div>
+              <div>desiredReplicas = ceil({currentReplicas} × {currentLoad} / {targetCPU}) = {Math.ceil(currentReplicas * currentLoad / targetCPU)}</div>
               <div style={{ marginTop: '8px', color: '#64748b' }}>
-                # Constrained: {minReplicas} ≤ replicas ≤ {maxReplicas}
+                # Apply the 10% tolerance, then constrain to {minReplicas}–{maxReplicas}: <span style={{ color: '#22c55e' }}>{desiredReplicas}</span>
               </div>
             </div>
           </div>
@@ -262,12 +278,12 @@ export default function Module43() {
           }}>
             <h3 style={{ marginTop: 0, color: '#9c0606ff' }}>The Control Loop</h3>
             <ol>
-              <li><strong>Metrics Server</strong> collects CPU/memory from kubelet every 15s</li>
+              <li>A metrics API supplies CPU/memory measurements (commonly via Metrics Server)</li>
               <li><strong>HPA Controller</strong> queries metrics every 15s (configurable)</li>
               <li>HPA calculates: <code>desiredReplicas = ceil(currentReplicas * (currentMetric / targetMetric))</code></li>
               <li>If desired ≠ current, HPA updates the Deployment/ReplicaSet <code>spec.replicas</code></li>
               <li>ReplicaSet creates/deletes Pods</li>
-              <li>Wait for cooldown period (scale-up: 3 min, scale-down: 5 min default)</li>
+              <li>Scaling policies and stabilization smooth changes; the default downscale stabilization window is 5 minutes, while scale-up has no stabilization window</li>
             </ol>
           </div>
 
@@ -281,8 +297,8 @@ export default function Module43() {
             color: '#1e293b'
           }}>
             <p style={{ marginTop: 0 }}>
-              <strong>⚠️ CRITICAL:</strong> HPA requires the <strong>Metrics Server</strong> to be 
-              installed in your cluster. Without it, HPA cannot read CPU/memory metrics.
+              <strong>⚠️ Check your cluster:</strong> CPU and memory HPA need the <code>metrics.k8s.io</code> API,
+              commonly provided by Metrics Server. Managed clusters may already provide it.
             </p>
             <div style={{
               background: '#1e293b',

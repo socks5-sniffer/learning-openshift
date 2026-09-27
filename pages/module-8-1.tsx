@@ -66,9 +66,9 @@ export default function Logging() {
     direct: {
       name: 'Direct Shipping',
       description: 'Application sends logs directly to logging backend',
-      pros: ['Lowest latency', 'No intermediaries', 'Guaranteed delivery'],
+      pros: ['Low latency', 'No collection agent', 'Application controls retries'],
       cons: ['Tight coupling', 'App complexity', 'Network dependency'],
-      useCase: 'Critical business logs that can\'t be lost'
+      useCase: 'Applications that need direct control over log delivery'
     }
   }
 
@@ -714,9 +714,9 @@ export default function Logging() {
             }}>
               <strong style={{ color: '#92400e' }}>⚠️ Remember:</strong>
               <p style={{ color: '#92400e', marginTop: '0.5rem', marginBottom: 0 }}>
-                kubectl logs only shows logs that are currently in the container. If the Pod restarts,
-                you lose them unless you have centralized logging. Always use --previous to see logs
-                from the crashed container.
+                kubectl logs reads container logs retained on the node. After a container restart,
+                --previous can show the previous instance while those logs remain available. For
+                durable history across Pod deletion or node loss, use centralized logging.
               </p>
             </div>
           </div>

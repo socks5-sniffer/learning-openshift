@@ -1,118 +1,72 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Terminal from '../components/Terminal'
-import { useTheme } from '../components/ThemeContext'
 import { useProgress } from '../components/ProgressContext'
 import { getModuleById } from '../data/modules'
 
-
 const Home: NextPage = () => {
-  const { theme, toggleTheme } = useTheme();
-  const { completedCount, totalCount, loaded, nextModule } = useProgress();
-  const nextId = nextModule();
-  const nextInfo = getModuleById(nextId);
+  const { completedCount, totalCount, loaded, nextModule } = useProgress()
+  const nextId = nextModule()
+  const nextInfo = getModuleById(nextId)
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>Kubernetes Learning Platform | Cloud-Native Development</title>
-        <meta name="description" content="Master Kubernetes and OpenShift with hands-on learning modules" />
+        <title>ClusterFoundry | Kubernetes Learning</title>
+        <meta name="description" content="Learn Kubernetes through hands-on modules, interactive labs, and practical examples." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/* Navigation Bar */}
       <nav className={styles.navbar}>
         <div className={styles.navContent}>
           <Link href="/" className={styles.navBrand}>
             <div className={styles.navLogo}>☸</div>
             <span className={styles.navTitle}>
-              <span className={styles.navTitleAccent}>Learn K8's</span>
+              <span className={styles.navTitleAccent}>ClusterFoundry</span>
             </span>
           </Link>
           <div className={styles.navLinks}>
-            <Link href="/learning-modules" className={styles.navLink}>
-              Modules
-            </Link>
-            <Link href="/interactive-learning" className={styles.navLink}>
-              Interactive
-            </Link>
-            <Link href="/kubectl-cheatsheet" className={styles.navLink}>
-              Cheat Sheet
-            </Link>
+            <Link href="/learning-modules" className={styles.navLink}>Modules</Link>
+            <Link href="/interactive-learning" className={styles.navLink}>Interactive</Link>
+            <Link href="/kubectl-cheatsheet" className={styles.navLink}>Cheat Sheet</Link>
+            <Link href="/about" className={styles.navLink}>About</Link>
           </div>
         </div>
       </nav>
 
-      <main className={styles.main}>
-        {/* Hero */}
-        <section className={styles.hero}>
-          <div className={styles.badge}>
-            <span className={styles.badgeIcon}></span>
-            Deployed on OpenShift with Dev Spaces
-          </div>
+      <main className={`${styles.main} ${styles.landingMain}`}>
+        <section className={`${styles.hero} ${styles.landingHero}`}>
           <h1 className={styles.title}>
             Master <span className={styles.titleAccent}>Cloud-Native</span> Development
           </h1>
-          
-          {/* SIMULATED TERMINAL WINDOW */}
+
           <div className={styles.terminalWrapper}>
             <Terminal />
           </div>
 
           <p className={styles.subtitle}>
             A hands-on learning platform for Kubernetes, container orchestration,
-            and modern cloud infrastructure.  Built by practitioners, for practitioners.
+            and modern cloud infrastructure. Built by practitioners, for practitioners.
           </p>
 
-          {/* Continue / start learning */}
           {loaded && (
-            <div
-              style={{
-                marginTop: '2rem',
-                display: 'inline-flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '0.75rem',
-                padding: '1.5rem 2rem',
-                borderRadius: 14,
-                border: '1px solid rgba(148, 163, 184, 0.2)',
-                background: 'rgba(30, 41, 59, 0.5)',
-              }}
-            >
+            <div className={styles.learningCta}>
               {completedCount > 0 ? (
                 <>
-                  <div style={{ color: '#cbd5e1', fontSize: '0.95rem' }}>
-                    You&apos;ve completed <strong style={{ color: '#22c55e' }}>{completedCount} of {totalCount}</strong> modules
+                  <div className={styles.learningCtaText}>
+                    You&apos;ve completed <strong>{completedCount} of {totalCount}</strong> modules
                   </div>
-                  <div
-                    style={{
-                      width: 260,
-                      height: 8,
-                      borderRadius: 4,
-                      background: 'rgba(148, 163, 184, 0.15)',
-                      overflow: 'hidden',
-                    }}
-                  >
+                  <div className={styles.progressTrack}>
                     <div
-                      style={{
-                        width: `${Math.round((completedCount / totalCount) * 100)}%`,
-                        height: '100%',
-                        background: 'linear-gradient(90deg, #16a34a, #22c55e)',
-                      }}
+                      className={styles.progressFill}
+                      style={{ width: `${Math.round((completedCount / totalCount) * 100)}%` }}
                     />
                   </div>
                   <Link
                     href={completedCount === totalCount ? '/learning-modules' : `/module-${nextId}`}
-                    style={{
-                      background: '#9c0606',
-                      color: 'white',
-                      padding: '12px 26px',
-                      borderRadius: 8,
-                      textDecoration: 'none',
-                      fontWeight: 600,
-                    }}
+                    className={styles.learningButton}
                   >
                     {completedCount === totalCount
                       ? 'Review the curriculum →'
@@ -121,20 +75,10 @@ const Home: NextPage = () => {
                 </>
               ) : (
                 <>
-                  <div style={{ color: '#cbd5e1', fontSize: '0.95rem' }}>
+                  <div className={styles.learningCtaText}>
                     {totalCount} modules, from container basics to production Kubernetes
                   </div>
-                  <Link
-                    href={`/module-${nextId}`}
-                    style={{
-                      background: '#9c0606',
-                      color: 'white',
-                      padding: '12px 26px',
-                      borderRadius: 8,
-                      textDecoration: 'none',
-                      fontWeight: 600,
-                    }}
-                  >
+                  <Link href="/learning-modules" className={styles.learningButton}>
                     Start learning →
                   </Link>
                 </>
@@ -142,192 +86,7 @@ const Home: NextPage = () => {
             </div>
           )}
         </section>
-
-        {/* My Approach */}
-        <section className={styles.spotlight}>
-          <h2 className={styles.spotlightTitle}>
-            <span className={styles.spotlightIcon}>💡</span>
-            Learning Philosophy
-          </h2>
-          <p className={styles.spotlightText}>
-            I approach learning with intention. I ship working code, 
-            document my mistakes, and iterate based on feedback. This platform itself is evidence I&apos;m 
-            learning Next.js and OpenShift by actually deploying to production.
-          </p>
-        </section>
-
-        {/* What I Know */}
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>🛠️</span>
-            Technical Focus Areas
-          </h2>
-          
-          <div className={styles.grid}>
-            <div className={styles.card}>
-              <h3><span className={styles.cardIcon}>⚡</span> Currently Practicing</h3>
-              <ul className={styles.techList}>
-                <li>Next.js + TypeScript fundamentals</li>
-                <li>OpenShift deployment and routing</li>
-                <li>Git workflows and version control</li>
-                <li>Infrastructure configuration</li>
-              </ul>
-            </div>
-
-            <div className={styles.card}>
-              <h3><span className={styles.cardIcon}>📚</span> Actively Learning</h3>
-              <ul className={styles.techList}>
-                <li>Container orchestration patterns</li>
-                <li>Kubernetes core concepts</li>
-                <li>Cloud-native design patterns</li>
-                <li>System architecture principles</li>
-              </ul>
-            </div>
-
-            <div className={styles.card}>
-              <h3><span className={styles.cardIcon}>🗺️</span> On the Roadmap</h3>
-              <ul className={styles.techList}>
-                <li>Service mesh and networking</li>
-                <li>CI/CD pipeline automation</li>
-                <li>Security best practices</li>
-                <li>Infrastructure as Code</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* This Project */}
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>🏗️</span>
-            About This Platform
-          </h2>
-          <div className={styles.projectCard}>
-            <div className={styles.projectHeader}>
-              <span className={styles.projectStatus}>Live</span>
-              <h3>Learning & Portfolio Workspace</h3>
-            </div>
-            <p className={styles.projectDesc}>
-              This isn&apos;t a polished product, it&apos;s a working lab. I deployed a Next.js app to 
-              OpenShift to understand how containerized applications work in practice. The codebase 
-              is navigable, changes are tracked, and patterns are documented for learning.
-            </p>
-            <div className={styles.techStack}>
-              <span className={styles.techBadge}>Next.js</span>
-              <span className={styles.techBadge}>TypeScript</span>
-              <span className={styles.techBadge}>OpenShift</span>
-              <span className={styles.techBadge}>Kubernetes</span>
-              <span className={styles.techBadge}>AI-Assisted</span>
-            </div>
-          </div>
-        </section>
-
-        {/* How I Learn */}
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>🎯</span>
-            Development Principles
-          </h2>
-          <div className={styles.principleGrid}>
-            <div className={styles.principle}>
-              <div className={styles.principleIcon}>🚀</div>
-              <h4>Ship First, Refine Later</h4>
-              <p>Deploy early, break things safely, learn from errors, and iterate continuously.</p>
-            </div>
-            
-            <div className={styles.principle}>
-              <div className={styles.principleIcon}>📖</div>
-              <h4>Learn in Public</h4>
-              <p>Transparency about gaps in knowledge enables honest progress tracking.</p>
-            </div>
-            
-            <div className={styles.principle}>
-              <div className={styles.principleIcon}>🔧</div>
-              <h4>Production-Focused</h4>
-              <p>Build real systems in real environments, not just tutorial exercises.</p>
-            </div>
-            
-            <div className={styles.principle}>
-              <div className={styles.principleIcon}>🤖</div>
-              <h4>Leverage Modern Tools</h4>
-              <p>Use AI assistance, automation, and existing patterns to accelerate learning.</p>
-            </div>
-          </div>
-        </section>
-
-        {/* Current Focus */}
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>📍</span>
-            Current Focus
-          </h2>
-          <p className={styles.sectionText}>
-            Working to understand how applications are architected for cloud environments. 
-            That means hands-on work with container orchestration, understanding design decisions, 
-            and learning why certain patterns matter for scalability and reliability.
-          </p>
-          <div className={styles.learningList}>
-            <div className={styles.learningItem}>
-              <span className={styles.learningStatus}>Practicing</span>
-              <span>Deploying and updating applications in OpenShift</span>
-            </div>
-            <div className={styles.learningItem}>
-              <span className={styles.learningStatus}>Studying</span>
-              <span>How Kubernetes resources connect (Pods, Services, Routes)</span>
-            </div>
-            <div className={styles.learningItem}>
-              <span className={styles.learningStatus}>Exploring</span>
-              <span>Enterprise approaches to container orchestration</span>
-            </div>
-          </div>
-        </section>
-
-        {/* Why Solutions Architecture */}
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>💭</span>
-            Why Solutions Architecture?
-          </h2>
-          <p className={styles.sectionText}>
-            Drawn to the strategic side of technology, understanding how pieces fit together 
-            to solve business problems. Developing the mindset: asking why certain approaches work, 
-            thinking about tradeoffs, and connecting technology to outcomes. The goal is to grow 
-            into a role helping teams make informed architectural decisions.
-          </p>
-        </section>
-
-        {/* Connect */}
-        <section className={styles.ctaSection}>
-          <h2>Open to Opportunities</h2>
-          <p>Looking for teams that value growth mindset, honest communication, and learning through building.</p>
-          <div className={styles.ctaButtons}>
-            <a href="https://github.com/socks5-sniffer" className={styles.ctaButton}>
-              View GitHub →
-            </a>
-            <a href="https://linkedin.com/in/erik-roed" className={styles.ctaButton}>
-              View LinkedIn →
-            </a>
-          </div>
-        </section>
       </main>
-
-      <footer className={styles.footer}>
-        <div className={styles.footerContent}>
-          <div className={styles.footerBrand}>
-            <Image
-              src="/shield-272x300.png"
-              alt="Logo"
-              width={28}
-              height={28}
-              className={styles.footerLogo}
-            />
-            <span>Built with Next.js • Deployed on OpenShift</span>
-          </div>
-          <div className={styles.footerMeta}>
-            Learning in public since 2025
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }

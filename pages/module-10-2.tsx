@@ -15,8 +15,8 @@ export default function ManagedKubernetes() {
       color: '#ff9900',
       company: 'AWS',
       popularity: '⭐⭐⭐⭐⭐',
-      description: 'Amazon\'s managed Kubernetes. Deep AWS integration, enterprise-grade, biggest ecosystem.',
-      pricing: '$0.10/hour per cluster + EC2/Fargate costs',
+      description: 'Amazon\'s managed Kubernetes service with AWS infrastructure and identity integrations.',
+      pricing: 'Cluster fees vary by Kubernetes support tier; compute, storage, and networking are additional.',
       theyHandle: [
         'Control plane (API server, etcd, scheduler)',
         'Automatic upgrades (with your approval)',
@@ -44,8 +44,8 @@ export default function ManagedKubernetes() {
         '✓ Enterprise support available'
       ],
       cons: [
-        '✗ Most expensive control plane ($72/month)',
-        '✗ Slower to adopt new K8s versions',
+        '✗ Cluster fee varies with version support tier',
+        '✗ Version availability follows the EKS release schedule',
         '✗ AWS vendor lock-in',
         '✗ Complex IAM for service accounts'
       ],
@@ -78,8 +78,8 @@ kubectl get nodes`
       color: '#4285f4',
       company: 'Google Cloud',
       popularity: '⭐⭐⭐⭐⭐',
-      description: 'Google invented Kubernetes. GKE is the most mature, feature-rich, and fastest to adopt new K8s versions.',
-      pricing: '$0.10/hour per cluster (free if <15GB memory) + GCE costs',
+      description: 'Google Cloud managed Kubernetes with Standard and Autopilot operating modes.',
+      pricing: 'Cluster management fee with eligible free-tier credit; compute and other resources cost extra.',
       theyHandle: [
         'Control plane (fully managed)',
         'Automatic upgrades and patches',
@@ -101,11 +101,11 @@ kubectl get nodes`
         'Compliance requirements'
       ],
       pros: [
-        '✓ Best Kubernetes implementation (Google built it)',
-        '✓ Fastest to adopt new K8s versions',
-        '✓ GKE Autopilot = zero node management',
-        '✓ Free control plane for small clusters',
-        '✓ Best auto-scaling and auto-repair'
+        '✓ Standard and Autopilot operating modes',
+        '✓ Release channels for upgrade planning',
+        '✓ Autopilot manages node infrastructure',
+        '✓ Eligible free-tier cluster credit',
+        '✓ Node auto-repair and autoscaling options'
       ],
       cons: [
         '✗ Smaller ecosystem than AWS',
@@ -113,7 +113,7 @@ kubectl get nodes`
         '✗ Google Cloud has fewer services',
         '✗ Regional limitations in some areas'
       ],
-      bestFor: 'Best Kubernetes experience, greenfield projects, cloud-native apps',
+      bestFor: 'Teams on Google Cloud or those evaluating Autopilot',
       setupExample: `# Install gcloud CLI
 curl https://sdk.cloud.google.com | bash
 
@@ -150,9 +150,9 @@ kubectl get nodes`
       company: 'Microsoft Azure',
       popularity: '⭐⭐⭐⭐',
       description: 'Microsoft\'s managed Kubernetes. Strong Windows container support, great for hybrid cloud.',
-      pricing: 'FREE control plane + VM costs',
+      pricing: 'Free, Standard, and Premium tiers differ in cluster-management charges and features; compute costs extra.',
       theyHandle: [
-        'Control plane (completely free!)',
+        'Managed control plane (tier-dependent charges)',
         'Automatic upgrades',
         'Azure AD integration',
         'Virtual network integration',
@@ -173,17 +173,17 @@ kubectl get nodes`
         'Cost optimization'
       ],
       pros: [
-        '✓ FREE control plane (best value)',
-        '✓ Best Windows container support',
+        '✓ Free tier available for development and testing',
+        '✓ Windows container support',
         '✓ Strong enterprise features',
         '✓ Hybrid cloud with Azure Arc',
         '✓ Azure AD integration'
       ],
       cons: [
         '✗ Azure ecosystem smaller than AWS',
-        '✗ Occasional reliability issues',
-        '✗ UI can be confusing',
-        '✗ Less mature than GKE'
+        '✗ Some features require a paid tier',
+        '✗ Azure networking and identity require planning',
+        '✗ Regional feature availability varies'
       ],
       bestFor: 'Already on Azure, Windows containers, hybrid cloud, cost-conscious',
       setupExample: `# Install Azure CLI
@@ -246,7 +246,7 @@ kubectl get nodes`
       pros: [
         '✓ Complete platform (not just K8s)',
         '✓ Enterprise security and compliance',
-        '✓ Best developer experience',
+        '✓ Integrated developer console',
         '✓ Red Hat support',
         '✓ Runs anywhere (on-prem, cloud, edge)',
         '✓ Strong multi-tenancy'
@@ -603,9 +603,9 @@ oc get nodes`
                 {[
                   { 
                     feature: 'Control Plane Cost',
-                    eks: '$72/month',
-                    gke: 'Free (<15GB)',
-                    aks: 'FREE',
+                    eks: 'Per-cluster fee; support tier matters',
+                    gke: 'Fee with eligible credit',
+                    aks: 'Depends on tier',
                     openshift: 'Varies'
                   },
                   {
@@ -617,10 +617,10 @@ oc get nodes`
                   },
                   {
                     feature: 'Kubernetes Version Lag',
-                    eks: '~3 months',
-                    gke: '~1 week',
-                    aks: '~2 months',
-                    openshift: '~6 months'
+                    eks: 'Check supported versions',
+                    gke: 'Check release channels',
+                    aks: 'Check supported versions',
+                    openshift: 'Check update channels'
                   },
                   {
                     feature: 'Auto-Upgrade',
@@ -654,7 +654,7 @@ oc get nodes`
                     feature: 'Windows Support',
                     eks: 'Yes',
                     gke: 'Yes',
-                    aks: 'Best',
+                    aks: 'Yes',
                     openshift: 'Yes'
                   },
                   {
@@ -715,7 +715,7 @@ oc get nodes`
               },
               {
                 gotcha: 'Each Provider Has Quirks',
-                issue: 'AWS IAM for SA is complex. GKE Workload Identity. AKS has free control plane but...',
+                issue: 'Identity and cluster billing differ by provider and service tier.',
                 solution: 'Read provider-specific docs, follow their best practices'
               },
               {
@@ -773,16 +773,16 @@ oc get nodes`
                 reason: 'Deep integration with AWS services (IAM, VPC, ELB, RDS, etc.)'
               },
               {
-                scenario: 'Best Kubernetes experience',
+                scenario: 'Prefer managed node infrastructure',
                 choice: 'GKE',
                 color: '#4285f4',
-                reason: 'Google invented K8s. Most mature, fastest updates, Autopilot mode'
+                reason: 'Autopilot manages node infrastructure; review its workload constraints and pricing'
               },
               {
                 scenario: 'Cost-conscious',
                 choice: 'AKS',
                 color: '#0078d4',
-                reason: 'FREE control plane saves $72/month. Good enough for most workloads'
+                reason: 'AKS offers a Free tier; compare paid tiers and total infrastructure costs'
               },
               {
                 scenario: 'Enterprise/Regulated',

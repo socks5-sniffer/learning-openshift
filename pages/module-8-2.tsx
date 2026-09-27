@@ -6,7 +6,6 @@ import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Monitoring() {
   const [selectedMetric, setSelectedMetric] = useState<'cpu' | 'memory' | 'requests' | 'errors'>('cpu')
-  const [timeRange, setTimeRange] = useState<'1h' | '6h' | '24h' | '7d'>('1h')
   const [selectedService, setSelectedService] = useState<'frontend' | 'backend' | 'database'>('frontend')
   const [alertThreshold, setAlertThreshold] = useState(80)
   const [enableAlert, setEnableAlert] = useState(false)
@@ -59,9 +58,9 @@ export default function Monitoring() {
       unit: 'GB',
       icon: '💾',
       description: 'RAM consumption in gigabytes',
-      goodRange: '< 75%',
-      warningRange: '75-90%',
-      criticalRange: '> 90%'
+      goodRange: '< 2 GB',
+      warningRange: '2–3 GB',
+      criticalRange: '> 3 GB'
     },
     requests: {
       name: 'Request Rate',
@@ -77,20 +76,15 @@ export default function Monitoring() {
       unit: 'errors/min',
       icon: '⚠️',
       description: 'Number of errors per minute',
-      goodRange: '< 1%',
-      warningRange: '1-5%',
-      criticalRange: '> 5%'
+      goodRange: '< 5 errors/min',
+      warningRange: '5–10 errors/min',
+      criticalRange: '> 10 errors/min'
     }
   }
 
   const getCurrentValue = () => {
     const data = services[selectedService].metrics[selectedMetric]
     return data[data.length - 1]
-  }
-
-  const getMaxValue = () => {
-    const data = services[selectedService].metrics[selectedMetric]
-    return Math.max(...data)
   }
 
   const isAlerting = () => {
@@ -103,7 +97,7 @@ export default function Monitoring() {
 
   const renderChart = () => {
     const data = services[selectedService].metrics[selectedMetric]
-    const max = Math.max(...data)
+    const max = Math.max(...data, enableAlert ? alertThreshold : 0)
     const height = 200
 
     return (
@@ -115,14 +109,14 @@ export default function Monitoring() {
         padding: '1rem',
         marginBottom: '1rem'
       }}>
-        <svg width="100%" height={height - 32} style={{ position: 'relative' }}>
+        <svg width="100%" height={height - 32} viewBox={`0 0 1000 ${height - 32}`} preserveAspectRatio="none" style={{ position: 'relative' }}>
           {/* Grid lines */}
           {[0, 25, 50, 75, 100].map(percent => (
             <line
               key={percent}
               x1="0"
               y1={(height - 32) * (1 - percent / 100)}
-              x2="100%"
+              x2="1000"
               y2={(height - 32) * (1 - percent / 100)}
               stroke="#334155"
               strokeWidth="1"
@@ -133,9 +127,9 @@ export default function Monitoring() {
           {/* Data line */}
           <polyline
             points={data.map((value, idx) => {
-              const x = (idx / (data.length - 1)) * 100
+              const x = (idx / (data.length - 1)) * 1000
               const y = (1 - value / max) * (height - 32)
-              return `${x}%,${y}`
+              return `${x},${y}`
             }).join(' ')}
             fill="none"
             stroke={services[selectedService].color}
@@ -144,12 +138,12 @@ export default function Monitoring() {
 
           {/* Data points */}
           {data.map((value, idx) => {
-            const x = (idx / (data.length - 1)) * 100
+            const x = (idx / (data.length - 1)) * 1000
             const y = (1 - value / max) * (height - 32)
             return (
               <circle
                 key={idx}
-                cx={`${x}%`}
+                cx={x}
                 cy={y}
                 r="4"
                 fill={services[selectedService].color}
@@ -162,7 +156,7 @@ export default function Monitoring() {
             <line
               x1="0"
               y1={(height - 32) * (1 - alertThreshold / max)}
-              x2="100%"
+              x2="1000"
               y2={(height - 32) * (1 - alertThreshold / max)}
               stroke="#ef4444"
               strokeWidth="2"
@@ -277,7 +271,10 @@ export default function Monitoring() {
                 {(Object.keys(metricInfo) as Array<keyof typeof metricInfo>).map(metric => (
                   <button
                     key={metric}
-                    onClick={() => setSelectedMetric(metric)}
+                    onClick={() => {
+                      setSelectedMetric(metric)
+                      setAlertThreshold(metric === 'memory' ? 3 : 80)
+                    }}
                     style={{
                       padding: '1rem',
                       background: selectedMetric === metric ? '#9c0606' : '#f8fafc',
@@ -317,6 +314,9 @@ export default function Monitoring() {
               </h3>
               <p style={{ color: '#64748b', marginBottom: '1rem' }}>
                 {metricInfo[selectedMetric].description}
+              </p>
+              <p style={{ color: '#64748b', marginBottom: '1rem', fontSize: '0.85rem' }}>
+                These ranges are examples for this simulated dashboard, not universal alert thresholds.
               </p>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
                 <div>
@@ -376,8 +376,9 @@ export default function Monitoring() {
                     </label>
                     <input
                       type="range"
-                      min="50"
-                      max="100"
+                      min={selectedMetric === 'memory' ? 1 : 50}
+                      max={selectedMetric === 'memory' ? 5 : 100}
+                      step={selectedMetric === 'memory' ? 0.1 : 1}
                       value={alertThreshold}
                       onChange={(e) => setAlertThreshold(Number(e.target.value))}
                       style={{ width: '100%', marginBottom: '1rem' }}

@@ -50,6 +50,47 @@ export default function Module71() {
     return roles[role as keyof typeof roles].permissions.includes(action);
   };
 
+  const exampleYaml = selectedRole === 'clusterAdmin'
+    ? `apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: example-cluster-admin-binding
+subjects:
+  - kind: User
+    name: user@example.com
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io`
+    : `apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: ${selectedRole}-role
+  namespace: production
+rules:
+${roles[selectedRole as keyof typeof roles].permissions.map((action) => {
+  const { verb, resource } = actions[action as keyof typeof actions];
+  const apiGroup = resource === 'rolebindings' || resource === 'clusterroles'
+    ? 'rbac.authorization.k8s.io'
+    : resource === 'deployments' ? 'apps' : '';
+  return `  - apiGroups: ["${apiGroup}"]\n    resources: ["${resource}"]\n    verbs: ["${verb}"]`;
+}).join('\n')}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ${selectedRole}-binding
+  namespace: production
+subjects:
+  - kind: User
+    name: user@example.com
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: ${selectedRole}-role
+  apiGroup: rbac.authorization.k8s.io`;
+
   return (
     <div className={styles.container}>
       <main className={styles.main}>
@@ -69,9 +110,10 @@ export default function Module71() {
             authored for a light page) stays readable against the dark theme. */}
         <div style={{ background: 'white', borderRadius: 16, padding: '2rem 2.5rem' }}>
         <p style={{ fontSize: '1.2rem', lineHeight: '1.8', color: '#1e293b', maxWidth: '800px' }}>
-          By default, Kubernetes gives you way too much power. RBAC (Role-Based Access Control) is how you
-          limit who can do what. It's the difference between "anyone can delete production" and "only
-          admins can, and they need MFA."
+          Kubernetes uses authorization rules to decide who can do what. With RBAC enabled,
+          most application ServiceAccounts have no API permissions beyond discovery until an
+          administrator grants them. Roles and bindings let you grant only what a user or
+          workload needs.
         </p>
 
         <div style={{
@@ -122,7 +164,7 @@ export default function Module71() {
             <ul style={{ color: '#1e293b', lineHeight: '1.8', marginBottom: 0 }}>
               <li>Applications/Pods</li>
               <li>Stored as Kubernetes resources</li>
-              <li>Automatically get a token (mounted as Secret)</li>
+              <li>Pods normally receive a short-lived, rotating token through a projected volume</li>
               <li>Used by Pods to talk to API server</li>
               <li>Example: system:serviceaccount:default:my-app</li>
             </ul>
@@ -408,6 +450,34 @@ export default function Module71() {
             </div>
           </div>
 
+          <div style={{ padding: '1rem', background: 'white', borderRadius: 8, marginBottom: '1.5rem' }}>
+            <div style={{ color: '#1e293b', fontWeight: 600, marginBottom: '0.75rem' }}>
+              Try an action as this role:
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+              {Object.keys(actions).map((action) => (
+                <button
+                  key={action}
+                  onClick={() => setSelectedAction(action)}
+                  aria-pressed={selectedAction === action}
+                  style={{
+                    padding: '0.5rem 0.75rem',
+                    borderRadius: 6,
+                    border: selectedAction === action ? '2px solid #9c0606' : '1px solid #cbd5e1',
+                    background: selectedAction === action ? '#fef2f2' : 'white',
+                    color: '#1e293b',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {action}
+                </button>
+              ))}
+            </div>
+            <p style={{ color: canPerformAction(selectedRole, selectedAction) ? '#15803d' : '#dc2626', fontWeight: 600 }}>
+              {canPerformAction(selectedRole, selectedAction) ? 'Allowed' : 'Denied'}: {selectedAction}
+            </p>
+          </div>
+
           <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', marginBottom: '1rem' }}>
             <input
               type="checkbox"
@@ -415,11 +485,11 @@ export default function Module71() {
               onChange={(e) => setShowBinding(e.target.checked)}
               style={{ width: '20px', height: '20px' }}
             />
-            <span style={{ color: '#1e293b', fontWeight: 600 }}>Show Role + RoleBinding YAML</span>
+            <span style={{ color: '#1e293b', fontWeight: 600 }}>Show example RBAC YAML</span>
           </label>
 
           {showBinding && (
-            <div style={{
+            <pre style={{
               fontFamily: 'monospace',
               fontSize: '0.85rem',
               background: '#1e293b',
@@ -428,39 +498,8 @@ export default function Module71() {
               borderRadius: '6px',
               overflowX: 'auto'
             }}>
-              {"# Role definition"}<br />
-              {"apiVersion: rbac.authorization.k8s.io/v1"}<br />
-              {"kind: Role"}<br />
-              {"metadata:"}<br />
-              {"  name: "}{selectedRole}-role<br />
-              {"  namespace: production"}<br />
-              {"rules:"}<br />
-              {roles[selectedRole as keyof typeof roles].permissions.slice(0, 3).map((action) => {
-                const act = actions[action as keyof typeof actions];
-                return (
-                  <>
-                    {"- apiGroups: ['']"}<br />
-                    {"  resources: ['"}{act.resource}{"']"}<br />
-                    {"  verbs: ['"}{act.verb}{"']"}<br />
-                  </>
-                );
-              })}
-              <br />
-              {"# RoleBinding"}<br />
-              {"apiVersion: rbac.authorization.k8s.io/v1"}<br />
-              {"kind: RoleBinding"}<br />
-              {"metadata:"}<br />
-              {"  name: "}{selectedRole}-binding<br />
-              {"  namespace: production"}<br />
-              {"subjects:"}<br />
-              {"- kind: User"}<br />
-              {"  name: user@example.com"}<br />
-              {"  apiGroup: rbac.authorization.k8s.io"}<br />
-              {"roleRef:"}<br />
-              {"  kind: Role"}<br />
-              {"  name: "}{selectedRole}-role<br />
-              {"  apiGroup: rbac.authorization.k8s.io"}
-            </div>
+              {exampleYaml}
+            </pre>
           )}
         </div>
 

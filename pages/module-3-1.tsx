@@ -6,7 +6,6 @@ import ModuleCompletion from '../components/ModuleCompletion';
 
 export default function Module31() {
   const [configType, setConfigType] = useState<'env' | 'file'>('env');
-  const [showPodYAML, setShowPodYAML] = useState(false);
 
   return (
     <div className={styles.container}>
@@ -301,7 +300,13 @@ export default function Module31() {
                 <div style={{ color: '#f59e0b' }}>metadata:</div>
                 <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;name: myapp</div>
                 <div style={{ color: '#f59e0b' }}>spec:</div>
+                <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;selector:</div>
+                <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;&nbsp;&nbsp;matchLabels:</div>
+                <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;app: myapp</div>
                 <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;template:</div>
+                <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;&nbsp;&nbsp;metadata:</div>
+                <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;labels:</div>
+                <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;app: myapp</div>
                 <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;&nbsp;&nbsp;spec:</div>
                 <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;containers:</div>
                 <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- name: app</div>
@@ -395,7 +400,13 @@ export default function Module31() {
                 <div style={{ color: '#f59e0b' }}>metadata:</div>
                 <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;name: myapp</div>
                 <div style={{ color: '#f59e0b' }}>spec:</div>
+                <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;selector:</div>
+                <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;&nbsp;&nbsp;matchLabels:</div>
+                <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;app: myapp</div>
                 <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;template:</div>
+                <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;&nbsp;&nbsp;metadata:</div>
+                <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;labels:</div>
+                <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;app: myapp</div>
                 <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;&nbsp;&nbsp;spec:</div>
                 <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;containers:</div>
                 <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- name: app</div>

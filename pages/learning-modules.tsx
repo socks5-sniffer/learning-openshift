@@ -43,7 +43,7 @@ export default function LearningModules() {
   return (
     <div className={styles.container} style={{ position: 'relative' }}>
       <Head>
-        <title>Learning Modules | KubeLearn</title>
+        <title>Learning Modules | ClusterFoundry</title>
         <meta name="description" content="Kubernetes: A comprehensive introduction to container orchestration" />
       </Head>
 
@@ -53,7 +53,7 @@ export default function LearningModules() {
           <Link href="/" className={styles.navBrand}>
             <div className={styles.navLogo}>☸</div>
             <span className={styles.navTitle}>
-              Kube<span className={styles.navTitleAccent}>Learn</span>
+              Cluster<span className={styles.navTitleAccent}>Foundry</span>
             </span>
           </Link>
           <div className={styles.navLinks}>
@@ -65,6 +65,9 @@ export default function LearningModules() {
             </Link>
             <Link href="/kubectl-cheatsheet" className={styles.navLink}>
               Cheat Sheet
+            </Link>
+            <Link href="/about" className={styles.navLink}>
+              About
             </Link>
           </div>
         </div>

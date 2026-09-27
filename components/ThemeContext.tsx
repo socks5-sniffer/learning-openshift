@@ -13,7 +13,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>('dark');
 
   useEffect(() => {
-    const raw = localStorage.getItem('theme');
+    let raw: string | null = null;
+    try {
+      raw = localStorage.getItem('theme');
+    } catch {
+      // Theme selection still works for this session when storage is blocked.
+    }
     const savedTheme: Theme | null = raw === 'dark' || raw === 'light' ? raw : null;
     if (savedTheme) {
       setTheme(savedTheme);
@@ -24,7 +29,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
+    try {
+      localStorage.setItem('theme', newTheme);
+    } catch {
+      // Keep the theme change in memory when storage is unavailable.
+    }
     document.documentElement.setAttribute('data-theme', newTheme);
   };
 

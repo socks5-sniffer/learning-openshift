@@ -32,16 +32,20 @@ export default function ServiceDiscovery() {
 
   const endpoints = pods.filter((p) => p.app === selector && p.ready);
 
-  const setApp = (name: string, app: SimPod['app']) =>
+  const setApp = (name: string, app: SimPod['app']) => {
     setPods((prev) => prev.map((p) => (p.name === name ? { ...p, app } : p)));
-  const toggleReady = (name: string) =>
+    setLastHit(null);
+  };
+  const toggleReady = (name: string) => {
     setPods((prev) => prev.map((p) => (p.name === name ? { ...p, ready: !p.ready } : p)));
+    setLastHit(null);
+  };
 
   const sendRequest = () => {
     if (endpoints.length === 0) {
       setLastHit(null);
       setRequestLog((log) =>
-        [`✗ curl http://${selector}-svc → connection refused (Service has no endpoints)`, ...log].slice(0, 6)
+        [`✗ curl http://${selector}-svc → request failed (Service has no ready endpoints)`, ...log].slice(0, 6)
       );
       return;
     }
@@ -66,7 +70,7 @@ export default function ServiceDiscovery() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Service Discovery | KubeLearn</title>
+        <title>Service Discovery | ClusterFoundry</title>
         <meta name="description" content="Visualize how Kubernetes Services select Pods by label and load-balance traffic" />
       </Head>
 
@@ -75,7 +79,7 @@ export default function ServiceDiscovery() {
           <Link href="/" className={styles.navBrand}>
             <div className={styles.navLogo}>☸</div>
             <span className={styles.navTitle}>
-              Kube<span className={styles.navTitleAccent}>Learn</span>
+              Cluster<span className={styles.navTitleAccent}>Foundry</span>
             </span>
           </Link>
           <div className={styles.navLinks}>
@@ -87,6 +91,9 @@ export default function ServiceDiscovery() {
             </Link>
             <Link href="/kubectl-cheatsheet" className={styles.navLink}>
               Cheat Sheet
+            </Link>
+            <Link href="/about" className={styles.navLink}>
+              About
             </Link>
           </div>
         </div>
@@ -269,8 +276,8 @@ export default function ServiceDiscovery() {
           }}
         >
           💡 Things to try: relabel a <strong>web</strong> Pod to <strong>api</strong> and watch it silently
-          drop out of the endpoint list — label typos are a classic "Service returns connection refused"
-          bug. Mark all matching Pods NotReady and send a request. Notice the Service IP and DNS name never
+          drop out of the endpoint list — label typos can leave a Service with no ready endpoints.
+          Mark all matching Pods NotReady and send a request. Notice the Service IP and DNS name never
           change while all of this churns — that stability is the whole point (
           <Link href="/module-2-3" style={{ color: '#93c5fd' }}>Module 2.3</Link>).
         </div>

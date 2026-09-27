@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from '../styles/Home.module.css';
 import ModuleCompletion from '../components/ModuleCompletion';
 
@@ -12,25 +12,38 @@ export default function Module23() {
     { id: 3, ip: '10.244.1.7', healthy: true }
   ]);
   const serviceIP = '10.96.0.100';
+  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  const clearSimulationTimers = () => {
+    timers.current.forEach(clearTimeout);
+    timers.current = [];
+  };
+
+  useEffect(() => () => {
+    timers.current.forEach(clearTimeout);
+  }, []);
 
   const simulateIPChange = () => {
+    clearSimulationTimers();
     setSimulationRunning(true);
     // Simulate a pod crash and recreation
-    setTimeout(() => {
+    timers.current.push(setTimeout(() => {
       setPods(prev => prev.map(pod => 
         pod.id === 2 ? { ...pod, healthy: false } : pod
       ));
-    }, 1000);
+    }, 1000));
 
-    setTimeout(() => {
+    timers.current.push(setTimeout(() => {
       setPods(prev => prev.map(pod => 
         pod.id === 2 ? { ...pod, ip: '10.244.1.99', healthy: true } : pod
       ));
       setSimulationRunning(false);
-    }, 2500);
+      timers.current = [];
+    }, 2500));
   };
 
   const resetSimulation = () => {
+    clearSimulationTimers();
     setPods([
       { id: 1, ip: '10.244.1.5', healthy: true },
       { id: 2, ip: '10.244.1.6', healthy: true },
@@ -135,7 +148,7 @@ export default function Module23() {
               }}>
                 Service: my-app
                 <div style={{ fontSize: '0.9rem', marginTop: '8px' }}>
-                  ClusterIP: {serviceIP} (STABLE - never changes)
+                  ClusterIP: {serviceIP} (stable for this Service's lifetime)
                 </div>
               </div>
 
@@ -419,7 +432,8 @@ export default function Module23() {
               marginTop: '12px'
             }}>
               <p style={{ margin: 0, fontSize: '0.9rem' }}>
-                💡 <strong>Only works on cloud providers.</strong> On local clusters (minikube, kind), LoadBalancer behaves like NodePort.
+                💡 <strong>Requires a load balancer implementation.</strong> Cloud providers commonly supply one;
+                local clusters can use tools such as minikube tunnel or MetalLB.
               </p>
             </div>
           </div>
