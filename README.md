@@ -1,14 +1,14 @@
 # Developer Learning Journey – Next.js on OpenShift
 
-🧪 **Deployed to Red Hat OpenShift using OpenShift Dev Spaces (development sandbox environment).**
+🧪 **Intended for deployment to Red Hat OpenShift Dev Spaces as a learning sandbox.**
 
-This application runs inside an OpenShift-managed container and is accessible while the Dev Spaces environment is active. The deployment is intentionally non-persistent and used for learning, experimentation, and understanding OpenShift workflows.
+This project documents a learning journey with OpenShift. A Dev Spaces deployment is ephemeral and is intended for experimentation; this README does not indicate that a live deployment is currently available.
 
 ---
 
 ## Overview
 
-This project is a learning playground for cloud-native development, deployed on OpenShift. It uses the modern [Next.js](https://nextjs.org/) stack with TypeScript and React, and is intended to document and demonstrate a developer's journey in public.
+This project is a learning playground for cloud-native development, intended to run locally and in OpenShift Dev Spaces. It uses Next.js with TypeScript and React, and documents a developer's journey in public.
 
 The goal is not perfection, but iteration, experimentation, and understanding how real applications move from local development to a managed Kubernetes platform.
 
@@ -16,10 +16,10 @@ The goal is not perfection, but iteration, experimentation, and understanding ho
 
 ## Stack
 
-- **Framework:** [Next.js](https://nextjs.org/)
+- **Framework:** [Next.js](https://nextjs.org/) 15.5.27
 - **Language:** TypeScript
 - **UI Library:** React
-- **Linting:** ESLint (with Next.js config)
+- **Linting:** ESLint 8 with a temporarily retained `eslint-config-next` 14.2.35 configuration; see [SECURITY.md](SECURITY.md) for the compatibility reason
 - **Deployment Platform:** Red Hat OpenShift
 
 ---
@@ -52,8 +52,19 @@ This site is a personal learning project, focused on:
 3. **Build for production:**
     ```bash
     npm run build
-    npm start
     ```
+    On Windows, the `build` script uses a compatibility wrapper for the production build.
+    To serve the production build manually, run `npm start` after the build.
+
+4. **Run checks:**
+    ```bash
+    npm run lint
+    npm run typecheck
+    npx playwright install chromium --only-shell
+    npm run build
+    npm run test:e2e
+    ```
+    Install Chromium's headless shell once per environment. Build before running `test:e2e`; Playwright starts the production server for its checks. The suite exercises Chromium at desktop and mobile viewport sizes but does not validate Kubernetes configuration against a live cluster. CI targets pushes and pull requests to `main`: build/lint/type-check jobs use Node.js 22 and 24, while the browser job uses Node.js 22. See the dated [module and verification review](MODULE-REVIEW.md) for recorded results, and check CI for the current commit.
 
 ---
 
@@ -65,9 +76,10 @@ This site is a personal learning project, focused on:
 - `lib/` – Small shared utilities
 - `public/` – Static assets
 - `styles/` – CSS modules and global styles
-- `middleware.ts` – Content-Security-Policy header generation (per-request nonce)
+- `middleware.ts` – per-request Content-Security-Policy nonce handling
+- `playwright.config.ts` – production browser test configuration
 - `tsconfig.json` – TypeScript configuration
-- `eslint.config.mjs` – ESLint configuration
+- `.eslintrc.json` – ESLint configuration
 
 ---
 
@@ -176,4 +188,4 @@ The site includes an interactive Kubernetes learning curriculum split across 30 
 
 ---
 
-All modules are accessible from the `/learning-modules` page when running locally, or via the navigation bar on the deployed site.
+All modules are accessible from the `/learning-modules` page when running locally, or from the site's navigation when deployed.

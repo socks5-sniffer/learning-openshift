@@ -1,21 +1,12 @@
 # Security Policy
 
-**Last Updated:** May 2026  
-**Version:** 1.5.x
+**Last Updated:** October 8, 2026
 
 ---
 
 ## Supported Versions
 
-The following table outlines which versions of Learning OpenShift receive security updates:
-
-| Version | Supported          | Notes                              |
-| ------- | ------------------ | ---------------------------------- |
-| 1.5.x   | :white_check_mark: | Current stable release             |
-| 1.4.x   | :x:                | No longer supported                |
-| < 1.4   | :x:                | No longer supported                |
-
-> **Note:** This project follows semantic versioning. Security patches are applied to the latest minor version only. Users are strongly encouraged to upgrade to the latest supported version.
+This repository does not currently publish a supported-version matrix. Security fixes should be applied to the active development branch and released through the project's normal review process.
 
 ---
 
@@ -73,7 +64,7 @@ Please provide as much detail as possible:
 - Dependency vulnerabilities affecting the application
 
 ### Out of Scope
-- Issues in third-party dependencies that are not exploitable in this application's context
+- Third-party dependency issues unrelated to how this application uses the affected package
 - Social engineering attacks
 - Physical security
 - Denial of Service (DoS) attacks
@@ -83,10 +74,10 @@ Please provide as much detail as possible:
 
 ## Security Best Practices
 
-This project implements the following security measures:
+The repository configures the following security controls. Check the October 8, 2026 [module and verification review](MODULE-REVIEW.md) and current CI results before deployment.
 
 ### HTTP Security Headers
-- `Content-Security-Policy` (set in `middleware.ts`, not `next.config.js`) — restricts resource origins; `script-src` uses a per-request nonce instead of `'unsafe-inline'`, and `'unsafe-eval'` is removed in production (allowed only when `NODE_ENV=development`, where Next.js Fast Refresh requires it); `style-src` still allows `'unsafe-inline'`; fonts are served from `'self'`
+- `Content-Security-Policy` is set by `middleware.ts`, which generates a per-request nonce and forwards it in the CSP and `x-nonce` request headers, including for prefetch requests. The script policy combines the nonce with `'strict-dynamic'`: Next.js bootstrap scripts receive the nonce, and scripts loaded by those trusted scripts inherit trust in supporting browsers. `_app.tsx` calls the default App `getInitialProps` to support request-specific nonces. This disables automatic static optimization, so pages render on demand rather than being served as static pages; that is the performance and caching tradeoff for per-request nonces. Targeted production Chromium checks at desktop and mobile sizes verified nonce matching on rendered scripts, fresh nonces for prefetch requests despite untrusted caller headers, consistent nonce use on 404 responses, and blocking of an untrusted parser-inserted inline script while hydration succeeds. `style-src` retains `'unsafe-inline'` for the app's inline styles. Development may allow `'unsafe-eval'` for Fast Refresh; production should omit it. Fonts are served from `'self'`.
 - `X-Content-Type-Options: nosniff` — prevents MIME-type sniffing
 - `X-Frame-Options: DENY` — prevents clickjacking
 - `Strict-Transport-Security: max-age=31536000; includeSubDomains; preload` — enforces HTTPS for all subdomains (appropriate for OpenShift/production HTTPS deployment)
@@ -94,32 +85,31 @@ This project implements the following security measures:
 - `Permissions-Policy` — restricts browser feature access (camera, microphone, geolocation)
 
 ### Application Security
-- Self-hosted fonts via `next/font/google` (no third-party font CDN dependency at runtime)
-- No use of `dangerouslySetInnerHTML` or other XSS sinks anywhere in the codebase
+- Self-hosted fonts via `@fontsource` packages (no third-party font CDN dependency at runtime)
+- Avoid `dangerouslySetInnerHTML` and other unsafe HTML injection patterns; review any exception carefully
 - No secrets or sensitive configuration stored in code or committed to the repository
 - HTTP method validation on API endpoints
 - Regular dependency updates and vulnerability scanning
 - `poweredByHeader: false` — removes the `X-Powered-By: Next.js` response header
 
 ### Dependency Security
-- Dependency audit: `next`, `react`, `react-dom` are at current stable versions
-- Self-hosted fonts via `@fontsource/inter` and `@fontsource/jetbrains-mono` (no runtime third-party CDN requests)
-- Run `npm audit` regularly to check for new vulnerabilities
-- **Known/accepted advisory:** `postcss <8.5.10` (GHSA-qx2v-qp2m-jg93) — affects `postcss` bundled by Next.js as a build-time CSS processor. The "fix" offered by `npm audit fix --force` would downgrade Next.js to v9.3.3 (a breaking change). This advisory is not exploitable in the normal app runtime context; it only concerns CSS build processing. Monitor for a Next.js patch that updates its bundled postcss.
+- Do not assume dependencies are vulnerability-free or current based on this document.
+- Run `npm audit` before each deployment and review findings against the lockfile and affected code paths. Avoid `npm audit fix --force` without reviewing the proposed version changes, since it can introduce breaking downgrades.
+- Keep the lockfile committed and review automated dependency update alerts.
+- **Temporary lint-toolchain compatibility:** The project uses `eslint-config-next` 14.2.35 with ESLint 8.57.1 alongside Next.js 15.5.27. This keeps the config within its supported ESLint 8 peer range and avoids the newer config's plugin/`fast-glob` path reintroducing unpatched `braces`. Local lint and build pass. Monitor upstream for a patched compatible config/plugin release and revisit this pairing when available.
 
 ---
 
-## Recent Security Improvements (v1.5.x)
+## CSP Browser Verification (October 8, 2026)
 
-The following hardening improvements were made in the v1.5.x release:
+Targeted Playwright Chromium checks passed at desktop and mobile sizes for these cases:
 
-| Change | Detail |
-| ------ | ------- |
-| Removed `'unsafe-eval'` from CSP `script-src` | Prevents eval-based code execution in browsers; not required by Next.js production builds |
-| Removed legacy `X-XSS-Protection` header | This header is deprecated in modern browsers and superseded by CSP; removing avoids false sense of security |
-| Self-hosted fonts via `@fontsource` packages | Fonts (Inter, JetBrains Mono) are bundled via npm at install time and served from `'self'`; eliminates runtime third-party dependency on `fonts.googleapis.com` and `fonts.gstatic.com`, improving privacy and CSP alignment |
-| Removed Google Fonts `@import` from CSS | Removes the browser-level request to the Google Fonts CDN |
-| Nonce-based CSP for `script-src` | `middleware.ts` generates a per-request nonce injected into both the CSP header and Next.js's inline bootstrap scripts (via `pages/_document.tsx`), removing the need for `'unsafe-inline'` in `script-src` |
+- Rendered server script tags carry the nonce named by that response's CSP.
+- Regular navigation and requests marked with `purpose=prefetch` or `next-router-prefetch` receive fresh server-generated nonces, replacing untrusted incoming CSP and `x-nonce` values.
+- A 404 response uses a consistent CSP and script nonce.
+- An untrusted parser-inserted inline script is blocked while the application hydrates successfully.
+
+These checks cover the listed browser behaviors. They do not validate Kubernetes configuration against a live cluster. `_app.tsx` calls the default App `getInitialProps` so each request can receive its nonce. This disables automatic static optimization: pages render on demand instead of using static output, trading some static delivery and caching for nonce support.
 
 ---
 
@@ -127,11 +117,11 @@ The following hardening improvements were made in the v1.5.x release:
 
 ### `'unsafe-inline'` in `style-src`
 
-The CSP still includes `'unsafe-inline'` for `style-src`, because the app uses inline `style={{ ... }}` props extensively and Next.js Pages Router injects some inline styles at SSR time. `script-src` no longer needs this (see "Recent Security Improvements" — it uses a per-request nonce instead). Removing `'unsafe-inline'` from `style-src` would require converting inline styles to CSS classes or nonce'd `<style>` tags, which is a larger refactor not currently planned.
+The CSP retains `'unsafe-inline'` for `style-src` because the app uses inline `style={{ ... }}` props. Removing it would require converting those styles to CSS classes or nonce-bearing style tags and verifying framework-generated styles.
 
 ### `'unsafe-eval'` in development
 
-`middleware.ts` allows `'unsafe-eval'` in `script-src` only when `NODE_ENV=development`, because Next.js Fast Refresh's hot-reload runtime evaluates code via `eval()`. This does not apply to production builds (`next build && next start`) — the production CSP has no `'unsafe-eval'`.
+Development may allow `'unsafe-eval'` in `script-src` for Next.js Fast Refresh. Verify that the production policy omits it.
 
 ### HSTS with `preload`
 
@@ -139,11 +129,11 @@ The CSP still includes `'unsafe-inline'` for `style-src`, because the app uses i
 - All production subdomains are served over HTTPS
 - The domain is or will be submitted to the [HSTS preload list](https://hstspreload.org/)
 
-If subdomains exist that are not HTTPS-ready, remove `includeSubDomains` and `preload` until they are. The current configuration is suitable for an OpenShift-hosted production deployment where TLS is handled at the ingress/router level.
+If subdomains exist that are not HTTPS-ready, remove `includeSubDomains` and `preload` until they are. Confirm the actual deployment domain and TLS behavior before relying on this header.
 
 ### Dependency Monitoring
 
-Run `npm audit` before each deployment and review GitHub Dependabot alerts. The current dependency set is minimal (Next.js, React, React-DOM) which limits the attack surface.
+Run `npm audit` before each deployment and review GitHub Dependabot alerts. Playwright checks exercise the built application at desktop and mobile viewport sizes; they do not validate Kubernetes manifests or behavior against a live cluster. The linked October 8 review records source-level and browser results for the commit it examined; check CI for the current commit.
 
 ---
 

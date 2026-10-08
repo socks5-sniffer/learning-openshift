@@ -310,11 +310,11 @@ export default function PodBuilder() {
                 : 'A Deployment wraps your Pod in a ReplicaSet: self-healing, scaling, and rolling updates (Module 2.2).'}
             </p>
 
-            <label style={labelStyle}>Name</label>
-            <input style={inputStyle} value={name} onChange={(e) => setName(e.target.value)} spellCheck={false} />
+            <label htmlFor="pod-name" style={labelStyle}>Name</label>
+            <input id="pod-name" style={inputStyle} value={name} onChange={(e) => setName(e.target.value)} spellCheck={false} />
 
-            <label style={labelStyle}>Container image</label>
-            <input style={inputStyle} value={image} onChange={(e) => setImage(e.target.value)} spellCheck={false} list="preset-images" />
+            <label htmlFor="pod-image" style={labelStyle}>Container image</label>
+            <input id="pod-image" style={inputStyle} value={image} onChange={(e) => setImage(e.target.value)} spellCheck={false} list="preset-images" />
             <datalist id="preset-images">
               {PRESET_IMAGES.map((img) => (
                 <option key={img} value={img} />
@@ -342,13 +342,13 @@ export default function PodBuilder() {
 
             <div style={{ display: 'grid', gridTemplateColumns: kind === 'Deployment' ? '1fr 1fr' : '1fr', gap: '1rem' }}>
               <div>
-                <label style={labelStyle}>Container port</label>
-                <input style={inputStyle} value={port} onChange={(e) => setPort(e.target.value)} placeholder="e.g. 80 (optional)" spellCheck={false} />
+                <label htmlFor="pod-port" style={labelStyle}>Container port</label>
+                <input id="pod-port" style={inputStyle} value={port} onChange={(e) => setPort(e.target.value)} placeholder="e.g. 80 (optional)" spellCheck={false} />
               </div>
               {kind === 'Deployment' && (
                 <div>
-                  <label style={labelStyle}>Replicas</label>
-                  <input style={inputStyle} value={replicas} onChange={(e) => setReplicas(e.target.value)} spellCheck={false} />
+                  <label htmlFor="pod-replicas" style={labelStyle}>Replicas</label>
+                  <input id="pod-replicas" style={inputStyle} value={replicas} onChange={(e) => setReplicas(e.target.value)} spellCheck={false} />
                 </div>
               )}
             </div>
@@ -409,13 +409,13 @@ export default function PodBuilder() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <div>
                   <label style={{ ...labelStyle, marginTop: '0.25rem' }}>CPU request / limit</label>
-                  <input style={{ ...inputStyle, marginBottom: 8 }} value={cpuRequest} onChange={(e) => setCpuRequest(e.target.value)} spellCheck={false} />
-                  <input style={inputStyle} value={cpuLimit} onChange={(e) => setCpuLimit(e.target.value)} spellCheck={false} />
+                  <input aria-label="CPU request" style={{ ...inputStyle, marginBottom: 8 }} value={cpuRequest} onChange={(e) => setCpuRequest(e.target.value)} spellCheck={false} />
+                  <input aria-label="CPU limit" style={inputStyle} value={cpuLimit} onChange={(e) => setCpuLimit(e.target.value)} spellCheck={false} />
                 </div>
                 <div>
                   <label style={{ ...labelStyle, marginTop: '0.25rem' }}>Memory request / limit</label>
-                  <input style={{ ...inputStyle, marginBottom: 8 }} value={memRequest} onChange={(e) => setMemRequest(e.target.value)} spellCheck={false} />
-                  <input style={inputStyle} value={memLimit} onChange={(e) => setMemLimit(e.target.value)} spellCheck={false} />
+                  <input aria-label="Memory request" style={{ ...inputStyle, marginBottom: 8 }} value={memRequest} onChange={(e) => setMemRequest(e.target.value)} spellCheck={false} />
+                  <input aria-label="Memory limit" style={inputStyle} value={memLimit} onChange={(e) => setMemLimit(e.target.value)} spellCheck={false} />
                 </div>
               </div>
             )}

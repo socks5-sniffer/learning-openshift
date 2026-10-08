@@ -38,3 +38,20 @@ This is a source-level audit of the 30 lessons, their routes, quizzes, examples,
 The examples remain teaching material, not deployment recipes. In particular, the managed-service setup commands and controller-specific Ingress snippets still depend on a provider, installed versions, cluster policy, and current vendor documentation. A useful next pass is to run each interactive lesson in a browser at desktop and mobile widths and validate representative YAML against a disposable Kubernetes cluster. No browser or cluster execution is claimed here.
 
 Primary references used for the corrected content: [Pod Security Standards](https://kubernetes.io/docs/concepts/security/pod-security-standards/), [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/), [NetworkPolicy](https://kubernetes.io/docs/concepts/services-networking/network-policies/), [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/), [HPA](https://kubernetes.io/docs/concepts/workloads/autoscaling/horizontal-pod-autoscale/), [RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/), [EKS pricing](https://aws.amazon.com/eks/pricing/), [GKE pricing](https://cloud.google.com/kubernetes-engine/pricing), and [AKS tiers](https://learn.microsoft.com/en-us/azure/aks/free-standard-pricing-tiers).
+
+## October 8, 2026: reconciliation and production browser verification
+
+Integrated `main`'s shared `ModuleShell`, `Callout`, and `TermBox` components while retaining the September lesson corrections and simulator fixes. Updated the runtime and dependency lockfile, corrected per-request CSP nonce propagation, removed the prefetch-header bypass, and fixed Unicode handling in the Secret encoder. Pages now render on demand so the response policy and initial script nonces agree; this replaces automatic static optimization and static HTML caching. Inline styles remain an explicitly documented CSP tradeoff.
+
+Local verification on Windows with Node.js 25.2.1:
+
+- `npm run lint`, `npm run typecheck`, and `npm run build` passed.
+- `npm ci --dry-run --ignore-scripts` confirmed package/lockfile consistency.
+- `npm audit` reported zero vulnerabilities at the time of this check.
+- `npm run test:e2e`: **88 passed**, using production Chromium at desktop and mobile viewport sizes.
+
+The browser suite checks all 30 lessons for loading, quiz availability, navigation, visit tracking, and horizontal viewport overflow. It also exercises quiz completion and persistence, client navigation, malformed/unavailable storage, search, Pod Builder validation, RBAC scope, Service Discovery endpoints, flashcard keyboard controls, HPA scaling, and UTF-8/Base64 encoding. Security checks verify server-script nonce consistency, nonce uniqueness and caller-header rejection for both prefetch markers, the 404 response, HTTP/API headers, and rejection of an untrusted parser-inserted inline script while trusted scripts hydrate normally.
+
+CI now targets `main`, checks builds on Node.js 22 and 24, and runs the production browser suite on Node.js 22. Audit and TypeScript failures are no longer ignored. The local results above do not assert remote CI success or a live deployment.
+
+These checks do not exercise every lesson control or validate manifests against a Kubernetes cluster. Representative YAML and provider-specific setup still need validation in a disposable cluster; other browser engines and the deployed HTTPS/OpenShift environment remain outside this verification.

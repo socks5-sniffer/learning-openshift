@@ -3,9 +3,9 @@ name: Bearer Security Scan
 
 on:
   push:
-    branches: [main, main1]
+    branches: [main]
   pull_request:
-    branches: [main, main1]
+    branches: [main]
   schedule:
     - cron: '0 0 * * 0'  # Weekly on Sundays
   workflow_dispatch:  # Allow manual trigger
@@ -61,6 +61,6 @@ jobs:
           PY
 
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@v4.37.3
         with:
           sarif_file: results.sarif
