@@ -11,9 +11,12 @@ test('production scripts use the request nonce and hydrate', async ({ page, requ
   expect(policy.split(';').find((part) => part.trim().startsWith('script-src'))).not.toContain("'unsafe-inline'");
   // Next's trusted runtime may prefetch scripts without a nonce, which
   // strict-dynamic intentionally permits. Check the original response tags.
-  const bootstrapScripts = (await response!.text()).match(/<script\b[^>]*>/g) ?? [];
-  expect(bootstrapScripts.length).toBeGreaterThan(0);
-  expect(bootstrapScripts.every((tag) => tag.includes(`nonce="${nonce}"`))).toBe(true);
+  const bootstrapNonces = await page.evaluate((html) => {
+    const document = new DOMParser().parseFromString(html, 'text/html');
+    return Array.from(document.querySelectorAll('script'), (script) => script.nonce);
+  }, await response!.text());
+  expect(bootstrapNonces.length).toBeGreaterThan(0);
+  expect(bootstrapNonces.every((value) => value === nonce)).toBe(true);
   await expect(page.getByText('Your journey starts here')).toBeVisible();
 
   const prefetchHeaders: Record<string, string>[] = [{ purpose: 'prefetch' }, { 'next-router-prefetch': '1' }];
@@ -61,14 +64,17 @@ test('CSP blocks an inline script without a trusted nonce', async ({ page, brows
   }
 });
 
-test('missing routes retain a nonce-protected error page', async ({ request }) => {
+test('missing routes retain a nonce-protected error page', async ({ request, page }) => {
   const response = await request.get('/not-a-real-route');
   expect(response.status()).toBe(404);
   const nonce = response.headers()['content-security-policy']?.match(/'nonce-([^']+)'/)?.[1];
   expect(nonce).toBeTruthy();
-  const scripts = (await response.text()).match(/<script\b[^>]*>/g) ?? [];
-  expect(scripts.length).toBeGreaterThan(0);
-  expect(scripts.every((tag) => tag.includes(`nonce="${nonce}"`))).toBe(true);
+  const scriptNonces = await page.evaluate((html) => {
+    const document = new DOMParser().parseFromString(html, 'text/html');
+    return Array.from(document.querySelectorAll('script'), (script) => script.nonce);
+  }, await response.text());
+  expect(scriptNonces.length).toBeGreaterThan(0);
+  expect(scriptNonces.every((value) => value === nonce)).toBe(true);
 });
 
 test('security headers and API method restrictions are enforced', async ({ request }) => {
