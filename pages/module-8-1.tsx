@@ -37,7 +37,7 @@ const apps = {
 const loggingPatterns = {
   sidecar: { name: 'Sidecar Pattern', description: 'Separate container in Pod reads app logs and forwards to aggregator', pros: ['App-agnostic', 'No code changes', 'Easy to update logging config'], cons: ['Extra container per Pod', 'More resource usage', 'Network overhead'], useCase: "When you can't modify application code" },
   daemonset: { name: 'DaemonSet Pattern', description: 'One logging agent per node collects from all containers', pros: ['Resource efficient', 'Node-level insights', 'Centralized per node'], cons: ['Node failure = lost logs', 'Harder to scale', 'Complex routing'], useCase: 'Cost-effective for large clusters' },
-  direct: { name: 'Direct Shipping', description: 'Application sends logs directly to logging backend', pros: ['Lowest latency', 'No intermediaries', 'Guaranteed delivery'], cons: ['Tight coupling', 'App complexity', 'Network dependency'], useCase: "Critical business logs that can't be lost" },
+  direct: { name: 'Direct Shipping', description: 'Application sends logs directly to logging backend', pros: ['Low latency', 'No collection agent', 'Application controls retries'], cons: ['Tight coupling', 'App complexity', 'Network dependency'], useCase: 'Applications that need direct control over log delivery' },
 };
 
 const diagrams: Record<keyof typeof loggingPatterns, string> = {
@@ -243,8 +243,10 @@ export default function Module81() {
       <section className={styles.spotlight}>
         <h2>🏗️ Centralized Logging Patterns</h2>
         <p>
-          Your apps print to stdout, but where do those logs actually go? kubectl logs only shows
-          what's currently in the container. If it restarts, logs are gone. You need centralized logging.
+          Your apps print to stdout, but where do those logs actually go? <code>kubectl logs</code> reads
+          container logs retained on the node. After a container restart, <code>--previous</code> can
+          show the previous instance while those logs remain available. Centralized logging provides
+          durable history across Pod deletion or node loss.
         </p>
 
         <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
@@ -341,9 +343,9 @@ export default function Module81() {
 
         <Callout variant="warning" title="⚠️ Remember">
           <p>
-            kubectl logs only shows logs that are currently in the container. If the Pod restarts,
-            you lose them unless you have centralized logging. Always use --previous to see logs
-            from the crashed container.
+            kubectl logs reads container logs retained on the node. After a container restart,
+            --previous can show the previous instance while those logs remain available. For
+            durable history across Pod deletion or node loss, use centralized logging.
           </p>
         </Callout>
       </section>

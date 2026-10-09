@@ -52,9 +52,9 @@ export default function Module41() {
         </Callout>
 
         <Callout variant="info" icon="💡" title="Key Concepts">
-          <p><strong>Requests:</strong> Guaranteed minimum resources (used for scheduling)</p>
+          <p><strong>Requests:</strong> Resources used for scheduling; CPU requests also affect shares under contention</p>
           <p><strong>Limits:</strong> Maximum resources a Pod can use (enforced by the kernel)</p>
-          <p>Think of requests as "reserved seats" and limits as "you can't stand in the aisle."</p>
+          <p>Requests guide placement and CPU weighting. Limits cap runtime usage; memory is not physically set aside just because it was requested.</p>
         </Callout>
       </section>
 
@@ -107,7 +107,7 @@ export default function Module41() {
           <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- name: app</div>
           <div style={{ color: '#e2e8f0' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;image: myapp:1.0</div>
           <div style={{ color: '#22c55e' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resources:</div>
-          <div style={{ color: '#0ea5e9' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;requests:  # Guaranteed minimum (used for scheduling)</div>
+          <div style={{ color: '#0ea5e9' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;requests:  # Used for scheduling and CPU shares</div>
           <div style={{ color: '#0ea5e9' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cpu: "500m"      # 0.5 CPU cores</div>
           <div style={{ color: '#0ea5e9' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;memory: "512Mi"  # 512 MiB RAM</div>
           <div style={{ color: '#ef4444' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;limits:    # Maximum allowed (enforced)</div>
@@ -119,10 +119,10 @@ export default function Module41() {
         <Callout variant="neutral">
           <ul style={{ lineHeight: '1.8' }}>
             <li><strong>Scheduling:</strong> Kubernetes finds a node with at least 500m CPU and 512Mi RAM available</li>
-            <li><strong>CPU guarantee:</strong> Pod always gets 0.5 cores, even under heavy load</li>
+            <li><strong>CPU request:</strong> 500m counts toward scheduling and influences CPU shares when the node is busy</li>
             <li><strong>CPU burst:</strong> Pod can use up to 1 full core if available</li>
-            <li><strong>Memory guarantee:</strong> Pod gets 512Mi reserved</li>
-            <li><strong>Memory limit:</strong> Pod is killed if it tries to use more than 1Gi</li>
+            <li><strong>Memory request:</strong> 512Mi counts toward scheduling and affects eviction decisions; it is not preallocated RAM</li>
+            <li><strong>Memory limit:</strong> A container can be terminated if it uses more than its 1Gi limit</li>
           </ul>
         </Callout>
       </section>
@@ -258,8 +258,8 @@ export default function Module41() {
         </p>
 
         <div style={{ display: 'grid', gap: '1rem', margin: '1.5rem 0' }}>
-          <Callout variant="success" title="Guaranteed (Highest Priority)">
-            <p><strong>Condition:</strong> Requests = Limits for all resources</p>
+          <Callout variant="success" title="Guaranteed QoS">
+            <p><strong>Condition:</strong> Every container sets equal CPU and memory requests and limits</p>
             <TermBox>
               <div style={{ color: '#f59e0b' }}>resources:</div>
               <div style={{ color: '#22c55e' }}>&nbsp;&nbsp;requests:</div>
@@ -269,11 +269,11 @@ export default function Module41() {
               <div style={{ color: '#22c55e' }}>&nbsp;&nbsp;&nbsp;&nbsp;cpu: "1"      # Same as request</div>
               <div style={{ color: '#22c55e' }}>&nbsp;&nbsp;&nbsp;&nbsp;memory: "1Gi"  # Same as request</div>
             </TermBox>
-            <p><strong>Eviction:</strong> Last to be killed during resource pressure. Use for critical services.</p>
+            <p><strong>Eviction:</strong> Less likely to be evicted for exceeding requests; Pod priority still matters.</p>
           </Callout>
 
-          <Callout variant="info" title="Burstable (Medium Priority)">
-            <p><strong>Condition:</strong> Requests {'<'} Limits (or only requests set)</p>
+          <Callout variant="info" title="Burstable QoS">
+            <p><strong>Condition:</strong> Some resources are set, but the Pod does not meet Guaranteed QoS</p>
             <TermBox>
               <div style={{ color: '#f59e0b' }}>resources:</div>
               <div style={{ color: '#0ea5e9' }}>&nbsp;&nbsp;requests:</div>
@@ -283,11 +283,11 @@ export default function Module41() {
               <div style={{ color: '#0ea5e9' }}>&nbsp;&nbsp;&nbsp;&nbsp;cpu: "2"       # Higher than request</div>
               <div style={{ color: '#0ea5e9' }}>&nbsp;&nbsp;&nbsp;&nbsp;memory: "2Gi"   # Higher than request</div>
             </TermBox>
-            <p><strong>Eviction:</strong> Killed before Guaranteed, after BestEffort. Most common QoS class.</p>
+            <p><strong>Eviction:</strong> Usage above requests can increase eviction risk under node pressure.</p>
           </Callout>
 
-          <Callout variant="danger" title="BestEffort (Lowest Priority)">
-            <p><strong>Condition:</strong> No requests or limits set</p>
+          <Callout variant="danger" title="BestEffort QoS">
+            <p><strong>Condition:</strong> No container has CPU or memory requests or limits</p>
             <TermBox>
               <div style={{ color: '#64748b' }}># No resources block at all</div>
               <div style={{ color: '#ef4444' }}>containers:</div>
@@ -301,9 +301,7 @@ export default function Module41() {
 
         <Callout variant="info" icon="💡" title="Recommendation">
           <p>
-            <strong>Burstable</strong> is the sweet spot for most workloads. It gives you scheduling
-            guarantees (requests) while allowing bursts (limits). Use <strong>Guaranteed</strong> only
-            for critical services that need absolute priority.
+            <strong>Burstable</strong> is the sweet spot for most workloads. It gives you scheduling capacity planning through requests while allowing bursts up to limits. The <strong>Guaranteed</strong> QoS class does not give a Pod absolute priority over other workloads.
           </p>
         </Callout>
       </section>
@@ -329,10 +327,9 @@ export default function Module41() {
 
         <h3>How Kubernetes Ensures Fairness</h3>
         <Callout variant="success" title="Fairness Mechanisms">
-          <h4>1. Requests Guarantee Minimum Resources</h4>
+          <h4>1. Requests Guide Scheduling and CPU Shares</h4>
           <p>
-            If Pod A requests 500m CPU, it's <strong>guaranteed</strong> 500m even if other Pods
-            try to use all CPU.
+            If Pod A requests 500m CPU, the scheduler accounts for that amount, and the request influences its share of CPU time when other containers compete for CPU.
           </p>
 
           <h4>2. Limits Prevent Monopolization</h4>
@@ -343,8 +340,7 @@ export default function Module41() {
 
           <h4>3. QoS-Based Eviction</h4>
           <p>
-            During resource pressure, Kubernetes kills BestEffort Pods first, then Burstable,
-            then Guaranteed.
+            During node pressure, eviction considers Pod priority and usage relative to requests. QoS class influences this behavior, but it is not a strict eviction queue.
           </p>
         </Callout>
       </section>
@@ -413,11 +409,11 @@ export default function Module41() {
       <section className={styles.spotlight}>
         <h2>Key Takeaways</h2>
         <ul>
-          <li><strong>Requests:</strong> Guaranteed minimum resources, used for scheduling decisions</li>
+          <li><strong>Requests:</strong> Used for scheduling; CPU requests also influence CPU shares</li>
           <li><strong>Limits:</strong> Maximum resources, enforced by the kernel</li>
           <li><strong>CPU</strong> is compressible (throttled), <strong>memory</strong> is incompressible (OOMKilled)</li>
-          <li><strong>OOMKilled</strong> happens when a Pod exceeds its memory limit</li>
-          <li><strong>QoS classes:</strong> Guaranteed (requests = limits), Burstable (requests {'<'} limits), BestEffort (no resources set)</li>
+          <li><strong>OOMKilled</strong> can result from exceeding a container memory limit or from node memory pressure</li>
+          <li><strong>QoS classes:</strong> Guaranteed requires equal CPU and memory requests and limits for every container; BestEffort has none; other Pods are Burstable</li>
           <li>Use <strong>Burstable</strong> for most workloads, <strong>Guaranteed</strong> for critical services</li>
           <li>Set <strong>generous memory limits</strong> to avoid OOMKills, then tune based on monitoring</li>
           <li>Resource management prevents starvation and ensures fairness</li>

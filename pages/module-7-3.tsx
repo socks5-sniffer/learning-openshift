@@ -51,9 +51,8 @@ export default function Module73() {
     <ModuleShell id="7-3">
       <section className={styles.spotlight}>
         <p>
-          By default, any Pod can talk to any other Pod in your cluster. NetworkPolicies let you implement
-          firewall rules—zero trust networking where every connection must be explicitly allowed. Essential
-          for defense in depth.
+          By default, Pods are non-isolated for ingress and egress. NetworkPolicies select Pods and isolate
+          them only in directions included in policyTypes, allowing you to restrict new connections.
         </p>
 
         <Callout variant="danger" title="The Default is Scary">
@@ -69,7 +68,8 @@ export default function Module73() {
         <h2>How NetworkPolicies Work</h2>
         <p>
           NetworkPolicies select Pods (via labels) and define allowed ingress (incoming) and egress (outgoing)
-          connections. Once you apply <em>any</em> NetworkPolicy that selects a Pod, it becomes deny-by-default.
+          connections. A selected Pod is isolated only for the directions listed in <code>policyTypes</code>;
+          allowed connections from all matching policies are additive.
         </p>
 
         <Callout variant="neutral" title="The Selection Model">
@@ -83,15 +83,18 @@ export default function Module73() {
 
         <Callout variant="warning" title="Critical">
           <p>
-            NetworkPolicies require a CNI plugin that supports them (Calico, Cilium,
-            Weave). Flannel does NOT support NetworkPolicies by default. Check your CNI before relying on these!
+            NetworkPolicies require a network plugin that supports them. Confirm that your cluster's
+            network implementation enforces these rules before relying on them.
           </p>
         </Callout>
       </section>
 
       <section className={styles.spotlight}>
         <h2>Interactive: Zero Trust Demo</h2>
-        <p>See how NetworkPolicies restrict traffic in a 3-tier application:</p>
+        <p>See how a set of default-deny ingress and egress policies plus explicit allow rules could restrict
+          new connections in a 3-tier application. The backend-to-database rule is preconfigured; use the
+          checkboxes to add the other rules. Replies to allowed connections are allowed automatically.
+          A supporting network plugin is required.</p>
 
         <div style={{ background: 'var(--color-bg-elevated)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: '24px', margin: '20px 0' }}>
           <div style={{ marginBottom: '1.5rem' }}>
@@ -209,7 +212,11 @@ export default function Module73() {
         </TermBox>
 
         <h3>Example 2: Allow DNS</h3>
-        <p>Without DNS, nothing works. Always allow egress to kube-system on port 53.</p>
+        <p>If egress is isolated and the workload needs cluster DNS, allow egress to DNS Pods on UDP and TCP
+          port 53. The examples below allow port 53 to every Pod in <code>kube-system</code>, not only
+          DNS Pods. Adjust the namespace and add a <code>podSelector</code> alongside the
+          <code>namespaceSelector</code> in the same destination entry to match your DNS deployment.
+          Node-local DNS can require a different destination rule.</p>
         <TermBox>
           <div style={{ color: '#10b981' }}>apiVersion: networking.k8s.io/v1</div>
           <div style={{ color: '#10b981' }}>kind: NetworkPolicy</div>
@@ -224,7 +231,7 @@ export default function Module73() {
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;- to:</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;- namespaceSelector:</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matchLabels:</div>
-          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: kube-system</div>
+          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kubernetes.io/metadata.name: kube-system</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;ports:</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;- protocol: UDP</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;port: 53</div>
@@ -283,9 +290,11 @@ export default function Module73() {
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;- to:</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;- namespaceSelector:</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matchLabels:</div>
-          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: kube-system</div>
+          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kubernetes.io/metadata.name: kube-system</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;ports:</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;- protocol: UDP</div>
+          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;port: 53</div>
+          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;- protocol: TCP</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;port: 53</div>
         </TermBox>
       </section>
@@ -313,7 +322,7 @@ export default function Module73() {
           <div style={{ color: '#10b981' }}>- from:</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;- namespaceSelector:</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matchLabels:</div>
-          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: frontend</div>
+          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kubernetes.io/metadata.name: frontend</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;podSelector:</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matchLabels:</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;app: web</div>
@@ -332,7 +341,7 @@ export default function Module73() {
           <div style={{ color: '#10b981' }}>- from:</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;- namespaceSelector:</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matchLabels:</div>
-          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: monitoring</div>
+          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kubernetes.io/metadata.name: monitoring</div>
         </TermBox>
       </section>
 
@@ -390,8 +399,8 @@ export default function Module73() {
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;policyTypes: [Egress]</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;egress:</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;- to:</div>
-          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;- namespaceSelector: {'{matchLabels: {name: kube-system}}'}</div>
-          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;ports: [{'{protocol: UDP, port: 53}'}]</div>
+          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;- namespaceSelector: {'{matchLabels: {kubernetes.io/metadata.name: kube-system}}'}</div>
+          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;ports: [{'{protocol: UDP, port: 53}, {protocol: TCP, port: 53}'}]</div>
           <br />
           <div style={{ color: '#64748b' }}># 3. Frontend: from Ingress, to Backend</div>
           <div style={{ color: '#10b981' }}>kind: NetworkPolicy</div>
@@ -400,7 +409,8 @@ export default function Module73() {
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;podSelector: {'{matchLabels: {app: frontend}}'}</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;policyTypes: [Ingress, Egress]</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;ingress:</div>
-          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;- from: [{'{namespaceSelector: {matchLabels: {name: ingress-nginx}}}'}]</div>
+          <div style={{ color: '#64748b' }}># Replace ingress-system with your controller's namespace</div>
+          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;- from: [{'{namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: ingress-system}}}'}]</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;ports: [{'{protocol: TCP, port: 80}'}]</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;egress:</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;- to: [{'{podSelector: {matchLabels: {app: backend}}}'}]</div>
@@ -437,7 +447,7 @@ export default function Module73() {
         <Callout variant="danger" title="Gotcha 1: Forgetting DNS">
           <p>
             If you apply an egress policy without allowing DNS, service discovery breaks. Always allow
-            egress to kube-system on UDP/TCP port 53.
+            egress to your cluster DNS Pods on UDP/TCP port 53; the namespace varies by cluster.
           </p>
         </Callout>
         <Callout variant="danger" title="Gotcha 2: Label Mismatches">
@@ -448,8 +458,8 @@ export default function Module73() {
         </Callout>
         <Callout variant="danger" title="Gotcha 3: CNI Plugin Doesn't Support It">
           <p>
-            Flannel doesn't support NetworkPolicies. If you're using Flannel, you need to add Calico
-            (Canal = Flannel + Calico) or switch to a different CNI entirely.
+            NetworkPolicy support depends on the network implementation and its configuration. Verify
+            that your cluster's plugin enforces standard NetworkPolicy resources.
           </p>
         </Callout>
         <Callout variant="danger" title="Gotcha 4: Policies Are Additive">

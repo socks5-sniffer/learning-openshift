@@ -4,29 +4,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-A Kubernetes/OpenShift learning platform built with Next.js and TypeScript, deployed on Red Hat OpenShift Dev Spaces. It contains 30 comprehensive learning modules covering the full Kubernetes curriculum from containers basics through GitOps and failure scenarios, with per-module quizzes, localStorage-based progress tracking, and interactive labs.
+A Kubernetes/OpenShift learning platform built with Next.js and TypeScript, intended for Red Hat OpenShift Dev Spaces. It contains 30 learning modules covering the Kubernetes curriculum from containers basics through GitOps and failure scenarios, with per-module quizzes, localStorage-based progress tracking, and interactive labs.
 
 ## Commands
 
 ```bash
 npm install        # Install dependencies
 npm run dev        # Development server on :3000
-npm run build      # Production build
+npm run build      # Production build (uses the Windows compatibility wrapper on Windows)
 npm run lint       # ESLint check
+npm run typecheck  # TypeScript check
+npx playwright install chromium --only-shell  # One-time setup for headless Chromium
+npm run test:e2e   # After npm run build: production checks (Chromium desktop and mobile)
 npm start          # Start production server
 ```
 
-CI runs `npm ci && npm run build && npm run lint` on Node 18.x, 20.x, and 22.x. There is no test suite beyond build and lint.
-
-For TypeScript type checking (used in CI on dependabot PRs): `npx tsc --noEmit`
+CI targets pushes and pull requests to `main`. Build, lint, and type-check jobs use Node.js 22 and 24; the production browser job uses Node.js 22. The browser suite runs Chromium at desktop and mobile viewport sizes and does not validate Kubernetes manifests or behavior against a live cluster. Local build, lint, and type-check pass; remote CI status must be checked for the commit under review.
 
 ## Architecture
 
-**Router**: Next.js Pages Router (not App Router). All pages live in `pages/`.
+**Router**: Next.js Pages Router (not App Router). All pages live in `pages/`. `_app.tsx` has a custom `getInitialProps` to support per-request CSP nonces; this disables automatic static optimization, so pages are served on demand.
 
-**Theme system**: `components/ThemeContext.tsx` provides a React context for dark/light mode with `localStorage` persistence. Dark mode is the default. Wrap new pages in `useTheme()` to access `isDarkMode`.
+**Theme system**: `components/ThemeContext.tsx` provides a React context for dark/light mode with `localStorage` persistence. Dark mode is the default. `useTheme()` returns `theme` (`'dark'` or `'light'`) and `toggleTheme()`.
 
-**Learning modules**: 30 page files named `pages/module-[0-10]-[1-3].tsx`. Each module is a self-contained page with inline styles derived from the theme context. New modules follow this naming convention and must be added to `data/modules.ts` (the module list page renders from it).
+**Learning modules**: 30 page files named `pages/module-[0-10]-[1-3].tsx`. Each module uses `components/module/ModuleShell.tsx` for shared page structure and navigation, with reusable `Callout` and `TermBox` components. Shared visual tokens and module styles live in `styles/Module.module.css`; lesson content can still contain local inline styles. New modules follow this naming convention and must be added to `data/modules.ts` (the module list page renders from it).
 
 **Module catalog**: `data/modules.ts` is the single source of truth for module ids, titles, descriptions, and section grouping. `pages/learning-modules.tsx` and the landing page render from it.
 
@@ -44,18 +45,20 @@ For TypeScript type checking (used in CI on dependabot PRs): `npx tsc --noEmit`
 
 **Flashcards**: `pages/flashcards.tsx` builds a self-graded flip-card deck from `data/quizzes.ts` (question → correct answer + explanation), with section filters and keyboard shortcuts (space/1/2). Adding quiz questions automatically adds flashcards.
 
-**Security headers**: Static headers (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, `Strict-Transport-Security`) are defined in `next.config.js` via `headers()`. The Content-Security-Policy is set separately in `middleware.ts`, which generates a per-request nonce for `script-src` — no `'unsafe-inline'` for scripts; `style-src` still allows `'unsafe-inline'` (documented trade-off in `SECURITY.md`). In development only, `script-src` also allows `'unsafe-eval'` because Next.js Fast Refresh requires it; production keeps it removed. The policy self-hosts fonts via `@fontsource` — do not add external font CDN references.
+**Security headers**: Static headers (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, `Strict-Transport-Security`) are defined in `next.config.js` via `headers()`. `middleware.ts` creates a per-request nonce and puts it in both the request's CSP and `x-nonce` headers, including requests with prefetch headers. The CSP uses `'nonce-…' 'strict-dynamic'` for scripts: the nonce authorizes Next.js bootstrap scripts, and `strict-dynamic` lets those trusted scripts load their own scripts. `'unsafe-inline'` remains for styles. `_app.tsx` calls the default App `getInitialProps` so each page request can receive a unique nonce. This disables automatic static optimization: pages render on demand, which trades static delivery/caching for per-request nonce support. Targeted production Chromium checks at desktop and mobile sizes verified nonce matching on rendered scripts, fresh nonces for prefetch requests despite untrusted caller headers, consistent nonce use on 404 responses, and blocking of an untrusted parser-inserted inline script while hydration succeeds. Fonts are self-hosted via `@fontsource` — do not add external font CDN references.
+
+**Lint toolchain compatibility**: The project currently pairs Next.js 15.5.27 with `eslint-config-next` 14.2.35 and ESLint 8.57.1. This temporary choice stays within the config's supported ESLint 8 peer range and avoids the newer config's vulnerable `braces` dependency path through `fast-glob`. Local lint and build pass. Monitor upstream for a patched compatible release before changing this combination.
 
 **API routes**: Currently only `pages/api/hello.ts` exists as a reference. It demonstrates the pattern: GET-only guard, security headers on the response, JSON response.
 
 **`components/Terminal.tsx`**: Animates a sequence of kubectl commands character-by-character. Used on the landing page hero section.
 
-**Styling**: `styles/globals.css` defines CSS custom properties for the design system (colors, spacing, typography). `styles/Home.module.css` contains the bulk of layout and component styles. Module pages use inline styles driven by the theme context rather than CSS modules.
+**Styling**: `styles/globals.css` defines CSS custom properties for the design system (colors, spacing, typography). `styles/Home.module.css` contains shared layout styles, while `styles/Module.module.css` and `components/module/` provide module-specific tokens and reusable presentation components.
 
 ## Key Constraints
 
 - **No `dangerouslySetInnerHTML`** — enforced by security policy.
 - **No external font CDNs** — fonts are self-hosted via `@fontsource` packages to avoid third-party data leakage.
 - **No secrets in code** — OpenShift Dev Spaces is ephemeral and non-persistent; treat the environment as disposable.
-- TypeScript strict mode is **off** (`tsconfig.json`), so type errors won't always surface at compile time — rely on `tsc --noEmit` in CI for stricter checks.
+- TypeScript strict mode is enabled (`tsconfig.json`). Use `npm run typecheck` to run the project's explicit type check.
 - ESLint rules disable `react/no-unescaped-entities` and `react/jsx-no-comment-textnodes` — these are intentional for the content-heavy module pages.

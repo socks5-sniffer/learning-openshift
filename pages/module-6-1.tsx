@@ -210,13 +210,12 @@ export default function Module61() {
 
         <Callout variant="neutral" title="Calico">
           <p>
-            Uses BGP (Border Gateway Protocol) to program routes directly in the kernel routing table.
-            No overlay by default—just pure IP routing. Can optionally use VXLAN for environments that
-            don't support BGP. Strong NetworkPolicy implementation with iptables or eBPF.
+            Supports several networking modes, including routed and overlay configurations.
+            It can enforce Kubernetes NetworkPolicy. The installation method and data plane
+            depend on your cluster and Calico configuration.
           </p>
           <TermBox>
-            <div style={{ color: '#64748b' }}># Install Calico</div>
-            <div style={{ color: '#10b981' }}>kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml</div>
+            <div style={{ color: '#64748b' }}># Illustrative routed network (not an installation command)</div>
             <br />
             <div style={{ color: '#64748b' }}># Each node gets routes like this:</div>
             <div style={{ color: '#10b981' }}>10.244.1.0/24 via 192.168.1.10 dev eth0</div>
@@ -226,13 +225,12 @@ export default function Module61() {
 
         <Callout variant="neutral" title="Flannel">
           <p>
-            The simplest CNI. Uses VXLAN to create an overlay network. Every packet gets wrapped in a VXLAN
-            header with the destination node's IP. Easy to set up, but no NetworkPolicy support (you need
-            Calico on top for that—yes, you can run both).
+            Flannel provides Pod networking using a configurable backend such as VXLAN.
+            Flannel itself does not enforce Kubernetes NetworkPolicy; choose a compatible
+            policy implementation if your workloads need traffic rules.
           </p>
           <TermBox>
-            <div style={{ color: '#64748b' }}># Install Flannel</div>
-            <div style={{ color: '#10b981' }}>kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml</div>
+            <div style={{ color: '#64748b' }}># Illustrative VXLAN setup (not an installation command)</div>
             <br />
             <div style={{ color: '#64748b' }}># Creates a flannel.1 interface on each node</div>
             <div style={{ color: '#64748b' }}># All Pod traffic goes through the VXLAN tunnel</div>
@@ -355,18 +353,23 @@ export default function Module61() {
 
         <Callout variant="danger" title="Problem: NetworkPolicy blocks everything">
           <p>
-            <strong>Diagnosis:</strong> By default, Pods accept all traffic. Once you create <em>any</em>
-            NetworkPolicy that selects a Pod, it becomes deny-by-default. You need to explicitly allow DNS.
+            <strong>Diagnosis:</strong> Pods are non-isolated by default. A policy isolates selected Pods
+            only for the directions in its <code>policyTypes</code>. If egress is restricted, allow DNS
+            explicitly on UDP and TCP port 53 when the workload needs name resolution. This example
+            allows port 53 to all Pods in <code>kube-system</code>; adjust the namespace and add a
+            <code>podSelector</code> matching your DNS deployment to narrow the destination.
           </p>
           <TermBox>
-            <div style={{ color: '#64748b' }}># Always allow DNS:</div>
+            <div style={{ color: '#64748b' }}># Example DNS egress rule (add to an Egress policy):</div>
             <div style={{ color: '#10b981' }}>egress:</div>
             <div style={{ color: '#10b981' }}>- to:</div>
             <div style={{ color: '#10b981' }}>&nbsp;&nbsp;- namespaceSelector:</div>
             <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;matchLabels:</div>
-            <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: kube-system</div>
+            <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kubernetes.io/metadata.name: kube-system</div>
             <div style={{ color: '#10b981' }}>&nbsp;&nbsp;ports:</div>
             <div style={{ color: '#10b981' }}>&nbsp;&nbsp;- protocol: UDP</div>
+            <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;port: 53</div>
+            <div style={{ color: '#10b981' }}>&nbsp;&nbsp;- protocol: TCP</div>
             <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;port: 53</div>
           </TermBox>
         </Callout>

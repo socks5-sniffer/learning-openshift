@@ -14,20 +14,23 @@ const sliderLabel: React.CSSProperties = {
 export default function Module43() {
   const [currentLoad, setCurrentLoad] = useState(30);
   const [targetCPU, setTargetCPU] = useState(70);
+  const [currentReplicas, setCurrentReplicas] = useState(3);
   const [minReplicas, setMinReplicas] = useState(2);
   const [maxReplicas, setMaxReplicas] = useState(10);
 
+  // Simplified instantaneous HPA recommendation. Real HPA also considers
+  // readiness, missing metrics, scaling policies, and stabilization windows.
   const calculateReplicas = () => {
-    if (currentLoad <= targetCPU) {
-      return minReplicas;
-    }
-    const desired = Math.ceil((currentLoad / targetCPU) * minReplicas);
+    const ratio = currentLoad / targetCPU;
+    const desired = Math.abs(1 - ratio) <= 0.1
+      ? currentReplicas
+      : Math.ceil(ratio * currentReplicas);
     return Math.min(Math.max(desired, minReplicas), maxReplicas);
   };
 
   const desiredReplicas = calculateReplicas();
-  const isScalingUp = currentLoad > targetCPU;
-  const isScalingDown = currentLoad < targetCPU && desiredReplicas > minReplicas;
+  const isScalingUp = desiredReplicas > currentReplicas;
+  const isScalingDown = desiredReplicas < currentReplicas;
   const accent = isScalingUp ? '#ef4444' : isScalingDown ? '#3b82f6' : '#22c55e';
 
   return (
@@ -51,15 +54,15 @@ export default function Module43() {
           <p>
             HPA scales <strong>Pods</strong>, not <strong>nodes</strong>. If your cluster is
             out of CPU/memory capacity, new Pods will be <code>Pending</code>. You need
-            <strong>Cluster Autoscaler</strong> (adds nodes) or <strong>Vertical Pod
-            Autoscaler</strong> (adjusts resource requests).
+            a node autoscaler or more cluster capacity to schedule them. Vertical Pod
+            Autoscaler adjusts resource requests; it does not add nodes.
           </p>
         </Callout>
       </section>
 
       <section className={styles.spotlight}>
         <h2>Interactive: HPA Simulation</h2>
-        <p>Adjust the current CPU load and observe how HPA scales the number of replicas:</p>
+        <p>Adjust CPU utilization and the current replica count to see a simplified HPA recommendation:</p>
 
         <div
           style={{
@@ -71,23 +74,28 @@ export default function Module43() {
           }}
         >
           <div style={{ marginBottom: '20px' }}>
-            <label style={sliderLabel}>Current CPU Usage: {currentLoad}%</label>
-            <input type="range" min="10" max="100" value={currentLoad} onChange={(e) => setCurrentLoad(Number(e.target.value))} style={{ width: '100%' }} />
+            <label htmlFor="hpa-current-cpu" style={sliderLabel}>Current Average CPU Utilization: {currentLoad}% of request</label>
+            <input id="hpa-current-cpu" type="range" min="10" max="100" value={currentLoad} onChange={(e) => setCurrentLoad(Number(e.target.value))} style={{ width: '100%' }} />
           </div>
 
           <div style={{ marginBottom: '20px' }}>
-            <label style={sliderLabel}>Target CPU: {targetCPU}%</label>
-            <input type="range" min="50" max="90" value={targetCPU} onChange={(e) => setTargetCPU(Number(e.target.value))} style={{ width: '100%' }} />
+            <label htmlFor="hpa-current-replicas" style={sliderLabel}>Current Replicas: {currentReplicas}</label>
+            <input id="hpa-current-replicas" type="range" min="1" max="20" value={currentReplicas} onChange={(e) => setCurrentReplicas(Number(e.target.value))} style={{ width: '100%' }} />
+          </div>
+
+          <div style={{ marginBottom: '20px' }}>
+            <label htmlFor="hpa-target-cpu" style={sliderLabel}>Target Average CPU Utilization: {targetCPU}% of request</label>
+            <input id="hpa-target-cpu" type="range" min="50" max="90" value={targetCPU} onChange={(e) => setTargetCPU(Number(e.target.value))} style={{ width: '100%' }} />
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginBottom: '20px' }}>
             <div>
-              <label style={sliderLabel}>Min Replicas: {minReplicas}</label>
-              <input type="range" min="1" max="5" value={minReplicas} onChange={(e) => setMinReplicas(Number(e.target.value))} style={{ width: '100%' }} />
+              <label htmlFor="hpa-min-replicas" style={sliderLabel}>Min Replicas: {minReplicas}</label>
+              <input id="hpa-min-replicas" type="range" min="1" max="5" value={minReplicas} onChange={(e) => setMinReplicas(Number(e.target.value))} style={{ width: '100%' }} />
             </div>
             <div>
-              <label style={sliderLabel}>Max Replicas: {maxReplicas}</label>
-              <input type="range" min="5" max="20" value={maxReplicas} onChange={(e) => setMaxReplicas(Number(e.target.value))} style={{ width: '100%' }} />
+              <label htmlFor="hpa-max-replicas" style={sliderLabel}>Max Replicas: {maxReplicas}</label>
+              <input id="hpa-max-replicas" type="range" min="5" max="20" value={maxReplicas} onChange={(e) => setMaxReplicas(Number(e.target.value))} style={{ width: '100%' }} />
             </div>
           </div>
 
@@ -103,17 +111,17 @@ export default function Module43() {
             <div style={{ fontSize: '3rem', fontWeight: 'bold', color: accent, marginBottom: '12px' }}>{desiredReplicas}</div>
             <div style={{ fontSize: '1.2rem', color: 'var(--color-text-primary)', fontWeight: 600, marginBottom: '8px' }}>Desired Replicas</div>
             <div style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
-              {isScalingUp && `🔥 Scaling UP (CPU ${currentLoad}% > target ${targetCPU}%)`}
-              {isScalingDown && `❄️ Scaling DOWN (CPU ${currentLoad}% < target ${targetCPU}%)`}
-              {!isScalingUp && !isScalingDown && `✅ Stable (CPU within target)`}
+              {isScalingUp && `🔥 Scale up from ${currentReplicas}`}
+              {isScalingDown && `❄️ Scale down from ${currentReplicas}`}
+              {!isScalingUp && !isScalingDown && '✅ Keep the current replica count'}
             </div>
           </div>
 
           <TermBox copyable={false}>
             <div style={{ color: '#64748b' }}># Calculated formula:</div>
             <div>desiredReplicas = ceil((currentLoad / targetCPU) * currentReplicas)</div>
-            <div>desiredReplicas = ceil(({currentLoad} / {targetCPU}) * {minReplicas}) = <span style={{ color: '#22c55e' }}>{desiredReplicas}</span></div>
-            <div style={{ marginTop: '8px', color: '#64748b' }}># Constrained: {minReplicas} ≤ replicas ≤ {maxReplicas}</div>
+            <div>desiredReplicas = ceil({currentReplicas} × {currentLoad} / {targetCPU}) = {Math.ceil(currentReplicas * currentLoad / targetCPU)}</div>
+            <div style={{ marginTop: '8px', color: '#64748b' }}># Apply the 10% tolerance, then constrain to {minReplicas}–{maxReplicas}: <span style={{ color: '#22c55e' }}>{desiredReplicas}</span></div>
           </TermBox>
         </div>
       </section>
@@ -123,27 +131,30 @@ export default function Module43() {
 
         <Callout variant="neutral" title="The Control Loop">
           <ol>
-            <li><strong>Metrics Server</strong> collects CPU/memory from kubelet every 15s</li>
+            <li>A metrics API supplies CPU/memory measurements (commonly via Metrics Server)</li>
             <li><strong>HPA Controller</strong> queries metrics every 15s (configurable)</li>
             <li>HPA calculates: <code>desiredReplicas = ceil(currentReplicas * (currentMetric / targetMetric))</code></li>
             <li>If desired ≠ current, HPA updates the Deployment/ReplicaSet <code>spec.replicas</code></li>
             <li>ReplicaSet creates/deletes Pods</li>
-            <li>Wait for cooldown period (scale-up: 3 min, scale-down: 5 min default)</li>
+            <li>Scaling policies and stabilization smooth changes; the default downscale stabilization window is 5 minutes, while scale-up has no stabilization window</li>
           </ol>
         </Callout>
 
         <h3>Prerequisites</h3>
         <Callout variant="warning">
           <p>
-            <strong>⚠️ CRITICAL:</strong> HPA requires the <strong>Metrics Server</strong> to be
-            installed in your cluster. Without it, HPA cannot read CPU/memory metrics.
+            <strong>⚠️ Check your cluster:</strong> CPU and memory HPA need the <code>metrics.k8s.io</code> API,
+            commonly provided by Metrics Server. Managed clusters may already provide it. For utilization
+            targets, set the matching resource request on every container; CPU utilization is measured as a
+            percentage of the CPU request.
           </p>
           <TermBox>
             <div style={{ color: '#64748b' }}># Check if metrics-server is running</div>
             <div style={{ color: '#22c55e' }}>kubectl get deployment metrics-server -n kube-system</div>
             <br />
             <div style={{ color: '#64748b' }}># Install metrics-server (if missing)</div>
-            <div style={{ color: '#22c55e' }}>kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml</div>
+            <div style={{ color: '#22c55e' }}>kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.9.0/components.yaml</div>
+            <div style={{ color: '#64748b' }}># Metrics Server v0.9.x supports Kubernetes v1.34 and newer</div>
           </TermBox>
         </Callout>
       </section>
@@ -315,7 +326,7 @@ export default function Module43() {
           </Callout>
           <Callout variant="danger" title="❌ Problem: HPA Scales Too Slowly">
             <p>
-              <strong>Cause:</strong> Default cooldown (3 min scale-up, 5 min scale-down) too slow<br />
+              <strong>Cause:</strong> Scaling policies or stabilization settings limit how quickly the replica count changes<br />
               <strong>Fix:</strong> Tune <code>--horizontal-pod-autoscaler-downscale-stabilization</code> and
               <code>--horizontal-pod-autoscaler-sync-period</code> flags
             </p>
@@ -335,7 +346,7 @@ export default function Module43() {
 
         <Callout variant="success" icon="✅" title="Do This">
           <ul>
-            <li><strong>Set resource requests:</strong> HPA needs CPU/memory requests to calculate percentages</li>
+            <li><strong>Set resource requests:</strong> CPU utilization targets use CPU requests as their denominator; memory utilization targets need memory requests</li>
             <li><strong>Start conservative:</strong> Begin with <code>minReplicas=2</code>, <code>maxReplicas=10</code></li>
             <li><strong>Monitor HPA behavior:</strong> Use <code>kubectl get hpa --watch</code> and Grafana dashboards</li>
             <li><strong>Use multiple metrics:</strong> Combine CPU with custom metrics (requests/s, queue length)</li>
@@ -451,11 +462,11 @@ export default function Module43() {
         <h2>Key Takeaways</h2>
         <ul>
           <li><strong>HPA</strong> automatically adjusts Pod replica count based on metrics</li>
-          <li><strong>Requires metrics-server</strong> for CPU/memory-based scaling</li>
+          <li>CPU/memory scaling needs the <code>metrics.k8s.io</code> API, commonly provided by Metrics Server</li>
           <li>Scaling formula: <code>desiredReplicas = ceil(currentReplicas * currentMetric / targetMetric)</code></li>
           <li><strong>Multiple metrics:</strong> HPA picks the highest desired replica count</li>
           <li><strong>Custom metrics:</strong> Scale on requests/s, queue length, etc (via Prometheus Adapter)</li>
-          <li><strong>Cooldown periods</strong> prevent flapping (default: 3 min scale-up, 5 min scale-down)</li>
+          <li>Scaling policies and stabilization windows help prevent rapid replica changes</li>
           <li><strong>HPA scales Pods</strong>, not nodes (use Cluster Autoscaler for nodes)</li>
           <li><strong>VPA scales Pod size</strong> (vertical), HPA scales Pod count (horizontal)</li>
           <li>Always set <code>resources.requests</code> in Pod spec for HPA to work</li>

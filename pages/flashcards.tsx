@@ -126,7 +126,7 @@ export default function Flashcards() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Flashcards | KubeLearn</title>
+        <title>Flashcards | ClusterFoundry</title>
         <meta name="description" content="Review Kubernetes concepts with flashcards built from every module's knowledge checks" />
       </Head>
 
@@ -135,7 +135,7 @@ export default function Flashcards() {
           <Link href="/" className={styles.navBrand}>
             <div className={styles.navLogo}>☸</div>
             <span className={styles.navTitle}>
-              Kube<span className={styles.navTitleAccent}>Learn</span>
+              Cluster<span className={styles.navTitleAccent}>Foundry</span>
             </span>
           </Link>
           <div className={styles.navLinks}>
@@ -147,6 +147,9 @@ export default function Flashcards() {
             </Link>
             <Link href="/kubectl-cheatsheet" className={styles.navLink}>
               Cheat Sheet
+            </Link>
+            <Link href="/about" className={styles.navLink}>
+              About
             </Link>
           </div>
         </div>

@@ -10,8 +10,8 @@ const Terminal = () => {
     { type: 'prompt', text: '$ ' },
     { type: 'command', text: 'kubectl get pods -n production' },
     { type: 'output', text: '\nNAME                          READY   STATUS    RESTARTS   AGE' },
-    { type: 'output', text: '\nkube-learn-7d4f8b6c9d-xk2m    1/1     Running   0          2d' },
-    { type: 'output', text: '\nkube-learn-7d4f8b6c9d-p9n3    1/1     Running   0          2d' },
+    { type: 'output', text: '\ncluster-foundry-7d4f8b6c9d-xk2m    1/1     Running   0          2d' },
+    { type: 'output', text: '\ncluster-foundry-7d4f8b6c9d-p9n3    1/1     Running   0          2d' },
     { type: 'prompt', text: '\n$ ' },
   ]
 

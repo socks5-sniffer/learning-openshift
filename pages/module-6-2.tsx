@@ -6,7 +6,7 @@ import Callout from '../components/module/Callout';
 import TermBox from '../components/module/TermBox';
 
 const ingressControllers = {
-  nginx: { name: 'NGINX Ingress', vendor: 'Community/Kubernetes', implementation: 'nginx.conf + Lua', features: 'Path/host routing, TLS, rate limiting, auth', performance: 'High (C-based)', complexity: 'Medium', useCase: 'General purpose, most popular' },
+  nginx: { name: 'Ingress-NGINX (retired)', vendor: 'Kubernetes community; retired in March 2026', implementation: 'nginx.conf + Lua', features: 'Path/host routing, TLS, rate limiting, auth', performance: 'Historical example', complexity: 'Medium', useCase: 'Migrate existing installations to a maintained controller or Gateway API' },
   traefik: { name: 'Traefik', vendor: 'Traefik Labs', implementation: 'Go + middleware', features: "Auto SSL (Let's Encrypt), TCP/UDP, middleware", performance: 'High', complexity: 'Low', useCase: 'Easy setup, modern UI, dynamic config' },
   haproxy: { name: 'HAProxy Ingress', vendor: 'HAProxy Technologies', implementation: 'haproxy.cfg', features: 'Blue/green, A/B testing, circuit breaking', performance: 'Very High', complexity: 'High', useCase: 'Advanced routing, enterprise features' },
   contour: { name: 'Contour', vendor: 'VMware', implementation: 'Envoy proxy', features: 'HTTPProxy CRD, delegation, multi-tenancy', performance: 'Very High', complexity: 'Medium', useCase: 'Envoy-based, complex routing' },
@@ -22,7 +22,7 @@ const routingPaths = {
 export default function Module62() {
   const [selectedPath, setSelectedPath] = useState<keyof typeof routingPaths>('/api/users');
   const [tlsEnabled, setTlsEnabled] = useState(true);
-  const [selectedController, setSelectedController] = useState<keyof typeof ingressControllers>('nginx');
+  const [selectedController, setSelectedController] = useState<keyof typeof ingressControllers>('traefik');
   const path = routingPaths[selectedPath];
   const ctrl = ingressControllers[selectedController];
 
@@ -35,11 +35,11 @@ export default function Module62() {
 
   const flowSteps = [
     { step: 1, title: 'Client → Load Balancer', detail: `${tlsEnabled ? 'HTTPS' : 'HTTP'} request to ${tlsEnabled ? '443' : '80'}`, description: "Client makes request to your domain. DNS points to the Ingress controller's external IP." },
-    { step: 2, title: 'Load Balancer → Ingress Controller', detail: 'Traffic reaches NGINX/Traefik Pod', description: 'The LoadBalancer service forwards to the Ingress controller Pod (usually on port 80/443).' },
+    { step: 2, title: 'Load Balancer → Ingress Controller', detail: 'Traffic reaches the controller Pod', description: 'In this example, a LoadBalancer Service forwards to the Ingress controller Pod. Other exposure methods are possible.' },
     ...(tlsEnabled ? [{ step: 3, title: 'TLS Termination', detail: 'Decrypt with cert from Secret', description: 'Ingress controller decrypts HTTPS using the TLS certificate stored in a Kubernetes Secret.' }] : []),
     { step: tlsEnabled ? 4 : 3, title: 'Path Matching', detail: `Match rule: ${selectedPath} → ${path.service}`, description: 'Ingress controller checks its rules and finds the matching path/host.' },
     { step: tlsEnabled ? 5 : 4, title: 'Ingress Controller → Service', detail: `HTTP to ${path.service}:${path.port}`, description: 'Controller forwards the request to the backend Service (unencrypted within cluster).' },
-    { step: tlsEnabled ? 6 : 5, title: 'Service → Pod', detail: 'Service load balances to healthy Pod', description: 'Service picks a backend Pod using iptables/IPVS. The Pod handles the request.' },
+    { step: tlsEnabled ? 6 : 5, title: 'Service → Pod', detail: 'Service load balances to healthy Pod', description: 'Service routing sends the request to a ready backend Pod. Implementations vary by cluster.' },
     { step: tlsEnabled ? 7 : 6, title: 'Response Returns', detail: 'Pod → Service → Ingress → Client', description: tlsEnabled ? 'Response flows back through the same path. Ingress controller re-encrypts for HTTPS.' : 'Response flows back through the same path.' },
   ];
 
@@ -47,9 +47,9 @@ export default function Module62() {
     <ModuleShell id="6-2">
       <section className={styles.spotlight}>
         <p>
-          Services give you load balancing <em>inside</em> the cluster. Ingress gives you load balancing
-          <em>from outside</em> the cluster. It's the front door to your Kubernetes applications,
-          handling HTTP/HTTPS routing based on hostnames and paths.
+          Services provide stable access to workloads. An Ingress controller can expose HTTP and HTTPS
+          applications outside the cluster, routing requests by hostname and path. The Ingress API is
+          stable but frozen; Kubernetes recommends Gateway API for new features.
         </p>
 
         <Callout variant="warning" title="Key Point">
@@ -135,8 +135,9 @@ export default function Module62() {
 
         <Callout variant="warning" title="Notice">
           <p>
-            TLS terminates at the Ingress controller. Traffic inside the cluster is HTTP (unencrypted).
-            For end-to-end encryption, you need a service mesh or backend TLS.
+            In this example, TLS terminates at the Ingress controller and the backend uses HTTP.
+            Some controllers can also use HTTPS to the backend when configured. For end-to-end encryption,
+            configure backend TLS or a service mesh.
           </p>
         </Callout>
       </section>
@@ -150,11 +151,8 @@ export default function Module62() {
           <div style={{ color: '#10b981' }}>kind: Ingress</div>
           <div style={{ color: '#10b981' }}>metadata:</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;name: my-ingress</div>
-          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;annotations:</div>
-          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;nginx.ingress.kubernetes.io/rewrite-target: /</div>
-          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;cert-manager.io/cluster-issuer: letsencrypt-prod</div>
           <div style={{ color: '#10b981' }}>spec:</div>
-          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;ingressClassName: nginx</div>
+          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;ingressClassName: traefik  # Use an installed IngressClass</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;tls:</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;- hosts:</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;- example.com</div>
@@ -187,7 +185,7 @@ export default function Module62() {
         </TermBox>
 
         <Callout variant="neutral" title="Breaking It Down">
-          <p><code>ingressClassName: nginx</code><br />
+          <p><code>ingressClassName: traefik</code><br />
             Specifies which Ingress controller handles this resource. Multiple controllers can coexist.</p>
           <p><code>tls.secretName: example-tls</code><br />
             References a Secret containing tls.crt and tls.key. Cert-manager can auto-create this.</p>
@@ -195,7 +193,8 @@ export default function Module62() {
             <strong>Prefix:</strong> /api/users matches /api/users/123 · <strong>Exact:</strong> Only exact match ·
             <strong>ImplementationSpecific:</strong> Controller decides (usually regex)</p>
           <p><code>annotations</code><br />
-            Controller-specific config. NGINX uses nginx.ingress.kubernetes.io/*, Traefik uses traefik.ingress.kubernetes.io/*, etc.</p>
+            Annotations are controller-specific. Check the documentation for the controller you installed;
+            the Kubernetes Ingress API does not standardize rewrite or CORS annotations.</p>
         </Callout>
       </section>
 
@@ -238,22 +237,13 @@ export default function Module62() {
       <section className={styles.spotlight}>
         <h2>Installation Examples</h2>
 
-        <Callout variant="neutral" title="NGINX Ingress Controller">
+        <Callout variant="neutral" title="Ingress-NGINX (retired)">
           <p>
-            Most popular choice. Battle-tested, well-documented. Two versions exist: Kubernetes community
-            version (recommended) and NGINX Inc version.
+            The Kubernetes community Ingress-NGINX controller was retired in March 2026 and no longer
+            receives security fixes. Keep its examples for understanding existing clusters, but choose a
+            maintained controller or Gateway API implementation for new deployments. F5 NGINX Ingress
+            is a separate project with a different support lifecycle.
           </p>
-          <TermBox>
-            <div style={{ color: '#64748b' }}># Install via Helm</div>
-            <div style={{ color: '#10b981' }}>helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx</div>
-            <div style={{ color: '#10b981' }}>helm install nginx-ingress ingress-nginx/ingress-nginx</div>
-            <br />
-            <div style={{ color: '#64748b' }}># Or via kubectl</div>
-            <div style={{ color: '#10b981' }}>kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml</div>
-            <br />
-            <div style={{ color: '#64748b' }}># Get the external IP</div>
-            <div style={{ color: '#10b981' }}>kubectl get svc -n ingress-nginx</div>
-          </TermBox>
         </Callout>
 
         <Callout variant="neutral" title="Traefik">
@@ -404,7 +394,8 @@ export default function Module62() {
           </TermBox>
         </Callout>
 
-        <Callout variant="neutral" title="Pattern: Redirect HTTP to HTTPS">
+        <Callout variant="neutral" title="Historical Ingress-NGINX annotation: HTTPS redirect">
+          <p>These annotations are shown for recognizing older manifests. For a new deployment, use the HTTPS settings of your maintained controller.</p>
           <TermBox>
             <div style={{ color: '#10b981' }}>annotations:</div>
             <div style={{ color: '#10b981' }}>&nbsp;&nbsp;nginx.ingress.kubernetes.io/ssl-redirect: 'true'</div>
@@ -414,7 +405,7 @@ export default function Module62() {
         </Callout>
 
         <Callout variant="danger" title="Gotcha: Path rewriting">
-          <p>If you route /api to a service that expects /, you need rewrite rules:</p>
+          <p>If you route /api to a service that expects /, you need controller-specific rewrite rules. The following is a historical Ingress-NGINX fragment, not a complete portable Ingress:</p>
           <TermBox>
             <div style={{ color: '#64748b' }}># Request: /api/users → Backend receives: /users</div>
             <div style={{ color: '#10b981' }}>annotations:</div>
@@ -441,7 +432,7 @@ export default function Module62() {
         </Callout>
 
         <Callout variant="danger" title="Gotcha: CORS and headers">
-          <p>Frontend calling API from different origin? Configure CORS at the Ingress level:</p>
+          <p>Frontend calling an API from a different origin? Configure CORS in the app or your maintained controller. This is a historical Ingress-NGINX annotation fragment:</p>
           <TermBox>
             <div style={{ color: '#10b981' }}>annotations:</div>
             <div style={{ color: '#10b981' }}>&nbsp;&nbsp;nginx.ingress.kubernetes.io/enable-cors: 'true'</div>
@@ -458,7 +449,7 @@ export default function Module62() {
           <li><strong>Non-HTTP protocols:</strong> Use LoadBalancer or NodePort for TCP/UDP services (databases, game servers, etc.)</li>
           <li><strong>Single service:</strong> If you only expose one service, LoadBalancer is simpler</li>
           <li><strong>Internal traffic:</strong> For pod-to-pod or service-to-service, use ClusterIP Services directly</li>
-          <li><strong>Cost sensitivity:</strong> Ingress needs a LoadBalancer ($$). For dev, use port-forward or NodePort</li>
+          <li><strong>Cost sensitivity:</strong> An Ingress controller needs an exposure path; a cloud LoadBalancer may incur cost, while other clusters use NodePort, host networking, or an existing edge proxy.</li>
         </ul>
 
         <Callout variant="info" title="Pro Tip">
@@ -473,15 +464,15 @@ export default function Module62() {
       <section className={styles.spotlight}>
         <h2>The Big Picture</h2>
         <p>
-          Ingress is the standard way to expose HTTP services in Kubernetes. It's more flexible than LoadBalancer
-          (one IP for multiple services, path routing) and more powerful than NodePort (TLS, virtual hosting).
-          The controller ecosystem is mature—pick one that fits your needs and stick with it.
+          Ingress remains a stable way to expose HTTP services, but its API is frozen. Gateway API is the
+          recommended direction for new routing features. Both need a controller implementation, and the
+          right exposure method depends on the cluster.
         </p>
         <p>
-          For most use cases, <strong>NGINX Ingress + cert-manager</strong> is the sweet spot: well-documented,
-          performant, and has every feature you'd need. If you want something more modern with a better UX,
-          try <strong>Traefik</strong>. If you're building a complex microservices architecture, consider
-          <strong> Istio Gateway</strong> for the full service mesh experience.
+          Before choosing a controller, check its maintenance status and which APIs it supports. The
+          Kubernetes community Ingress-NGINX controller is retired. On OpenShift, you may also encounter
+          Routes managed by the platform router. Gateway API and maintained Ingress controllers are
+          options for Kubernetes clusters; compare them against your platform's built-in routing.
         </p>
 
         <Callout variant="warning" title="Remember">

@@ -24,16 +24,18 @@ export default function Module32() {
 
   const encodeSecret = (text: string) => {
     if (typeof window !== 'undefined') {
-      setEncodedSecret(btoa(text));
+      const bytes = new TextEncoder().encode(text);
+      setEncodedSecret(btoa(Array.from(bytes, (byte) => String.fromCharCode(byte)).join('')));
     }
   };
 
   const decodeSecret = (text: string) => {
     if (typeof window !== 'undefined') {
       try {
-        setDecodedSecret(atob(text));
+        const bytes = Uint8Array.from(atob(text), (character) => character.charCodeAt(0));
+        setDecodedSecret(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
       } catch {
-        setDecodedSecret('Invalid Base64');
+        setDecodedSecret('Invalid Base64 or non-UTF-8 text');
       }
     }
   };
@@ -90,6 +92,7 @@ export default function Module32() {
           <h3 style={{ marginTop: 0, color: 'var(--color-text-accent)' }}>Encode a Secret (Base64)</h3>
           <input
             type="text"
+            aria-label="Plain-text secret"
             placeholder="Type a password (e.g., SuperSecret123)"
             onChange={(e) => encodeSecret(e.target.value)}
             style={inputStyle}
@@ -104,6 +107,7 @@ export default function Module32() {
           <h3 style={{ marginTop: '24px', color: 'var(--color-text-accent)' }}>Decode a Secret (Base64)</h3>
           <input
             type="text"
+            aria-label="Base64 secret"
             placeholder="Paste Base64 string (or try: U3VwZXJTZWNyZXQxMjM=)"
             onChange={(e) => decodeSecret(e.target.value)}
             style={inputStyle}
@@ -140,7 +144,10 @@ export default function Module32() {
         </TermBox>
 
         <h3>Method 2: From YAML File (Manual Base64 Encoding)</h3>
-        <p>If you write a Secret in YAML, you must Base64-encode values yourself:</p>
+        <p>
+          If you use the <code>data</code> field in Secret YAML, Base64-encode values. The
+          <code> stringData</code> field accepts plain text and Kubernetes converts it on creation:
+        </p>
 
         <TermBox>
           <div style={{ color: '#64748b' }}># First, encode your secrets (on Linux/Mac/PowerShell)</div>
