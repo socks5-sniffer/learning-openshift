@@ -6,7 +6,7 @@ export default function InteractiveLearning() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Interactive Learning | KubeLearn</title>
+        <title>Interactive Learning | ClusterFoundry</title>
         <meta name="description" content="Interactive learning modules and activities" />
       </Head>
       
@@ -16,7 +16,7 @@ export default function InteractiveLearning() {
           <Link href="/" className={styles.navBrand}>
             <div className={styles.navLogo}>☸</div>
             <span className={styles.navTitle}>
-              Kube<span className={styles.navTitleAccent}>Learn</span>
+              Cluster<span className={styles.navTitleAccent}>Foundry</span>
             </span>
           </Link>
           <div className={styles.navLinks}>
@@ -28,6 +28,9 @@ export default function InteractiveLearning() {
             </Link>
             <Link href="/kubectl-cheatsheet" className={styles.navLink}>
               Cheat Sheet
+            </Link>
+            <Link href="/about" className={styles.navLink}>
+              About
             </Link>
           </div>
         </div>

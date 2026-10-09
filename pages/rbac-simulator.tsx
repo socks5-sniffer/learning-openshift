@@ -137,7 +137,7 @@ roleRef:
   return (
     <div className={styles.container}>
       <Head>
-        <title>RBAC Simulator | KubeLearn</title>
+        <title>RBAC Simulator | ClusterFoundry</title>
         <meta name="description" content="Build Roles and RoleBindings, then test permissions like kubectl auth can-i" />
       </Head>
 
@@ -146,7 +146,7 @@ roleRef:
           <Link href="/" className={styles.navBrand}>
             <div className={styles.navLogo}>☸</div>
             <span className={styles.navTitle}>
-              Kube<span className={styles.navTitleAccent}>Learn</span>
+              Cluster<span className={styles.navTitleAccent}>Foundry</span>
             </span>
           </Link>
           <div className={styles.navLinks}>
@@ -158,6 +158,9 @@ roleRef:
             </Link>
             <Link href="/kubectl-cheatsheet" className={styles.navLink}>
               Cheat Sheet
+            </Link>
+            <Link href="/about" className={styles.navLink}>
+              About
             </Link>
           </div>
         </div>

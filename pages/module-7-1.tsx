@@ -8,13 +8,15 @@ import TermBox from '../components/module/TermBox';
 const roles = {
   developer: { name: 'Developer', permissions: ['get-pods', 'get-logs', 'create-pods', 'delete-pods'], forbidden: ['get-secrets', 'create-rolebindings', 'delete-namespace'], description: 'Can manage Pods and view logs, but not access Secrets or admin resources' },
   viewer: { name: 'Read-Only Viewer', permissions: ['get-pods', 'get-logs', 'get-services', 'get-deployments'], forbidden: ['create-pods', 'delete-pods', 'get-secrets', 'create-rolebindings'], description: 'Can view resources but cannot modify anything' },
-  admin: { name: 'Namespace Admin', permissions: ['get-pods', 'get-logs', 'create-pods', 'delete-pods', 'get-secrets', 'create-rolebindings'], forbidden: ['delete-namespace', 'create-clusterroles'], description: 'Full control within a namespace, but cannot modify cluster-wide resources' },
-  clusterAdmin: { name: 'Cluster Admin', permissions: ['get-pods', 'get-logs', 'create-pods', 'delete-pods', 'get-secrets', 'create-rolebindings', 'delete-namespace', 'create-clusterroles'], forbidden: [], description: 'God mode. Can do anything in any namespace' },
+  admin: { name: 'Namespace Admin', permissions: ['get-pods', 'get-logs', 'get-services', 'get-deployments', 'create-pods', 'delete-pods', 'get-secrets', 'create-rolebindings'], forbidden: ['delete-namespace', 'create-clusterroles'], description: 'Full control within a namespace, but cannot modify cluster-wide resources' },
+  clusterAdmin: { name: 'Cluster Admin', permissions: ['get-pods', 'get-logs', 'get-services', 'get-deployments', 'create-pods', 'delete-pods', 'get-secrets', 'create-rolebindings', 'delete-namespace', 'create-clusterroles'], forbidden: [], description: 'God mode. Can do anything in any namespace' },
 };
 
 const actions = {
   'get-pods': { verb: 'get', resource: 'pods' },
   'get-logs': { verb: 'get', resource: 'pods/log' },
+  'get-services': { verb: 'get', resource: 'services' },
+  'get-deployments': { verb: 'get', resource: 'deployments' },
   'create-pods': { verb: 'create', resource: 'pods' },
   'delete-pods': { verb: 'delete', resource: 'pods' },
   'get-secrets': { verb: 'get', resource: 'secrets' },
@@ -36,8 +38,52 @@ const verbRows: [string, string][] = [
 
 export default function Module71() {
   const [selectedRole, setSelectedRole] = useState<keyof typeof roles>('developer');
+  const [selectedAction, setSelectedAction] = useState<keyof typeof actions>('get-pods');
   const [showBinding, setShowBinding] = useState(false);
   const role = roles[selectedRole];
+  const canPerformAction = (roleName: keyof typeof roles, action: keyof typeof actions) =>
+    roles[roleName].permissions.includes(action);
+
+  const exampleYaml = selectedRole === 'clusterAdmin'
+    ? `apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: example-cluster-admin-binding
+subjects:
+  - kind: User
+    name: user@example.com
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io`
+    : `apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: ${selectedRole}-role
+  namespace: production
+rules:
+${role.permissions.map((action) => {
+  const { verb, resource } = actions[action as keyof typeof actions];
+  const apiGroup = resource === 'rolebindings' || resource === 'clusterroles'
+    ? 'rbac.authorization.k8s.io'
+    : resource === 'deployments' ? 'apps' : '';
+  return `  - apiGroups: ["${apiGroup}"]\n    resources: ["${resource}"]\n    verbs: ["${verb}"]`;
+}).join('\n')}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ${selectedRole}-binding
+  namespace: production
+subjects:
+  - kind: User
+    name: user@example.com
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: ${selectedRole}-role
+  apiGroup: rbac.authorization.k8s.io`;
 
   const chip = (variant: 'ok' | 'no'): React.CSSProperties => ({
     padding: '0.5rem 1rem',
@@ -52,9 +98,10 @@ export default function Module71() {
     <ModuleShell id="7-1">
       <section className={styles.spotlight}>
         <p>
-          By default, Kubernetes gives you way too much power. RBAC (Role-Based Access Control) is how you
-          limit who can do what. It's the difference between "anyone can delete production" and "only
-          admins can, and they need MFA."
+          Kubernetes uses authorization rules to decide who can do what. With RBAC enabled,
+          most application ServiceAccounts have no API permissions beyond discovery until an
+          administrator grants them. Roles and bindings let you grant only what a user or
+          workload needs.
         </p>
 
         <Callout variant="warning" title="The Golden Rule">
@@ -82,7 +129,7 @@ export default function Module71() {
             <ul>
               <li>Applications/Pods</li>
               <li>Stored as Kubernetes resources</li>
-              <li>Automatically get a token (mounted as Secret)</li>
+              <li>Pods normally receive a short-lived, rotating token through a projected volume</li>
               <li>Used by Pods to talk to API server</li>
               <li>Example: system:serviceaccount:default:my-app</li>
             </ul>
@@ -223,46 +270,30 @@ export default function Module71() {
           </div>
         </div>
 
+        <div style={{ padding: '1rem', background: 'var(--color-bg-elevated)', borderRadius: 'var(--radius-md)', marginBottom: '1.5rem' }}>
+          <div style={{ color: 'var(--color-text-primary)', fontWeight: 600, marginBottom: '0.75rem' }}>Try an action as this role:</div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+            {(Object.keys(actions) as Array<keyof typeof actions>).map((action) => (
+              <button key={action} onClick={() => setSelectedAction(action)} aria-pressed={selectedAction === action}
+                style={{ padding: '0.5rem 0.75rem', borderRadius: 6, border: selectedAction === action ? '2px solid var(--color-primary)' : '1px solid var(--color-border)', background: selectedAction === action ? 'var(--color-bg-secondary)' : 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', cursor: 'pointer' }}>
+                {action}
+              </button>
+            ))}
+          </div>
+          <p style={{ color: canPerformAction(selectedRole, selectedAction) ? '#15803d' : '#dc2626', fontWeight: 600, marginBottom: 0 }}>
+            {canPerformAction(selectedRole, selectedAction) ? 'Allowed' : 'Denied'}: {selectedAction}
+          </p>
+        </div>
+
         <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', marginBottom: '1rem' }}>
           <input type="checkbox" checked={showBinding} onChange={(e) => setShowBinding(e.target.checked)} style={{ width: '20px', height: '20px' }} />
-          <span style={{ color: 'var(--color-text-primary)', fontWeight: 600 }}>Show Role + RoleBinding YAML</span>
+          <span style={{ color: 'var(--color-text-primary)', fontWeight: 600 }}>Show example RBAC YAML</span>
         </label>
 
         {showBinding && (
-          <TermBox>
-            <div style={{ color: '#64748b' }}># Role definition</div>
-            <div style={{ color: '#10b981' }}>apiVersion: rbac.authorization.k8s.io/v1</div>
-            <div style={{ color: '#10b981' }}>kind: Role</div>
-            <div style={{ color: '#10b981' }}>metadata:</div>
-            <div style={{ color: '#10b981' }}>&nbsp;&nbsp;name: {selectedRole}-role</div>
-            <div style={{ color: '#10b981' }}>&nbsp;&nbsp;namespace: production</div>
-            <div style={{ color: '#10b981' }}>rules:</div>
-            {role.permissions.slice(0, 3).map((action) => {
-              const act = actions[action as keyof typeof actions];
-              return (
-                <div key={action}>
-                  <div style={{ color: '#10b981' }}>- apiGroups: ['']</div>
-                  <div style={{ color: '#10b981' }}>&nbsp;&nbsp;resources: ['{act.resource}']</div>
-                  <div style={{ color: '#10b981' }}>&nbsp;&nbsp;verbs: ['{act.verb}']</div>
-                </div>
-              );
-            })}
-            <br />
-            <div style={{ color: '#64748b' }}># RoleBinding</div>
-            <div style={{ color: '#10b981' }}>apiVersion: rbac.authorization.k8s.io/v1</div>
-            <div style={{ color: '#10b981' }}>kind: RoleBinding</div>
-            <div style={{ color: '#10b981' }}>metadata:</div>
-            <div style={{ color: '#10b981' }}>&nbsp;&nbsp;name: {selectedRole}-binding</div>
-            <div style={{ color: '#10b981' }}>&nbsp;&nbsp;namespace: production</div>
-            <div style={{ color: '#10b981' }}>subjects:</div>
-            <div style={{ color: '#10b981' }}>- kind: User</div>
-            <div style={{ color: '#10b981' }}>&nbsp;&nbsp;name: user@example.com</div>
-            <div style={{ color: '#10b981' }}>&nbsp;&nbsp;apiGroup: rbac.authorization.k8s.io</div>
-            <div style={{ color: '#10b981' }}>roleRef:</div>
-            <div style={{ color: '#10b981' }}>&nbsp;&nbsp;kind: Role</div>
-            <div style={{ color: '#10b981' }}>&nbsp;&nbsp;name: {selectedRole}-role</div>
-            <div style={{ color: '#10b981' }}>&nbsp;&nbsp;apiGroup: rbac.authorization.k8s.io</div>
-          </TermBox>
+          <pre style={{ fontFamily: 'monospace', fontSize: '0.85rem', background: 'var(--color-bg-secondary)', color: 'var(--color-text-primary)', padding: '1rem', borderRadius: 'var(--radius-sm)', margin: 0, overflowX: 'auto' }}>
+            {exampleYaml}
+          </pre>
         )}
       </section>
 

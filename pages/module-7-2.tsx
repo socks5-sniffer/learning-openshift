@@ -12,22 +12,22 @@ interface SecurityStandard {
 const securityStandards: Record<'privileged' | 'baseline' | 'restricted', SecurityStandard> = {
   privileged: {
     name: 'Privileged', level: 'Unrestricted', color: '#ef4444',
-    description: 'No restrictions. Pods can do anything. Only for system components.',
+    description: 'The standard imposes no restrictions; use it only where broader privileges are necessary.',
     allows: ['Run as root (UID 0)', 'Privileged containers', 'Host namespaces (network, PID, IPC)', 'Host paths mounted', 'All capabilities', 'Privilege escalation'],
     useCase: 'System daemons (kube-proxy, CNI, monitoring agents)',
   },
   baseline: {
     name: 'Baseline', level: 'Minimally restrictive', color: '#f59e0b',
-    description: 'Prevents known privilege escalations. Good default for most apps.',
-    allows: ['Run as non-root (enforced)', 'No privileged containers', 'No host namespaces', 'Limited capabilities', 'No privilege escalation'],
+    description: 'Prevents known privilege escalations while allowing common application patterns.',
+    allows: ['No privileged containers', 'No host namespaces', 'No hostPath volumes', 'Only a limited set of added capabilities', 'Running as root is still possible'],
     forbids: ['Privileged: true', 'hostNetwork, hostPID, hostIPC', 'hostPath volumes', 'Dangerous capabilities (SYS_ADMIN, NET_ADMIN, etc.)'],
     useCase: 'Most applications, web servers, APIs',
   },
   restricted: {
     name: 'Restricted', level: 'Heavily restricted', color: '#10b981',
-    description: 'Maximum security. Follows current Pod hardening best practices.',
-    allows: ['Must run as non-root', 'Must drop ALL capabilities', 'Read-only root filesystem (seccompProfile)', 'No privilege escalation', 'Specific seccomp/AppArmor profiles'],
-    forbids: ['Everything from Baseline', 'Running as root (must set runAsNonRoot: true)', 'Any capabilities (must drop all)', 'Writable root filesystem'],
+    description: 'Adds tighter controls for non-root execution, capabilities, and seccomp.',
+    allows: ['Must run as non-root', 'Must drop ALL capabilities (NET_BIND_SERVICE may be added)', 'No privilege escalation', 'Seccomp must be RuntimeDefault or Localhost', 'Read-only root filesystem is recommended, not required'],
+    forbids: ['Everything from Baseline', 'Running as root (set runAsNonRoot: true)', 'Adding capabilities other than NET_BIND_SERVICE', 'Unconfined seccomp profiles'],
     useCase: 'Security-critical apps, compliance requirements (PCI-DSS, HIPAA)',
   },
 };
@@ -55,9 +55,8 @@ export default function Module72() {
     <ModuleShell id="7-2">
       <section className={styles.spotlight}>
         <p>
-          By default, containers run as root with a lot of privileges. This is terrifying from a security
-          perspective. Pod Security Standards and SecurityContext let you lock down containers so a
-          compromised app can't take over the node.
+          A container's privileges depend on its image, security context, and cluster admission policy.
+          Pod Security Standards and security contexts help limit what a compromised app can do.
         </p>
 
         <Callout variant="danger" title="Why This Matters">

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from '../styles/Home.module.css';
 import moduleStyles from '../styles/Module.module.css';
 import ModuleShell from '../components/module/ModuleShell';
@@ -8,6 +8,11 @@ import TermBox from '../components/module/TermBox';
 export default function Module53() {
   const [showScale, setShowScale] = useState(false);
   const [replicas, setReplicas] = useState(3);
+  const scaleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => {
+    if (scaleTimer.current) clearTimeout(scaleTimer.current);
+  }, []);
 
   return (
     <ModuleShell id="5-3" subtitle="When Stateless Isn't an Option (Databases in Kubernetes, Carefully)">
@@ -86,7 +91,11 @@ export default function Module53() {
               onChange={(e) => {
                 setReplicas(Number(e.target.value));
                 setShowScale(true);
-                setTimeout(() => setShowScale(false), 3000);
+                if (scaleTimer.current) clearTimeout(scaleTimer.current);
+                scaleTimer.current = setTimeout(() => {
+                  setShowScale(false);
+                  scaleTimer.current = null;
+                }, 3000);
               }}
               style={{ width: '100%' }}
             />

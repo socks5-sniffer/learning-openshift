@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from '../styles/Home.module.css';
 import moduleStyles from '../styles/Module.module.css';
 import ModuleShell from '../components/module/ModuleShell';
@@ -8,11 +8,20 @@ import TermBox from '../components/module/TermBox';
 export default function Module22() {
   const [replicaCount, setReplicaCount] = useState(3);
   const [currentReplicas, setCurrentReplicas] = useState(3);
+  const scaleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => {
+    if (scaleTimer.current) clearTimeout(scaleTimer.current);
+  }, []);
 
   const handleScale = (newCount: number) => {
     setReplicaCount(newCount);
     // Simulate gradual scaling
-    setTimeout(() => setCurrentReplicas(newCount), 500);
+    if (scaleTimer.current) clearTimeout(scaleTimer.current);
+    scaleTimer.current = setTimeout(() => {
+      setCurrentReplicas(newCount);
+      scaleTimer.current = null;
+    }, 500);
   };
 
   return (

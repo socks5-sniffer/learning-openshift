@@ -12,9 +12,9 @@ const services = {
 
 const metricInfo = {
   cpu: { name: 'CPU Usage', unit: '%', icon: '📊', description: 'Percentage of CPU cores being used', goodRange: '< 70%', warningRange: '70-85%', criticalRange: '> 85%' },
-  memory: { name: 'Memory Usage', unit: 'GB', icon: '💾', description: 'RAM consumption in gigabytes', goodRange: '< 75%', warningRange: '75-90%', criticalRange: '> 90%' },
+  memory: { name: 'Memory Usage', unit: 'GB', icon: '💾', description: 'RAM consumption in gigabytes', goodRange: '< 2 GB', warningRange: '2–3 GB', criticalRange: '> 3 GB' },
   requests: { name: 'Request Rate', unit: 'req/s', icon: '🔄', description: 'HTTP requests per second', goodRange: 'Steady', warningRange: 'Spiking', criticalRange: 'Dropping to 0' },
-  errors: { name: 'Error Rate', unit: 'errors/min', icon: '⚠️', description: 'Number of errors per minute', goodRange: '< 1%', warningRange: '1-5%', criticalRange: '> 5%' },
+  errors: { name: 'Error Rate', unit: 'errors/min', icon: '⚠️', description: 'Number of errors per minute', goodRange: '< 5 errors/min', warningRange: '5–10 errors/min', criticalRange: '> 10 errors/min' },
 };
 
 const metricTypes = [
@@ -52,23 +52,24 @@ export default function Module82() {
 
   const data = services[selectedService].metrics[selectedMetric];
   const current = data[data.length - 1];
-  const isAlerting = enableAlert && (selectedMetric === 'cpu' || selectedMetric === 'memory') && current > alertThreshold;
+  const alertActive = enableAlert && (selectedMetric === 'cpu' || selectedMetric === 'memory');
+  const isAlerting = alertActive && current > alertThreshold;
 
   const renderChart = () => {
-    const max = Math.max(...data);
+    const max = Math.max(...data, alertActive ? alertThreshold : 0);
     const height = 200;
     return (
       <div style={{ position: 'relative', height, background: '#0f172a', borderRadius: 8, padding: '1rem', marginBottom: '1rem' }}>
-        <svg width="100%" height={height - 32} style={{ position: 'relative' }}>
+        <svg width="100%" height={height - 32} viewBox={`0 0 1000 ${height - 32}`} preserveAspectRatio="none" style={{ position: 'relative' }}>
           {[0, 25, 50, 75, 100].map((p) => (
-            <line key={p} x1="0" y1={(height - 32) * (1 - p / 100)} x2="100%" y2={(height - 32) * (1 - p / 100)} stroke="#334155" strokeWidth="1" strokeDasharray="4,4" />
+            <line key={p} x1="0" y1={(height - 32) * (1 - p / 100)} x2="1000" y2={(height - 32) * (1 - p / 100)} stroke="#334155" strokeWidth="1" strokeDasharray="4,4" />
           ))}
-          <polyline points={data.map((v, idx) => `${(idx / (data.length - 1)) * 100}%,${(1 - v / max) * (height - 32)}`).join(' ')} fill="none" stroke={services[selectedService].color} strokeWidth="3" />
+          <polyline points={data.map((v, idx) => `${(idx / (data.length - 1)) * 1000},${(1 - v / max) * (height - 32)}`).join(' ')} fill="none" stroke={services[selectedService].color} strokeWidth="3" />
           {data.map((v, idx) => (
-            <circle key={idx} cx={`${(idx / (data.length - 1)) * 100}%`} cy={(1 - v / max) * (height - 32)} r="4" fill={services[selectedService].color} />
+            <circle key={idx} cx={(idx / (data.length - 1)) * 1000} cy={(1 - v / max) * (height - 32)} r="4" fill={services[selectedService].color} />
           ))}
-          {enableAlert && (selectedMetric === 'cpu' || selectedMetric === 'memory') && (
-            <line x1="0" y1={(height - 32) * (1 - alertThreshold / max)} x2="100%" y2={(height - 32) * (1 - alertThreshold / max)} stroke="#ef4444" strokeWidth="2" strokeDasharray="8,4" />
+          {alertActive && (
+            <line x1="0" y1={(height - 32) * (1 - alertThreshold / max)} x2="1000" y2={(height - 32) * (1 - alertThreshold / max)} stroke="#ef4444" strokeWidth="2" strokeDasharray="8,4" />
           )}
         </svg>
         <div style={{ position: 'absolute', top: '1rem', right: '1rem', background: services[selectedService].color, color: 'white', padding: '0.5rem 1rem', borderRadius: 6, fontWeight: 600, fontSize: '1.2rem' }}>
@@ -104,7 +105,10 @@ export default function Module82() {
           <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--color-text-primary)' }}>Select Metric</label>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '0.75rem' }}>
             {(Object.keys(metricInfo) as Array<keyof typeof metricInfo>).map((metric) => (
-              <button key={metric} onClick={() => setSelectedMetric(metric)}
+              <button key={metric} onClick={() => {
+                setSelectedMetric(metric);
+                setAlertThreshold(metric === 'memory' ? 3 : 80);
+              }}
                 style={{ padding: '1rem', background: selectedMetric === metric ? 'var(--color-primary)' : 'var(--color-bg-secondary)', color: selectedMetric === metric ? 'white' : 'var(--color-text-primary)', border: selectedMetric === metric ? 'none' : '1px solid var(--color-border)', borderRadius: 8, cursor: 'pointer', fontWeight: 600, textAlign: 'left' }}>
                 <div style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>{metricInfo[metric].icon}</div>
                 <div style={{ fontSize: '0.875rem' }}>{metricInfo[metric].name}</div>
@@ -118,6 +122,9 @@ export default function Module82() {
         <div style={{ background: 'var(--color-bg-elevated)', border: '1px solid var(--color-border)', borderRadius: 8, padding: '1.5rem', marginBottom: '1.5rem' }}>
           <h3 style={{ marginTop: 0 }}>{metricInfo[selectedMetric].icon} {metricInfo[selectedMetric].name}</h3>
           <p style={{ color: 'var(--color-text-secondary)', marginBottom: '1rem' }}>{metricInfo[selectedMetric].description}</p>
+          <p style={{ color: 'var(--color-text-secondary)', marginBottom: '1rem', fontSize: '0.85rem' }}>
+            These ranges are examples for this simulated dashboard, not universal alert thresholds.
+          </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
             <div>
               <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Good</div>
@@ -146,10 +153,10 @@ export default function Module82() {
 
             {enableAlert && (
               <>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--color-text-primary)' }}>
+                <label htmlFor="monitoring-alert-threshold" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--color-text-primary)' }}>
                   Alert Threshold: {alertThreshold}{metricInfo[selectedMetric].unit}
                 </label>
-                <input type="range" min="50" max="100" value={alertThreshold} onChange={(e) => setAlertThreshold(Number(e.target.value))} style={{ width: '100%', marginBottom: '1rem' }} />
+                <input id="monitoring-alert-threshold" type="range" min={selectedMetric === 'memory' ? 1 : 50} max={selectedMetric === 'memory' ? 5 : 100} step={selectedMetric === 'memory' ? 0.1 : 1} value={alertThreshold} onChange={(e) => setAlertThreshold(Number(e.target.value))} style={{ width: '100%', marginBottom: '1rem' }} />
                 {isAlerting && (
                   <div style={{ background: '#ef4444', color: 'white', padding: '1rem', borderRadius: 6, fontWeight: 600, marginTop: '1rem' }}>
                     🚨 ALERT: {metricInfo[selectedMetric].name} is {current}{metricInfo[selectedMetric].unit}, exceeding threshold of {alertThreshold}{metricInfo[selectedMetric].unit}

@@ -11,7 +11,21 @@ interface EnvVar {
 
 const NAME_RE = /^[a-z0-9]([-a-z0-9]*[a-z0-9])?$/;
 const CPU_RE = /^(\d+m|\d+(\.\d+)?)$/;
-const MEM_RE = /^\d+(Ki|Mi|Gi|Ti|k|M|G|T)?$/;
+const MEM_RE = /^\d+(\.\d+)?(Ki|Mi|Gi|Ti|k|M|G|T)?$/;
+
+const cpuCores = (value: string) => value.endsWith('m')
+  ? Number(value.slice(0, -1)) / 1000
+  : Number(value);
+const memoryBytes = (value: string) => {
+  const match = value.match(MEM_RE);
+  if (!match) return NaN;
+  const unit = match[2] || '';
+  const multipliers: Record<string, number> = {
+    '': 1, Ki: 1024, Mi: 1024 ** 2, Gi: 1024 ** 3, Ti: 1024 ** 4,
+    k: 1000, M: 1000 ** 2, G: 1000 ** 3, T: 1000 ** 4,
+  };
+  return Number(match[0].slice(0, unit ? -unit.length : undefined)) * multipliers[unit];
+};
 
 const PRESET_IMAGES = ['nginx:1.27', 'httpd:2.4', 'redis:7.4', 'node:22-alpine', 'python:3.12-slim', 'busybox:1.37'];
 
@@ -39,7 +53,9 @@ export default function PodBuilder() {
   }
   if (image.trim() === '') {
     hints.push({ level: 'error', text: 'Image is required — a Pod without an image has nothing to run.' });
-  } else if (!image.includes(':')) {
+  } else if (/\s/.test(image)) {
+    hints.push({ level: 'error', text: 'An image reference cannot contain spaces or line breaks.' });
+  } else if (!image.includes('@') && !image.split('/').pop()?.includes(':')) {
     hints.push({
       level: 'warn',
       text: 'No image tag specified — this implicitly means :latest. Pin a specific tag so you always know what is running (see Module 9.1).',
@@ -72,6 +88,12 @@ export default function PodBuilder() {
     if (!MEM_RE.test(memRequest) || !MEM_RE.test(memLimit)) {
       hints.push({ level: 'error', text: 'Memory values look wrong — use units like "128Mi" or "1Gi" (see Module 4.1).' });
     }
+    if (CPU_RE.test(cpuRequest) && CPU_RE.test(cpuLimit) && cpuCores(cpuRequest) > cpuCores(cpuLimit)) {
+      hints.push({ level: 'error', text: 'CPU request cannot exceed the CPU limit.' });
+    }
+    if (MEM_RE.test(memRequest) && MEM_RE.test(memLimit) && memoryBytes(memRequest) > memoryBytes(memLimit)) {
+      hints.push({ level: 'error', text: 'Memory request cannot exceed the memory limit.' });
+    }
   } else {
     hints.push({
       level: 'warn',
@@ -89,6 +111,10 @@ export default function PodBuilder() {
       });
     }
   });
+  const envNames = envVars.map((ev) => ev.key).filter(Boolean);
+  if (new Set(envNames).size !== envNames.length) {
+    hints.push({ level: 'error', text: 'Environment variable names must be unique.' });
+  }
   const hasErrors = hints.some((h) => h.level === 'error');
 
   // --- YAML generation ---
@@ -96,7 +122,7 @@ export default function PodBuilder() {
   const containerLines = (base: number) => {
     const lines = [
       `${indent(base)}- name: ${name || 'app'}`,
-      `${indent(base)}  image: ${image || 'IMAGE_REQUIRED'}`,
+      `${indent(base)}  image: ${JSON.stringify(image || 'IMAGE_REQUIRED')}`,
     ];
     if (port !== '') {
       lines.push(`${indent(base)}  ports:`);
@@ -166,6 +192,7 @@ export default function PodBuilder() {
   }, []);
 
   const copyYaml = async () => {
+    if (hasErrors) return;
     try {
       await navigator.clipboard.writeText(yaml);
       setCopied(true);
@@ -208,7 +235,7 @@ export default function PodBuilder() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Pod Builder | KubeLearn</title>
+        <title>Pod Builder | ClusterFoundry</title>
         <meta name="description" content="Build Kubernetes Pod and Deployment manifests interactively with instant validation feedback" />
       </Head>
 
@@ -217,7 +244,7 @@ export default function PodBuilder() {
           <Link href="/" className={styles.navBrand}>
             <div className={styles.navLogo}>☸</div>
             <span className={styles.navTitle}>
-              Kube<span className={styles.navTitleAccent}>Learn</span>
+              Cluster<span className={styles.navTitleAccent}>Foundry</span>
             </span>
           </Link>
           <div className={styles.navLinks}>
@@ -229,6 +256,9 @@ export default function PodBuilder() {
             </Link>
             <Link href="/kubectl-cheatsheet" className={styles.navLink}>
               Cheat Sheet
+            </Link>
+            <Link href="/about" className={styles.navLink}>
+              About
             </Link>
           </div>
         </div>
@@ -280,11 +310,11 @@ export default function PodBuilder() {
                 : 'A Deployment wraps your Pod in a ReplicaSet: self-healing, scaling, and rolling updates (Module 2.2).'}
             </p>
 
-            <label style={labelStyle}>Name</label>
-            <input style={inputStyle} value={name} onChange={(e) => setName(e.target.value)} spellCheck={false} />
+            <label htmlFor="pod-name" style={labelStyle}>Name</label>
+            <input id="pod-name" style={inputStyle} value={name} onChange={(e) => setName(e.target.value)} spellCheck={false} />
 
-            <label style={labelStyle}>Container image</label>
-            <input style={inputStyle} value={image} onChange={(e) => setImage(e.target.value)} spellCheck={false} list="preset-images" />
+            <label htmlFor="pod-image" style={labelStyle}>Container image</label>
+            <input id="pod-image" style={inputStyle} value={image} onChange={(e) => setImage(e.target.value)} spellCheck={false} list="preset-images" />
             <datalist id="preset-images">
               {PRESET_IMAGES.map((img) => (
                 <option key={img} value={img} />
@@ -312,13 +342,13 @@ export default function PodBuilder() {
 
             <div style={{ display: 'grid', gridTemplateColumns: kind === 'Deployment' ? '1fr 1fr' : '1fr', gap: '1rem' }}>
               <div>
-                <label style={labelStyle}>Container port</label>
-                <input style={inputStyle} value={port} onChange={(e) => setPort(e.target.value)} placeholder="e.g. 80 (optional)" spellCheck={false} />
+                <label htmlFor="pod-port" style={labelStyle}>Container port</label>
+                <input id="pod-port" style={inputStyle} value={port} onChange={(e) => setPort(e.target.value)} placeholder="e.g. 80 (optional)" spellCheck={false} />
               </div>
               {kind === 'Deployment' && (
                 <div>
-                  <label style={labelStyle}>Replicas</label>
-                  <input style={inputStyle} value={replicas} onChange={(e) => setReplicas(e.target.value)} spellCheck={false} />
+                  <label htmlFor="pod-replicas" style={labelStyle}>Replicas</label>
+                  <input id="pod-replicas" style={inputStyle} value={replicas} onChange={(e) => setReplicas(e.target.value)} spellCheck={false} />
                 </div>
               )}
             </div>
@@ -379,13 +409,13 @@ export default function PodBuilder() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <div>
                   <label style={{ ...labelStyle, marginTop: '0.25rem' }}>CPU request / limit</label>
-                  <input style={{ ...inputStyle, marginBottom: 8 }} value={cpuRequest} onChange={(e) => setCpuRequest(e.target.value)} spellCheck={false} />
-                  <input style={inputStyle} value={cpuLimit} onChange={(e) => setCpuLimit(e.target.value)} spellCheck={false} />
+                  <input aria-label="CPU request" style={{ ...inputStyle, marginBottom: 8 }} value={cpuRequest} onChange={(e) => setCpuRequest(e.target.value)} spellCheck={false} />
+                  <input aria-label="CPU limit" style={inputStyle} value={cpuLimit} onChange={(e) => setCpuLimit(e.target.value)} spellCheck={false} />
                 </div>
                 <div>
                   <label style={{ ...labelStyle, marginTop: '0.25rem' }}>Memory request / limit</label>
-                  <input style={{ ...inputStyle, marginBottom: 8 }} value={memRequest} onChange={(e) => setMemRequest(e.target.value)} spellCheck={false} />
-                  <input style={inputStyle} value={memLimit} onChange={(e) => setMemLimit(e.target.value)} spellCheck={false} />
+                  <input aria-label="Memory request" style={{ ...inputStyle, marginBottom: 8 }} value={memRequest} onChange={(e) => setMemRequest(e.target.value)} spellCheck={false} />
+                  <input aria-label="Memory limit" style={inputStyle} value={memLimit} onChange={(e) => setMemLimit(e.target.value)} spellCheck={false} />
                 </div>
               </div>
             )}
@@ -416,6 +446,8 @@ export default function PodBuilder() {
                 </span>
                 <button
                   onClick={copyYaml}
+                  disabled={hasErrors}
+                  title={hasErrors ? 'Fix validation errors before copying' : 'Copy YAML'}
                   style={{
                     background: copied ? 'rgba(34, 197, 94, 0.2)' : 'rgba(148, 163, 184, 0.15)',
                     border: 'none',
@@ -424,7 +456,8 @@ export default function PodBuilder() {
                     borderRadius: 6,
                     fontSize: '0.8rem',
                     fontWeight: 600,
-                    cursor: 'pointer',
+                    cursor: hasErrors ? 'not-allowed' : 'pointer',
+                    opacity: hasErrors ? 0.5 : 1,
                   }}
                 >
                   {copied ? '✓ Copied' : '⧉ Copy'}
