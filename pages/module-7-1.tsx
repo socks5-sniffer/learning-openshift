@@ -8,8 +8,8 @@ import TermBox from '../components/module/TermBox';
 const roles = {
   developer: { name: 'Developer', permissions: ['get-pods', 'get-logs', 'create-pods', 'delete-pods'], forbidden: ['get-secrets', 'create-rolebindings', 'delete-namespace'], description: 'Can manage Pods and view logs, but not access Secrets or admin resources' },
   viewer: { name: 'Read-Only Viewer', permissions: ['get-pods', 'get-logs', 'get-services', 'get-deployments'], forbidden: ['create-pods', 'delete-pods', 'get-secrets', 'create-rolebindings'], description: 'Can view resources but cannot modify anything' },
-  admin: { name: 'Namespace Admin', permissions: ['get-pods', 'get-logs', 'create-pods', 'delete-pods', 'get-secrets', 'create-rolebindings'], forbidden: ['delete-namespace', 'create-clusterroles'], description: 'Full control within a namespace, but cannot modify cluster-wide resources' },
-  clusterAdmin: { name: 'Cluster Admin', permissions: ['get-pods', 'get-logs', 'create-pods', 'delete-pods', 'get-secrets', 'create-rolebindings', 'delete-namespace', 'create-clusterroles'], forbidden: [], description: 'God mode. Can do anything in any namespace' },
+  admin: { name: 'Namespace Admin', permissions: ['get-pods', 'get-logs', 'get-services', 'get-deployments', 'create-pods', 'delete-pods', 'get-secrets', 'create-rolebindings'], forbidden: ['delete-namespace', 'create-clusterroles'], description: 'Full control within a namespace, but cannot modify cluster-wide resources' },
+  clusterAdmin: { name: 'Cluster Admin', permissions: ['get-pods', 'get-logs', 'get-services', 'get-deployments', 'create-pods', 'delete-pods', 'get-secrets', 'create-rolebindings', 'delete-namespace', 'create-clusterroles'], forbidden: [], description: 'God mode. Can do anything in any namespace' },
 };
 
 const actions = {

@@ -2,8 +2,8 @@
   "name": "devfile-stack-nodejs-nextjs",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "node scripts/build.cjs",
+    "dev": "node scripts/next.cjs dev",
+    "build": "node scripts/next.cjs build",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit --incremental false",

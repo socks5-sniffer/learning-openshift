@@ -52,10 +52,11 @@ export default function Module82() {
 
   const data = services[selectedService].metrics[selectedMetric];
   const current = data[data.length - 1];
-  const isAlerting = enableAlert && (selectedMetric === 'cpu' || selectedMetric === 'memory') && current > alertThreshold;
+  const alertActive = enableAlert && (selectedMetric === 'cpu' || selectedMetric === 'memory');
+  const isAlerting = alertActive && current > alertThreshold;
 
   const renderChart = () => {
-    const max = Math.max(...data, enableAlert ? alertThreshold : 0);
+    const max = Math.max(...data, alertActive ? alertThreshold : 0);
     const height = 200;
     return (
       <div style={{ position: 'relative', height, background: '#0f172a', borderRadius: 8, padding: '1rem', marginBottom: '1rem' }}>
@@ -67,7 +68,7 @@ export default function Module82() {
           {data.map((v, idx) => (
             <circle key={idx} cx={(idx / (data.length - 1)) * 1000} cy={(1 - v / max) * (height - 32)} r="4" fill={services[selectedService].color} />
           ))}
-          {enableAlert && (selectedMetric === 'cpu' || selectedMetric === 'memory') && (
+          {alertActive && (
             <line x1="0" y1={(height - 32) * (1 - alertThreshold / max)} x2="1000" y2={(height - 32) * (1 - alertThreshold / max)} stroke="#ef4444" strokeWidth="2" strokeDasharray="8,4" />
           )}
         </svg>
@@ -152,10 +153,10 @@ export default function Module82() {
 
             {enableAlert && (
               <>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--color-text-primary)' }}>
+                <label htmlFor="monitoring-alert-threshold" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--color-text-primary)' }}>
                   Alert Threshold: {alertThreshold}{metricInfo[selectedMetric].unit}
                 </label>
-                <input type="range" min={selectedMetric === 'memory' ? 1 : 50} max={selectedMetric === 'memory' ? 5 : 100} step={selectedMetric === 'memory' ? 0.1 : 1} value={alertThreshold} onChange={(e) => setAlertThreshold(Number(e.target.value))} style={{ width: '100%', marginBottom: '1rem' }} />
+                <input id="monitoring-alert-threshold" type="range" min={selectedMetric === 'memory' ? 1 : 50} max={selectedMetric === 'memory' ? 5 : 100} step={selectedMetric === 'memory' ? 0.1 : 1} value={alertThreshold} onChange={(e) => setAlertThreshold(Number(e.target.value))} style={{ width: '100%', marginBottom: '1rem' }} />
                 {isAlerting && (
                   <div style={{ background: '#ef4444', color: 'white', padding: '1rem', borderRadius: 6, fontWeight: 600, marginTop: '1rem' }}>
                     🚨 ALERT: {metricInfo[selectedMetric].name} is {current}{metricInfo[selectedMetric].unit}, exceeding threshold of {alertThreshold}{metricInfo[selectedMetric].unit}

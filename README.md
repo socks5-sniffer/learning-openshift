@@ -53,7 +53,7 @@ This site is a personal learning project, focused on:
     ```bash
     npm run build
     ```
-    On Windows, the `build` script uses a compatibility wrapper for the production build.
+    Both `dev` and `build` use the same launcher, which loads the filesystem compatibility shim on non-C: Windows drives, including in Next.js workers.
     To serve the production build manually, run `npm start` after the build.
 
 4. **Run checks:**

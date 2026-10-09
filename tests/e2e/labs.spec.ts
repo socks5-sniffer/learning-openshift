@@ -69,15 +69,16 @@ test('Secret encoder round-trips Unicode and handles invalid Base64', async ({ p
 
 test('HPA scales from current replicas and supports scaling down', async ({ page }) => {
   await page.goto('/module-4-3');
-  const sliders = page.getByRole('slider');
-  await sliders.nth(4).press('End'); // Max replicas: 20
-  await sliders.nth(1).press('End'); // Current replicas: 20
-  await sliders.nth(3).press('Home'); // Min replicas: 1
-  await sliders.nth(0).press('Home'); // CPU: 10%, target: 70%
+  await page.getByRole('slider', { name: /^Max Replicas:/ }).press('End'); // 20
+  await page.getByRole('slider', { name: /^Current Replicas:/ }).press('End'); // 20
+  await page.getByRole('slider', { name: /^Min Replicas:/ }).press('Home'); // 1
+  await expect(page.getByRole('slider', { name: /^Target Average CPU Utilization:/ })).toHaveValue('70');
+  const cpu = page.getByRole('slider', { name: /^Current Average CPU Utilization:/ });
+  await cpu.press('Home'); // 10%, target: 70%
   const recommendation = page.getByText('Desired Replicas', { exact: true }).locator('..');
   await expect(recommendation.getByText('3', { exact: true })).toBeVisible();
   await expect(recommendation.getByText('❄️ Scale down from 20', { exact: true })).toBeVisible();
-  await sliders.nth(0).press('End'); // CPU: 100%
+  await cpu.press('End'); // CPU: 100%
   await expect(recommendation.getByText('20', { exact: true })).toBeVisible();
   await expect(recommendation.getByText('✅ Keep the current replica count', { exact: true })).toBeVisible();
 });

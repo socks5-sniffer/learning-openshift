@@ -213,7 +213,10 @@ export default function Module73() {
 
         <h3>Example 2: Allow DNS</h3>
         <p>If egress is isolated and the workload needs cluster DNS, allow egress to DNS Pods on UDP and TCP
-          port 53. The DNS namespace can vary by cluster; update the selector to match your DNS deployment.</p>
+          port 53. The examples below allow port 53 to every Pod in <code>kube-system</code>, not only
+          DNS Pods. Adjust the namespace and add a <code>podSelector</code> alongside the
+          <code>namespaceSelector</code> in the same destination entry to match your DNS deployment.
+          Node-local DNS can require a different destination rule.</p>
         <TermBox>
           <div style={{ color: '#10b981' }}>apiVersion: networking.k8s.io/v1</div>
           <div style={{ color: '#10b981' }}>kind: NetworkPolicy</div>
@@ -290,6 +293,8 @@ export default function Module73() {
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kubernetes.io/metadata.name: kube-system</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;ports:</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;- protocol: UDP</div>
+          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;port: 53</div>
+          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;- protocol: TCP</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;port: 53</div>
         </TermBox>
       </section>
@@ -395,7 +400,7 @@ export default function Module73() {
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;egress:</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;- to:</div>
           <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;- namespaceSelector: {'{matchLabels: {kubernetes.io/metadata.name: kube-system}}'}</div>
-          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;ports: [{'{protocol: UDP, port: 53}'}]</div>
+          <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;ports: [{'{protocol: UDP, port: 53}, {protocol: TCP, port: 53}'}]</div>
           <br />
           <div style={{ color: '#64748b' }}># 3. Frontend: from Ingress, to Backend</div>
           <div style={{ color: '#10b981' }}>kind: NetworkPolicy</div>

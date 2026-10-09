@@ -74,28 +74,28 @@ export default function Module43() {
           }}
         >
           <div style={{ marginBottom: '20px' }}>
-            <label style={sliderLabel}>Current Average CPU Utilization: {currentLoad}% of request</label>
-            <input type="range" min="10" max="100" value={currentLoad} onChange={(e) => setCurrentLoad(Number(e.target.value))} style={{ width: '100%' }} />
+            <label htmlFor="hpa-current-cpu" style={sliderLabel}>Current Average CPU Utilization: {currentLoad}% of request</label>
+            <input id="hpa-current-cpu" type="range" min="10" max="100" value={currentLoad} onChange={(e) => setCurrentLoad(Number(e.target.value))} style={{ width: '100%' }} />
           </div>
 
           <div style={{ marginBottom: '20px' }}>
-            <label style={sliderLabel}>Current Replicas: {currentReplicas}</label>
-            <input type="range" min="1" max="20" value={currentReplicas} onChange={(e) => setCurrentReplicas(Number(e.target.value))} style={{ width: '100%' }} />
+            <label htmlFor="hpa-current-replicas" style={sliderLabel}>Current Replicas: {currentReplicas}</label>
+            <input id="hpa-current-replicas" type="range" min="1" max="20" value={currentReplicas} onChange={(e) => setCurrentReplicas(Number(e.target.value))} style={{ width: '100%' }} />
           </div>
 
           <div style={{ marginBottom: '20px' }}>
-            <label style={sliderLabel}>Target Average CPU Utilization: {targetCPU}% of request</label>
-            <input type="range" min="50" max="90" value={targetCPU} onChange={(e) => setTargetCPU(Number(e.target.value))} style={{ width: '100%' }} />
+            <label htmlFor="hpa-target-cpu" style={sliderLabel}>Target Average CPU Utilization: {targetCPU}% of request</label>
+            <input id="hpa-target-cpu" type="range" min="50" max="90" value={targetCPU} onChange={(e) => setTargetCPU(Number(e.target.value))} style={{ width: '100%' }} />
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginBottom: '20px' }}>
             <div>
-              <label style={sliderLabel}>Min Replicas: {minReplicas}</label>
-              <input type="range" min="1" max="5" value={minReplicas} onChange={(e) => setMinReplicas(Number(e.target.value))} style={{ width: '100%' }} />
+              <label htmlFor="hpa-min-replicas" style={sliderLabel}>Min Replicas: {minReplicas}</label>
+              <input id="hpa-min-replicas" type="range" min="1" max="5" value={minReplicas} onChange={(e) => setMinReplicas(Number(e.target.value))} style={{ width: '100%' }} />
             </div>
             <div>
-              <label style={sliderLabel}>Max Replicas: {maxReplicas}</label>
-              <input type="range" min="5" max="20" value={maxReplicas} onChange={(e) => setMaxReplicas(Number(e.target.value))} style={{ width: '100%' }} />
+              <label htmlFor="hpa-max-replicas" style={sliderLabel}>Max Replicas: {maxReplicas}</label>
+              <input id="hpa-max-replicas" type="range" min="5" max="20" value={maxReplicas} onChange={(e) => setMaxReplicas(Number(e.target.value))} style={{ width: '100%' }} />
             </div>
           </div>
 

@@ -7,7 +7,7 @@ import { useProgress } from '../components/ProgressContext'
 import { getModuleById } from '../data/modules'
 
 const Home: NextPage = () => {
-  const { completedCount, totalCount, loaded, nextModule } = useProgress()
+  const { completedCount, totalCount, loaded, nextModule, lastVisited } = useProgress()
   const nextId = nextModule()
   const nextInfo = getModuleById(nextId)
 
@@ -78,8 +78,8 @@ const Home: NextPage = () => {
                   <div className={styles.learningCtaText}>
                     {totalCount} modules, from container basics to production Kubernetes
                   </div>
-                  <Link href="/learning-modules" className={styles.learningButton}>
-                    Start learning →
+                  <Link href={`/module-${nextId}`} className={styles.learningButton}>
+                    {lastVisited ? `Continue: ${nextInfo ? nextInfo.title : 'next module'} →` : 'Start learning →'}
                   </Link>
                 </>
               )}

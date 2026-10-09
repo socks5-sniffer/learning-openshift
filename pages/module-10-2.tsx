@@ -322,9 +322,9 @@ const decisionGuide = [
   { scenario: 'Prefer managed node infrastructure', choice: 'GKE', color: '#4285f4', reason: 'Autopilot manages node infrastructure; review its workload constraints and pricing' },
   { scenario: 'Cost-conscious', choice: 'AKS', color: '#0078d4', reason: 'AKS offers a Free tier; compare paid tiers and total infrastructure costs' },
   { scenario: 'Enterprise/Regulated', choice: 'OpenShift', color: '#ee0000', reason: 'Complete platform with security, compliance, and Red Hat support' },
-  { scenario: 'Windows containers', choice: 'AKS', color: '#0078d4', reason: 'Best Windows container support, Azure AD integration' },
+  { scenario: 'Windows containers', choice: 'AKS', color: '#0078d4', reason: 'Supports Windows node pools; review Windows workload limitations and identity requirements' },
   { scenario: 'Hybrid/Multi-cloud', choice: 'OpenShift or GKE Anthos', color: '#8b5cf6', reason: 'Run consistently across clouds and on-premises' },
-  { scenario: 'Startup/MVP', choice: 'GKE Autopilot', color: '#4285f4', reason: 'Zero node management, pay only for Pods, fastest to market' }
+  { scenario: 'Startup/MVP', choice: 'GKE Autopilot', color: '#4285f4', reason: 'Google manages node infrastructure; compare workload constraints and billing models before choosing' }
 ]
 
 export default function ManagedKubernetes() {

@@ -355,7 +355,9 @@ export default function Module61() {
           <p>
             <strong>Diagnosis:</strong> Pods are non-isolated by default. A policy isolates selected Pods
             only for the directions in its <code>policyTypes</code>. If egress is restricted, allow DNS
-            explicitly when the workload needs name resolution.
+            explicitly on UDP and TCP port 53 when the workload needs name resolution. This example
+            allows port 53 to all Pods in <code>kube-system</code>; adjust the namespace and add a
+            <code>podSelector</code> matching your DNS deployment to narrow the destination.
           </p>
           <TermBox>
             <div style={{ color: '#64748b' }}># Example DNS egress rule (add to an Egress policy):</div>
@@ -366,6 +368,8 @@ export default function Module61() {
             <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kubernetes.io/metadata.name: kube-system</div>
             <div style={{ color: '#10b981' }}>&nbsp;&nbsp;ports:</div>
             <div style={{ color: '#10b981' }}>&nbsp;&nbsp;- protocol: UDP</div>
+            <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;port: 53</div>
+            <div style={{ color: '#10b981' }}>&nbsp;&nbsp;- protocol: TCP</div>
             <div style={{ color: '#10b981' }}>&nbsp;&nbsp;&nbsp;&nbsp;port: 53</div>
           </TermBox>
         </Callout>

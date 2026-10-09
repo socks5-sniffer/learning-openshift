@@ -55,3 +55,13 @@ The browser suite checks all 30 lessons for loading, quiz availability, navigati
 CI now targets `main`, checks builds on Node.js 22 and 24, and runs the production browser suite on Node.js 22. Audit and TypeScript failures are no longer ignored. The local results above do not assert remote CI success or a live deployment.
 
 These checks do not exercise every lesson control or validate manifests against a Kubernetes cluster. Representative YAML and provider-specific setup still need validation in a disposable cluster; other browser engines and the deployed HTTPS/OpenShift environment remain outside this verification.
+
+## October 9, 2026: Copilot review follow-up
+
+Verified the previously fixed Read-Only Viewer render failure and Node.js 22 Dependabot configuration. Added service and deployment read permissions to both admin roles, with browser checks for viewer/admin authorization, denied actions, and the generated Deployment API group. All DNS egress examples in lessons 6.1 and 7.3 now permit UDP and TCP port 53. The accompanying text explains that a namespace selector alone allows port 53 to every Pod in that namespace; a Pod selector in the same destination entry narrows that scope. See the [Kubernetes NetworkPolicy selector documentation](https://kubernetes.io/docs/concepts/services-networking/network-policies/#behavior-of-to-and-from-selectors).
+
+Associated every HPA range input and the monitoring alert threshold with its visible label. Corrected the home progress panel's light-theme contrast, including its emphasized completion count. Development and production builds now use `scripts/next.cjs`, which applies the non-C: Windows filesystem shim to either command and its worker processes. A temporary development server on D: served the RBAC lesson successfully.
+
+Restored home-page navigation to the last unfinished lesson even before any module is completed. Monitoring charts ignore alert thresholds for metrics that do not support alerts. Added regressions for both cases. Replaced unsupported provider rankings with capability descriptions informed by the [AKS Windows limitations](https://learn.microsoft.com/en-us/azure/aks/windows-vs-linux-containers) and [GKE Autopilot overview](https://docs.cloud.google.com/kubernetes-engine/docs/concepts/autopilot-overview).
+
+Final local validation on Windows with Node.js 25.2.1: lint, strict TypeScript, production build, and `git diff --check` passed; `npm audit` reported zero vulnerabilities; all **98** production Chromium checks passed at desktop and mobile viewport sizes. Live-cluster manifest execution, other browser engines, and deployed HTTPS/OpenShift checks remain outside this result.
