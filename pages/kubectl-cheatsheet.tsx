@@ -184,7 +184,7 @@ export default function KubectlCheatsheet() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>kubectl Cheat Sheet | KubeLearn</title>
+        <title>kubectl Cheat Sheet | ClusterFoundry</title>
         <meta name="description" content="The kubectl commands used across all 30 learning modules, grouped by task, with copy buttons" />
       </Head>
 
@@ -193,7 +193,7 @@ export default function KubectlCheatsheet() {
           <Link href="/" className={styles.navBrand}>
             <div className={styles.navLogo}>☸</div>
             <span className={styles.navTitle}>
-              Kube<span className={styles.navTitleAccent}>Learn</span>
+              Cluster<span className={styles.navTitleAccent}>Foundry</span>
             </span>
           </Link>
           <div className={styles.navLinks}>
@@ -205,6 +205,9 @@ export default function KubectlCheatsheet() {
             </Link>
             <Link href="/kubectl-cheatsheet" className={`${styles.navLink} ${styles.navLinkActive}`}>
               Cheat Sheet
+            </Link>
+            <Link href="/about" className={styles.navLink}>
+              About
             </Link>
           </div>
         </div>

@@ -91,3 +91,8 @@ random.txt
 .eslintcache
 
 # Package manager lockfiles should be committed for reproducible CI builds
+
+# Local Python tooling and browser test artifacts
+.venv/
+playwright-report/
+test-results/
