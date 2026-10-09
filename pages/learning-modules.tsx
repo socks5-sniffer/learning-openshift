@@ -151,10 +151,12 @@ export default function LearningModules() {
             What is Kubernetes?
           </h2>
           <p className={styles.spotlightText}>
-            Kubernetes (K8s) is a system for running applications at scale, whether that scale is
-            &quot;three users and a dream&quot; or &quot;half the internet.&quot; It answers the questions developers
-            used to avoid: What happens when my app crashes? How do I run five copies of it?
-            How do I update it without everything catching fire?
+            Kubernetes is an open-source platform for deploying and managing applications made up
+            of containers. You describe the state you want—such as which applications should run
+            and how many copies you need—and Kubernetes works to keep the cluster in that state.
+            It schedules containers onto machines, restarts failed workloads, and supports
+            controlled updates as your applications change. K8s is a common abbreviation for
+            Kubernetes: the eight letters between “K” and “s.”
           </p>
         </section>
 
