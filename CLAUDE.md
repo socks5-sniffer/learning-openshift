@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-A Kubernetes/OpenShift learning platform built with Next.js and TypeScript, intended for Red Hat OpenShift Dev Spaces. It contains 30 learning modules covering the Kubernetes curriculum from containers basics through GitOps and failure scenarios, with per-module quizzes, localStorage-based progress tracking, and interactive labs.
+A Kubernetes/OpenShift learning platform built with Next.js and TypeScript, developed in Red Hat OpenShift Dev Spaces and deployed through a separate OpenShift Deployment. It contains 30 learning modules covering the Kubernetes curriculum from containers basics through GitOps and failure scenarios, with per-module quizzes, localStorage-based progress tracking, and interactive labs. The October 9, 2026 sandbox deployment record and operations are documented in [openshift/README.md](openshift/README.md).
 
 ## Commands
 
@@ -19,7 +19,16 @@ npm run test:e2e   # After npm run build: production checks (Chromium desktop an
 npm start          # Start production server
 ```
 
-CI targets pushes and pull requests to `main`. Build, lint, and type-check jobs use Node.js 22 and 24; the production browser job uses Node.js 22. The browser suite runs Chromium at desktop and mobile viewport sizes and does not validate Kubernetes manifests or behavior against a live cluster. Local build, lint, and type-check pass; remote CI status must be checked for the commit under review.
+CI targets pushes and pull requests to `main`. Build, lint, and type-check jobs use Node.js 22 and 24; the production browser job uses Node.js 22. CI also verifies the devfile image's Node/npm/Git/oc tools and the production container under an arbitrary non-root user ID. The browser suite runs Chromium at desktop and mobile viewport sizes and does not validate teaching manifests against a live cluster. Local build, lint, and type-check pass; remote CI status must be checked for the commit under review.
+
+## OpenShift deployment and operations
+
+- `Dockerfile` builds standalone Next.js output with `NEXT_STANDALONE=1` using pinned Red Hat UBI Node 22 images. Local development and normal builds retain their existing output behavior.
+- `devfile.yaml` separately pins the Universal Developer Image with workspace tools, including `oc`. CI verifies tool availability; the production runtime image only needs Node.js.
+- `openshift/template.yaml` defines the app's ImageStream, Git BuildConfig, Deployment, Service, and HTTPS Route. Process it with `oc process --local` and apply to the intended namespace. Builds are manual; the BuildConfig's Git ref does not switch automatically when a PR is merged.
+- Dev Spaces can authenticate the CLI as a workspace service account with insufficient app permissions. Use the sandbox user's separate temporary kubeconfig and the login procedure in the operating guide; keep tokens out of repository files and logs.
+- The recorded app is `clusterfoundry` in `dustyroed-dev`. Everyday stop/resume uses `oc scale deployment/clusterfoundry --replicas=0` or `--replicas=1`, with `-n dustyroed-dev`. Full cleanup deletes the five app resources and requires a later apply/build to recreate them. Stopping Dev Spaces is a separate action.
+- The guide records successful admission, build, browser access, and external HTTP/security-header checks on October 9, 2026. This does not establish current uptime or validate every teaching manifest. Check current CI and the actual cluster state before making new validation claims.
 
 ## Architecture
 

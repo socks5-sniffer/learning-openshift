@@ -1,0 +1,51 @@
+schemaVersion: 2.2.0
+metadata:
+  name: clusterfoundry
+  displayName: ClusterFoundry
+  description: Next.js development workspace for OpenShift learning
+components:
+  - name: node
+    container:
+      image: quay.io/devfile/universal-developer-image:ubi9-latest@sha256:41b2af7b928ca5d4d97455ce12407e8586b8129d1f7b1f44f3da5292c4f1bcbb
+      command: ["tail", "-f", "/dev/null"]
+      mountSources: true
+      memoryLimit: 2Gi
+      env:
+        - name: NEXT_TELEMETRY_DISABLED
+          value: "1"
+      endpoints:
+        - name: nextjs
+          targetPort: 3000
+          exposure: public
+          protocol: http
+          secure: true
+commands:
+  - id: install
+    exec:
+      component: node
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: npm ci
+  - id: build
+    exec:
+      component: node
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: npm run build
+      group:
+        kind: build
+        isDefault: true
+  - id: dev
+    exec:
+      component: node
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: npm run dev -- --hostname 0.0.0.0
+      group:
+        kind: run
+        isDefault: true
+  - id: check
+    exec:
+      component: node
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: npm run lint && npm run typecheck
+      group:
+        kind: test
+        isDefault: true

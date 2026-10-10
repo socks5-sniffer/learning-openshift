@@ -54,3 +54,50 @@ jobs:
           playwright-report/
           test-results/
         retention-days: 7
+
+  workspace:
+    name: Dev Spaces tools
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+    - uses: actions/checkout@v7
+    - name: Check the workspace image tools
+      run: |
+        workspace_image="$(awk '$1 == "image:" { print $2; exit }' devfile.yaml)"
+        test -n "$workspace_image"
+        docker run --rm --user 1001230000:0 --cap-drop ALL \
+          --security-opt no-new-privileges \
+          --entrypoint /bin/bash "$workspace_image" -lc '
+            set -e
+            node --version
+            npm --version
+            git --version
+            oc version --client
+            node -e "if (![22, 24].includes(Number(process.versions.node.split(\".\")[0]))) process.exit(1)"
+          '
+
+  container:
+    name: OpenShift container
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+    - uses: actions/checkout@v7
+    - uses: actions/setup-node@v7
+      with:
+        node-version: 22.x
+    - name: Build production image
+      run: docker build --pull --tag clusterfoundry:ci .
+    - name: Start with an OpenShift-style user ID
+      run: >-
+        docker run --detach --name openshift-smoke
+        --user 1001230000:0 --cap-drop ALL
+        --security-opt no-new-privileges --memory 768m --cpus 1
+        -p 127.0.0.1:3000:3000 clusterfoundry:ci
+    - name: Check standalone server and assets
+      run: node scripts/container-smoke.cjs
+    - name: Container logs
+      if: always()
+      run: docker logs openshift-smoke
+    - name: Stop smoke container
+      if: always()
+      run: docker rm --force openshift-smoke
