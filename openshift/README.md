@@ -31,6 +31,28 @@ Run these commands in a terminal with the OpenShift `oc` CLI after using the
 console's **Copy login command** to log in. Select your existing sandbox project
 with `oc project YOUR_PROJECT`. The template creates only namespaced app resources.
 
+In Dev Spaces, `oc whoami` can initially report a workspace service account such
+as `system:serviceaccount:PROJECT:WORKSPACE-sa`. That account may lack permission
+to deploy applications. Log in with your sandbox user instead of adding roles to
+the workspace account. If the workspace manages its existing kubeconfig, use a
+separate temporary configuration in the Bash terminal:
+
+```bash
+export KUBECONFIG="$(mktemp /tmp/clusterfoundry-kubeconfig.XXXXXX)" && set +o history
+```
+
+In the OpenShift console, choose your username → **Copy login command** →
+**Display Token**, then paste the complete `oc login ...` command into that
+terminal. Keep the token out of chat and repository files. After login succeeds:
+
+```bash
+set -o history && oc project YOUR_PROJECT && oc whoami
+```
+
+The last command should show your sandbox username. This configuration is scoped
+to the current terminal and stored in `/tmp`; after a restart or in a new terminal,
+check your identity and repeat the login steps if needed.
+
 The template requires OpenShift's integrated image registry and permission to
 create Docker builds in your project. A private Git repository additionally needs
 a build source secret; a login to Dev Spaces does not automatically authenticate
@@ -39,11 +61,16 @@ the build service.
 The following works in Bash or PowerShell:
 
 ```sh
-oc process -f openshift/template.yaml -p NAMESPACE=$(oc project -q) -p GIT_REF=main | oc apply -f -
+oc process --local -f openshift/template.yaml -p NAMESPACE=$(oc project -q) -p GIT_REF=main | oc apply -f -
 oc start-build clusterfoundry --follow
 oc rollout status deployment/clusterfoundry --timeout=300s
 oc get route clusterfoundry -o jsonpath='{.spec.host}'
 ```
+
+Run each line separately. `--local` processes the template in the CLI; the server
+still enforces permissions and admission rules when `oc apply` creates or updates
+the resources. To check without creating or changing resources, add
+`--dry-run=server` to `oc apply`.
 
 While testing an unmerged branch, replace `GIT_REF=main` with
 `GIT_REF=codex/openshift-sandbox`. The application can briefly show an image-pull
