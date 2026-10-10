@@ -5,6 +5,28 @@ location. The application runs separately from your Dev Spaces terminal using a
 production Next.js build. Sandbox expiry, quotas, and idle policies still apply;
 this does not make the sandbox permanent or keep it awake.
 
+## Latest verified deployment: October 9, 2026
+
+| Item | Recorded value |
+| --- | --- |
+| Application and Deployment | `clusterfoundry` |
+| OpenShift project | `dustyroed-dev` |
+| CLI user used to deploy | `dustyroed` |
+| Public HTTPS Route | [ClusterFoundry](https://clusterfoundry-dustyroed-dev.apps.rm2.thpm.p1.openshiftapps.com) |
+| Initial build | Build #1 from the PR #49 development branch; pushed successfully |
+| Runtime | App pod Running; homepage opened in the browser |
+
+External checks accessed the site without a login, verified HTTP-to-HTTPS
+redirection, and passed the health, rendered page, CSP nonce, JavaScript, CSS,
+and public-asset checks. See [Validation](#validation) for the scope of this check.
+This is a dated deployment record, not a guarantee of current uptime. The Route
+may be unavailable while the app is paused or after sandbox expiry, and its
+hostname may change if the resources are removed and recreated.
+
+The app has its own Deployment, Service, and Route. Closing a terminal or stopping
+the Dev Spaces workspace does not stop the app; use the
+[everyday stop/resume commands](#stop-for-the-day-and-resume).
+
 ## Deploy from the Topology console
 
 After the Dockerfile is available on your Git branch:
@@ -73,22 +95,94 @@ the resources. To check without creating or changing resources, add
 `--dry-run=server` to `oc apply`.
 
 While testing an unmerged branch, replace `GIT_REF=main` with
-`GIT_REF=codex/openshift-sandbox`. The application can briefly show an image-pull
+`GIT_REF=YOUR_BRANCH`, using the branch containing your changes. The application can briefly show an image-pull
 error before the first build finishes; the image-stream trigger updates the
 deployment when the built image becomes available. Share `https://` followed by
 the printed Route hostname. The generated hostname may change if the project is
 reset, and learners' browser progress is tied to that hostname.
 
-After pushing an update to the selected branch, run `oc start-build clusterfoundry
---follow` again and wait for the rollout. Builds are manual; there is no webhook
-secret or keep-alive workflow.
+## Rebuild after an update
 
-To pause the application, use `oc scale deployment/clusterfoundry --replicas=0`.
-To resume, set `--replicas=1`. To remove just these resources:
+The BuildConfig keeps its selected Git ref until you change it. Merging a PR does
+not automatically switch an existing BuildConfig to `main` or rebuild the app.
+For the recorded deployment, after PR #49 is merged, point future builds at
+`main` with this command:
 
 ```sh
-oc delete route,service,deployment,buildconfig,imagestream clusterfoundry
+oc patch buildconfig/clusterfoundry -n dustyroed-dev --type=merge -p '{"spec":{"source":{"git":{"ref":"main"}}}}'
 ```
+
+Check the configured ref:
+
+```sh
+oc get buildconfig clusterfoundry -n dustyroed-dev -o jsonpath='{.spec.source.git.ref}'
+```
+
+After pushing or merging an update to that ref, start a build, then wait for the
+rollout. Run each command separately:
+
+```sh
+oc start-build clusterfoundry -n dustyroed-dev --follow
+```
+
+```sh
+oc rollout status deployment/clusterfoundry -n dustyroed-dev --timeout=300s
+```
+
+Builds are manual; there is no webhook secret or keep-alive workflow. A new build
+does not resume an app that you scaled to zero. Use the resume command below when
+you want to serve it again. Reapplying the full template sets the Deployment back
+to the template's one replica.
+
+## Stop for the day and resume
+
+Use these commands in a terminal logged in as your sandbox user. They target the
+recorded project explicitly; substitute your own project if you deployed elsewhere.
+For an everyday shutdown, stop the app pods while keeping its image and resources:
+
+```sh
+oc scale deployment/clusterfoundry --replicas=0 -n dustyroed-dev
+```
+
+The Deployment controller terminates the pods. The Service, Route, BuildConfig,
+and ImageStream remain, and the public URL shows unavailable while there are no
+ready app pods. Closing the terminal or deleting a single pod is not an app
+shutdown: the Deployment would recreate a deleted pod while its desired replica
+count remains one. Scaling the app does not cancel a build already in progress;
+wait for that build to finish if you also want it to stop using build resources.
+
+On the next day, resume from the retained image and resources:
+
+```sh
+oc scale deployment/clusterfoundry --replicas=1 -n dustyroed-dev
+```
+
+Then check readiness:
+
+```sh
+oc rollout status deployment/clusterfoundry -n dustyroed-dev --timeout=300s
+```
+
+This does not need another build if the image and resources still exist. Sandbox
+expiry or a project reset can remove them; in that case, deploy and build again.
+Stop your development workspace separately from the **Dev Spaces dashboard** when
+you are finished coding. Resume it there when you need another terminal; check
+`oc whoami` and log in again as needed.
+
+## Full cleanup and later redeployment
+
+Use this when you want to remove the app's deployment resources, rather than just
+stop for the day:
+
+```sh
+oc delete route,service,deployment,buildconfig,imagestream clusterfoundry -n dustyroed-dev
+```
+
+This removes the five named app resources. They are not refreshed or recreated
+automatically by this setup. To run the app again, repeat the template apply,
+build, rollout, and Route lookup steps above. The new hostname may differ, and
+browser progress stored for the old hostname does not move automatically. The
+cleanup command does not delete the OpenShift project or the Dev Spaces workspace.
 
 ## Develop in Dev Spaces
 
@@ -118,7 +212,19 @@ Docker image and starts it with an arbitrary non-root user ID and
 group 0. It checks the health endpoint, rendered pages, CSP nonces, and packaged
 JavaScript, CSS, and public assets. This verifies the image without requiring a
 cluster. Template admission, builds, and the external Route still need to be
-verified on your actual OpenShift project.
+verified for each new OpenShift project.
+
+For the recorded October 9 deployment, the user verified server dry-run admission
+for all five resources, applied the template, and reported `Push successful`.
+Topology showed Build #1 complete and the app pod Running. The browser opened the
+public homepage. Separate unauthenticated external requests passed the smoke
+script against the HTTPS Route and returned HTTP 200. Plain HTTP returned 302 to
+the HTTPS URL. The responses included fresh CSP nonces without `unsafe-eval`,
+`nosniff`, frame denial, referrer and permissions policies, and HSTS.
+
+These checks verify this application's deployment path and the listed responses.
+They do not validate every teaching manifest, prove that every lesson control
+works on the live cluster, or establish sandbox availability after this date.
 
 The Dockerfile pins Red Hat UBI Node 22 base-image digests. Dependabot checks for
 Docker updates monthly. The devfile separately pins the Universal Developer Image

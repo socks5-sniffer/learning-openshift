@@ -1,6 +1,6 @@
 # Security Policy
 
-**Last Updated:** October 8, 2026
+**Last Updated:** October 9, 2026
 
 ---
 
@@ -74,7 +74,7 @@ Please provide as much detail as possible:
 
 ## Security Best Practices
 
-The repository configures the following security controls. Check the October 8, 2026 [module and verification review](MODULE-REVIEW.md) and current CI results before deployment.
+The repository configures the following security controls. Check the dated [module and verification review](MODULE-REVIEW.md), [OpenShift deployment verification](openshift/README.md#validation), and current CI results before deployment.
 
 ### HTTP Security Headers
 - `Content-Security-Policy` is set by `middleware.ts`, which generates a per-request nonce and forwards it in the CSP and `x-nonce` request headers, including for prefetch requests. The script policy combines the nonce with `'strict-dynamic'`: Next.js bootstrap scripts receive the nonce, and scripts loaded by those trusted scripts inherit trust in supporting browsers. `_app.tsx` calls the default App `getInitialProps` to support request-specific nonces. This disables automatic static optimization, so pages render on demand rather than being served as static pages; that is the performance and caching tradeoff for per-request nonces. Targeted production Chromium checks at desktop and mobile sizes verified nonce matching on rendered scripts, fresh nonces for prefetch requests despite untrusted caller headers, consistent nonce use on 404 responses, and blocking of an untrusted parser-inserted inline script while hydration succeeds. `style-src` retains `'unsafe-inline'` for the app's inline styles. Development may allow `'unsafe-eval'` for Fast Refresh; production should omit it. Fonts are served from `'self'`.
@@ -113,6 +113,31 @@ These checks cover the listed browser behaviors. They do not validate Kubernetes
 
 ---
 
+## OpenShift Sandbox Verification (October 9, 2026)
+
+The [deployment guide](openshift/README.md) records the `clusterfoundry` app in
+`dustyroed-dev`, its HTTPS Route, and the everyday stop/resume and full cleanup
+commands. The app runs separately from the Dev Spaces workspace. The template
+configures a non-root runtime, dropped capabilities, no privilege escalation,
+the default seccomp profile, no mounted service-account token, resource limits,
+health probes, and an edge TLS Route that redirects HTTP to HTTPS.
+
+The user verified template admission, completed the image build, and opened the
+public app in a browser. Unauthenticated external checks returned HTTP 200,
+verified HTTP-to-HTTPS redirection, fresh CSP nonces without `unsafe-eval`, the
+expected security headers, and packaged JavaScript, stylesheets, and public assets.
+CI separately exercises the container under an arbitrary non-root user ID and
+checks the workspace image's tools. These are bounded deployment checks, not a
+complete security audit or validation of the educational manifests against a cluster.
+
+The public learning app has no application login and stores learner progress in
+the browser. Sandbox expiry and manual shutdown can make the Route unavailable.
+Use your sandbox user's CLI credentials to manage it; a workspace service account
+may lack the needed permissions. Keep login tokens and kubeconfig files out of
+the repository, build context, and logs.
+
+---
+
 ## Remaining Risks & Recommendations
 
 ### `'unsafe-inline'` in `style-src`
@@ -133,7 +158,7 @@ If subdomains exist that are not HTTPS-ready, remove `includeSubDomains` and `pr
 
 ### Dependency Monitoring
 
-Run `npm audit` before each deployment and review GitHub Dependabot alerts. Playwright checks exercise the built application at desktop and mobile viewport sizes; they do not validate Kubernetes manifests or behavior against a live cluster. The linked October 8 review records source-level and browser results for the commit it examined; check CI for the current commit.
+Run `npm audit` before each deployment and review GitHub Dependabot alerts. Playwright checks exercise the built application at desktop and mobile viewport sizes; they do not validate Kubernetes manifests or behavior against a live cluster. The linked dated reviews record the source, browser, and deployment checks actually performed; check CI for the current commit. Docker base images and the Dev Spaces image are pinned by digest. Dependabot checks Dockerfile updates monthly; workspace image upgrades are deliberate and must pass the workspace tools check.
 
 ---
 

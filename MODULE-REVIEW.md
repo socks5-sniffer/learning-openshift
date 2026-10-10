@@ -65,3 +65,26 @@ Associated every HPA range input and the monitoring alert threshold with its vis
 Restored home-page navigation to the last unfinished lesson even before any module is completed. Monitoring charts ignore alert thresholds for metrics that do not support alerts. Added regressions for both cases. Replaced unsupported provider rankings with capability descriptions informed by the [AKS Windows limitations](https://learn.microsoft.com/en-us/azure/aks/windows-vs-linux-containers) and [GKE Autopilot overview](https://docs.cloud.google.com/kubernetes-engine/docs/concepts/autopilot-overview).
 
 Final local validation on Windows with Node.js 25.2.1: lint, strict TypeScript, production build, and `git diff --check` passed; `npm audit` reported zero vulnerabilities; all **98** production Chromium checks passed at desktop and mobile viewport sizes. Live-cluster manifest execution, other browser engines, and deployed HTTPS/OpenShift checks remain outside this result.
+
+## October 9, 2026: OpenShift sandbox deployment
+
+PR #49 adds a standalone production container, an OpenShift template, a Dev Spaces
+devfile, container and workspace CI checks, and the
+[deployment record and operating guide](openshift/README.md). The guide records the
+public Route for `clusterfoundry` in `dustyroed-dev`, user login recovery, manual
+rebuilds, everyday stop/resume, and full cleanup followed by redeployment.
+
+For this deployment, the user verified server dry-run admission of all five app
+resources, completed Build #1 with a successful image push, and showed the app pod
+Running in Topology. The homepage opened in the browser. Unauthenticated external
+checks then passed the health endpoint, rendered pages, fresh production CSP
+nonces, packaged JavaScript, CSS, and public assets. HTTPS returned HTTP 200, HTTP
+redirected to HTTPS with 302, and the expected security headers were present.
+
+Before this documentation refresh, CI on `8e0baeacf066a11961ad1a4ca72cbd6d1fe04bc2`
+passed the Node 22/24 jobs, browser suite, production container and workspace tools
+checks, CodeQL, and Bearer. See [PR #49](https://github.com/socks5-sniffer/learning-openshift/pull/49)
+for checks and Copilot review on the final commit. These later results add an
+application deployment check to the earlier review; they do not validate all
+teaching manifests or every interactive control on a live cluster. Availability
+of the recorded Route remains subject to app shutdown and sandbox expiry.

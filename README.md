@@ -1,8 +1,14 @@
 # Developer Learning Journey – Next.js on OpenShift
 
-🧪 **Intended for deployment to Red Hat OpenShift Dev Spaces as a learning sandbox.**
+🧪 **A learning sandbox developed in Red Hat OpenShift Dev Spaces and deployed to OpenShift.**
 
-This project documents a learning journey with OpenShift. A Dev Spaces deployment is ephemeral and is intended for experimentation; this README does not indicate that a live deployment is currently available.
+The ClusterFoundry sandbox deployment was verified on **October 9, 2026**:
+[open the recorded HTTPS Route](https://clusterfoundry-dustyroed-dev.apps.rm2.thpm.p1.openshiftapps.com).
+The app runs as its own OpenShift Deployment, separate from the Dev Spaces
+workspace. Availability depends on the app being running and the sandbox remaining
+active; this dated record does not guarantee that the URL is currently available.
+See the [deployment record and operating guide](openshift/README.md) for deployment,
+everyday stop/resume, and full cleanup instructions.
 
 ---
 
@@ -67,7 +73,7 @@ For a public sandbox deployment or a browser-based development workspace, see
     npm run build
     npm run test:e2e
     ```
-    Install Chromium's headless shell once per environment. Build before running `test:e2e`; Playwright starts the production server for its checks. The suite exercises Chromium at desktop and mobile viewport sizes but does not validate Kubernetes configuration against a live cluster. CI targets pushes and pull requests to `main`: build/lint/type-check jobs use Node.js 22 and 24, while the browser job uses Node.js 22. See the dated [module and verification review](MODULE-REVIEW.md) for recorded results, and check CI for the current commit.
+    Install Chromium's headless shell once per environment. Build before running `test:e2e`; Playwright starts the production server for its checks. The suite exercises Chromium at desktop and mobile viewport sizes but does not validate Kubernetes configuration against a live cluster. CI targets pushes and pull requests to `main`: build/lint/type-check jobs use Node.js 22 and 24, while the browser job uses Node.js 22. CI also checks the Dev Spaces image's tools and the production container under an arbitrary non-root user ID. See the dated [module and verification review](MODULE-REVIEW.md) and [sandbox verification](openshift/README.md#validation) for recorded results, and check CI for the current commit.
 
 ---
 
@@ -83,6 +89,10 @@ For a public sandbox deployment or a browser-based development workspace, see
 - `playwright.config.ts` – production browser test configuration
 - `tsconfig.json` – TypeScript configuration
 - `.eslintrc.json` – ESLint configuration
+- `Dockerfile` and `.dockerignore` – production standalone container build
+- `devfile.yaml` – Dev Spaces workspace image, tools, tasks, and endpoint
+- `openshift/` – deployment template, verified sandbox record, and operating guide
+- `scripts/container-smoke.cjs` – health, page, CSP, and packaged-asset checks
 
 ---
 
