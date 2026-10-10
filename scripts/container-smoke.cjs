@@ -19,11 +19,12 @@ async function check() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
   }
   assert.ok(ready, 'Standalone server did not become ready');
+  console.log('Standalone health check passed');
 
   const nonces = new Set();
   const assets = new Set(['/favicon.ico', '/shield-272x300.png']);
   for (const path of ['/', '/', '/learning-modules', '/module-7-1']) {
-    const response = await fetch(`${base}${path}`);
+    const response = await fetch(`${base}${path}`, { signal: AbortSignal.timeout(5000) });
     assert.equal(response.status, 200, path);
     assert.equal(response.headers.get('x-content-type-options'), 'nosniff');
     const csp = response.headers.get('content-security-policy') || '';
@@ -40,14 +41,15 @@ async function check() {
   }
   assert.ok([...assets].some((path) => path.endsWith('.js')), 'No JavaScript assets found');
   assert.ok([...assets].some((path) => path.endsWith('.css')), 'No stylesheet assets found');
+  console.log('Rendered page and production CSP checks passed');
   for (const path of assets) {
-    const response = await fetch(new URL(path, base));
+    const response = await fetch(new URL(path, base), { signal: AbortSignal.timeout(5000) });
     assert.equal(response.status, 200, `Missing packaged asset: ${path}`);
   }
-  console.log(`Standalone smoke check passed: fresh CSP nonces and ${assets.size} assets`);
+  console.log('Packaged JavaScript, stylesheets, and public assets passed');
 }
 
-check().catch((error) => {
-  console.error(error);
+check().catch(() => {
+  console.error('Standalone smoke check failed; see the last completed stage above');
   process.exitCode = 1;
 });

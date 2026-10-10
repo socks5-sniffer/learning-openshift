@@ -3,7 +3,7 @@ FROM registry.access.redhat.com/ubi9/nodejs-22:latest@sha256:e52f879096f28d9a6cf
 WORKDIR /opt/app-root/src
 ENV NEXT_TELEMETRY_DISABLED=1 NEXT_STANDALONE=1
 COPY --chown=1001:0 package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --include=dev
 COPY --chown=1001:0 . .
 RUN npm run build
 
