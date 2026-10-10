@@ -71,7 +71,7 @@ Final local validation on Windows with Node.js 25.2.1: lint, strict TypeScript, 
 PR #49 adds a standalone production container, an OpenShift template, a Dev Spaces
 devfile, container and workspace CI checks, and the
 [deployment record and operating guide](openshift/README.md). The guide records the
-public Route for `clusterfoundry` in `dustyroed-dev`, user login recovery, manual
+public Route lookup for `clusterfoundry`, user login recovery, manual
 rebuilds, everyday stop/resume, and full cleanup followed by redeployment.
 
 For this deployment, the user verified server dry-run admission of all five app
