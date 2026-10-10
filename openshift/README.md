@@ -10,11 +10,14 @@ this does not make the sandbox permanent or keep it awake.
 | Item | Recorded value |
 | --- | --- |
 | Application and Deployment | `clusterfoundry` |
-| OpenShift project | `dustyroed-dev` |
-| CLI user used to deploy | `dustyroed` |
-| Public HTTPS Route | [ClusterFoundry](https://clusterfoundry-dustyroed-dev.apps.rm2.thpm.p1.openshiftapps.com) |
+| OpenShift project | Your sandbox project; substitute `YOUR_PROJECT` in the commands below |
+| Public HTTPS Route | Retrieve your own hostname with `oc get route clusterfoundry -n YOUR_PROJECT -o jsonpath='{.spec.host}'` |
 | Initial build | Build #1 from the PR #49 development branch; pushed successfully |
 | Runtime | App pod Running; homepage opened in the browser |
+
+Personal CLI usernames, project names, and Route hostnames are omitted from this
+public deployment record. Replace `YOUR_PROJECT` with your project name locally;
+`oc project -q` shows the selected project. Authenticate as your own sandbox user.
 
 External checks accessed the site without a login, verified HTTP-to-HTTPS
 redirection, and passed the health, rendered page, CSP nonce, JavaScript, CSS,
@@ -105,28 +108,28 @@ reset, and learners' browser progress is tied to that hostname.
 
 The BuildConfig keeps its selected Git ref until you change it. Merging a PR does
 not automatically switch an existing BuildConfig to `main` or rebuild the app.
-For the recorded deployment, after PR #49 is merged, point future builds at
-`main` with this command:
+For a deployment built from a development branch, point future builds at `main`
+after that branch's changes have been merged:
 
 ```sh
-oc patch buildconfig/clusterfoundry -n dustyroed-dev --type=merge -p '{"spec":{"source":{"git":{"ref":"main"}}}}'
+oc patch buildconfig/clusterfoundry -n YOUR_PROJECT --type=merge -p '{"spec":{"source":{"git":{"ref":"main"}}}}'
 ```
 
 Check the configured ref:
 
 ```sh
-oc get buildconfig clusterfoundry -n dustyroed-dev -o jsonpath='{.spec.source.git.ref}'
+oc get buildconfig clusterfoundry -n YOUR_PROJECT -o jsonpath='{.spec.source.git.ref}'
 ```
 
 After pushing or merging an update to that ref, start a build, then wait for the
 rollout. Run each command separately:
 
 ```sh
-oc start-build clusterfoundry -n dustyroed-dev --follow
+oc start-build clusterfoundry -n YOUR_PROJECT --follow
 ```
 
 ```sh
-oc rollout status deployment/clusterfoundry -n dustyroed-dev --timeout=300s
+oc rollout status deployment/clusterfoundry -n YOUR_PROJECT --timeout=300s
 ```
 
 Builds are manual; there is no webhook secret or keep-alive workflow. A new build
@@ -136,12 +139,12 @@ to the template's one replica.
 
 ## Stop for the day and resume
 
-Use these commands in a terminal logged in as your sandbox user. They target the
-recorded project explicitly; substitute your own project if you deployed elsewhere.
+Use these commands in a terminal logged in as your sandbox user. Replace
+`YOUR_PROJECT` with your own OpenShift project name in every command.
 For an everyday shutdown, stop the app pods while keeping its image and resources:
 
 ```sh
-oc scale deployment/clusterfoundry --replicas=0 -n dustyroed-dev
+oc scale deployment/clusterfoundry --replicas=0 -n YOUR_PROJECT
 ```
 
 The Deployment controller terminates the pods. The Service, Route, BuildConfig,
@@ -154,13 +157,13 @@ wait for that build to finish if you also want it to stop using build resources.
 On the next day, resume from the retained image and resources:
 
 ```sh
-oc scale deployment/clusterfoundry --replicas=1 -n dustyroed-dev
+oc scale deployment/clusterfoundry --replicas=1 -n YOUR_PROJECT
 ```
 
 Then check readiness:
 
 ```sh
-oc rollout status deployment/clusterfoundry -n dustyroed-dev --timeout=300s
+oc rollout status deployment/clusterfoundry -n YOUR_PROJECT --timeout=300s
 ```
 
 This does not need another build if the image and resources still exist. Sandbox
@@ -175,7 +178,7 @@ Use this when you want to remove the app's deployment resources, rather than jus
 stop for the day:
 
 ```sh
-oc delete route,service,deployment,buildconfig,imagestream clusterfoundry -n dustyroed-dev
+oc delete route,service,deployment,buildconfig,imagestream clusterfoundry -n YOUR_PROJECT
 ```
 
 This removes the five named app resources. They are not refreshed or recreated
