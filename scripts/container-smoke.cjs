@@ -1,6 +1,14 @@
-const assert = require('node:assert/strict');
-
 const base = process.env.SMOKE_URL || 'http://127.0.0.1:3000';
+let safeFailure = new Error('Standalone health endpoint did not become ready');
+
+function requireCheck(condition, message) {
+  if (!condition) {
+    // Messages are supplied by this test, never by an HTTP response.
+    safeFailure = new Error(message);
+    Error.captureStackTrace(safeFailure, requireCheck);
+    throw safeFailure;
+  }
+}
 
 async function check() {
   let ready = false;
@@ -18,38 +26,42 @@ async function check() {
     }
     await new Promise((resolve) => setTimeout(resolve, 1000));
   }
-  assert.ok(ready, 'Standalone server did not become ready');
+  requireCheck(ready, 'Health endpoint /api/hello did not become ready within 60 attempts');
   console.log('Standalone health check passed');
 
   const nonces = new Set();
   const assets = new Set(['/favicon.ico', '/shield-272x300.png']);
   for (const path of ['/', '/', '/learning-modules', '/module-7-1']) {
+    safeFailure = new Error(`${path}: document request failed or exceeded its 5-second deadline`);
     const response = await fetch(`${base}${path}`, { signal: AbortSignal.timeout(5000) });
-    assert.equal(response.status, 200, path);
-    assert.equal(response.headers.get('x-content-type-options'), 'nosniff');
+    requireCheck(response.status === 200, `${path}: expected HTTP 200`);
+    requireCheck(response.headers.get('x-content-type-options') === 'nosniff', `${path}: missing nosniff header`);
     const csp = response.headers.get('content-security-policy') || '';
-    assert.ok(!csp.includes('unsafe-eval'), 'Production CSP permits eval');
+    requireCheck(!csp.includes('unsafe-eval'), `${path}: production CSP permits eval`);
     const nonce = csp.match(/'nonce-([^']+)'/)?.[1];
-    assert.ok(nonce, `${path}: missing CSP nonce`);
-    assert.ok(!nonces.has(nonce), 'CSP nonce was reused');
+    requireCheck(nonce, `${path}: missing CSP nonce`);
+    requireCheck(!nonces.has(nonce), `${path}: CSP nonce was reused`);
     nonces.add(nonce);
     const html = await response.text();
-    assert.ok(html.includes(`nonce="${nonce}"`), `${path}: nonce missing from HTML`);
+    requireCheck(html.includes(`nonce="${nonce}"`), `${path}: nonce missing from HTML`);
     for (const match of html.matchAll(/(?:src|href)="([^"#]*\/_next\/static\/[^"#]+)"/g)) {
       assets.add(match[1].replaceAll('&amp;', '&'));
     }
   }
-  assert.ok([...assets].some((path) => path.endsWith('.js')), 'No JavaScript assets found');
-  assert.ok([...assets].some((path) => path.endsWith('.css')), 'No stylesheet assets found');
+  requireCheck([...assets].some((path) => path.endsWith('.js')), 'Rendered pages contain no JavaScript assets');
+  requireCheck([...assets].some((path) => path.endsWith('.css')), 'Rendered pages contain no stylesheet assets');
   console.log('Rendered page and production CSP checks passed');
   for (const path of assets) {
+    safeFailure = new Error('Packaged asset request failed or exceeded its 5-second deadline');
     const response = await fetch(new URL(path, base), { signal: AbortSignal.timeout(5000) });
-    assert.equal(response.status, 200, `Missing packaged asset: ${path}`);
+    requireCheck(response.status === 200, 'Packaged asset returned an unexpected status; expected HTTP 200');
   }
   console.log('Packaged JavaScript, stylesheets, and public assets passed');
 }
 
 check().catch(() => {
-  console.error('Standalone smoke check failed; see the last completed stage above');
+  // Keep check-specific diagnostics and call sites, without printing raw fetch
+  // errors, response content, headers, nonces, or response-derived asset URLs.
+  console.error(safeFailure.stack);
   process.exitCode = 1;
 });
