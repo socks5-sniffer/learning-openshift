@@ -6,7 +6,7 @@ metadata:
 components:
   - name: node
     container:
-      image: registry.access.redhat.com/ubi9/nodejs-22:latest@sha256:e52f879096f28d9a6cfb308b3bf2c71c0fc35caec613060bbe41dac054002831
+      image: quay.io/devfile/universal-developer-image:ubi9-latest@sha256:41b2af7b928ca5d4d97455ce12407e8586b8129d1f7b1f44f3da5292c4f1bcbb
       command: ["tail", "-f", "/dev/null"]
       mountSources: true
       memoryLimit: 2Gi

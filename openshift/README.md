@@ -66,6 +66,8 @@ oc delete route,service,deployment,buildconfig,imagestream clusterfoundry
 ## Develop in Dev Spaces
 
 Import this repository (and the branch containing `devfile.yaml`) into Dev Spaces.
+The workspace uses the Universal Developer Image with Node.js, Git, and the
+OpenShift `oc` CLI. The production Docker image is separate and only needs Node.js.
 An existing workspace can be restarted from its local devfile. In the workspace's
 task menu run **install**, then **dev**, and open the `nextjs` endpoint. The endpoint
 may require Dev Spaces authentication; use the application Route above for public
@@ -74,17 +76,26 @@ testing. The **build** and **check** tasks are also available.
 Workspace configuration and application deployment are separate. Your local
 Windows Git signing configuration does not automatically transfer to a workspace.
 
+If a terminal reports `oc: command not found`, changing folders will not fix it.
+Check which container the terminal uses and open a terminal in the devfile's
+`node` component. If the workspace still uses an older Node-only devfile image,
+pull the updated branch and restart the workspace from its local devfile. The
+`bash-5.1$` prompt is normal; use `pwd` to check your directory and `ls` to confirm
+that `package.json` and `openshift/` are present before running deployment commands.
+
 ## Validation
 
-CI builds the Docker image and starts it with an arbitrary non-root user ID and
+CI checks that the devfile image provides Node.js 22 or 24, npm, Git, and `oc`
+when running with an arbitrary non-root user ID and group 0. It also builds the
+Docker image and starts it with an arbitrary non-root user ID and
 group 0. It checks the health endpoint, rendered pages, CSP nonces, and packaged
 JavaScript, CSS, and public assets. This verifies the image without requiring a
 cluster. Template admission, builds, and the external Route still need to be
 verified on your actual OpenShift project.
 
 The Dockerfile pins Red Hat UBI Node 22 base-image digests. Dependabot checks for
-Docker updates monthly. When changing the build base image, update the devfile's
-image as well.
+Docker updates monthly. The devfile separately pins the Universal Developer Image
+digest; update it deliberately and run the workspace tools check when upgrading.
 
 References: [Next.js standalone output](https://nextjs.org/docs/pages/api-reference/config/next-config-js/output),
 [OpenShift image guidelines](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/images/creating-images),
