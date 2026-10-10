@@ -96,3 +96,5 @@ random.txt
 .venv/
 playwright-report/
 test-results/
+
+MODULE-REVIEW.md
