@@ -38,6 +38,9 @@ This site is a personal learning project, focused on:
 
 ## Getting Started
 
+For a public sandbox deployment or a browser-based development workspace, see
+[the OpenShift and Dev Spaces setup](openshift/README.md).
+
 1. **Install dependencies:**
     ```bash
     npm install

@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
+  // The container build packages its own server; local builds use next start.
+  output: process.env.NEXT_STANDALONE === '1' ? 'standalone' : undefined,
   reactStrictMode: true,
   poweredByHeader: false,
   async headers() {
