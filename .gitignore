@@ -79,6 +79,7 @@ random.txt
 
 # Personal configuration
 .gitconfig
+.codex-remote-attachments/
 
 # OS/IDE generated
 *.swp

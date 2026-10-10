@@ -115,9 +115,11 @@ These checks cover the listed browser behaviors. They do not validate Kubernetes
 
 ## OpenShift Sandbox Verification (October 9, 2026)
 
-The [deployment guide](openshift/README.md) records the `clusterfoundry` app in
-`dustyroed-dev`, its HTTPS Route, and the everyday stop/resume and full cleanup
-commands. The app runs separately from the Dev Spaces workspace. The template
+The [deployment guide](openshift/README.md) records verification of the
+`clusterfoundry` app and explains project selection, HTTPS Route lookup, everyday
+stop/resume, and full cleanup. Public examples use `YOUR_PROJECT`; personal CLI
+identities, project names, and Route hostnames are omitted. The app runs separately
+from the Dev Spaces workspace. The template
 configures a non-root runtime, dropped capabilities, no privilege escalation,
 the default seccomp profile, no mounted service-account token, resource limits,
 health probes, and an edge TLS Route that redirects HTTP to HTTPS.

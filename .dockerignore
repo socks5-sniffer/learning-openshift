@@ -3,6 +3,7 @@
 .gitconfig
 .npmrc
 .codex
+.codex-remote-attachments
 .agents
 .kube
 node_modules

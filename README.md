@@ -2,8 +2,9 @@
 
 🧪 **A learning sandbox developed in Red Hat OpenShift Dev Spaces and deployed to OpenShift.**
 
-The ClusterFoundry sandbox deployment was verified on **October 9, 2026**:
-[open the recorded HTTPS Route](https://clusterfoundry-dustyroed-dev.apps.rm2.thpm.p1.openshiftapps.com).
+The ClusterFoundry sandbox deployment was verified on **October 9, 2026**.
+Retrieve your own deployment's HTTPS address with the Route lookup command in the
+[operating guide](openshift/README.md#deploy-the-checked-in-template).
 The app runs as its own OpenShift Deployment, separate from the Dev Spaces
 workspace. Availability depends on the app being running and the sandbox remaining
 active; this dated record does not guarantee that the URL is currently available.
