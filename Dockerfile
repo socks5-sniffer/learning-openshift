@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/nodejs-22:latest@sha256:e52f879096f28d9a6cfb308b3bf2c71c0fc35caec613060bbe41dac054002831 AS build
+FROM registry.access.redhat.com/ubi9/nodejs-22:latest@sha256:06f5f49a1f94a0ff6822de8b99a62717945ec227883c914d9371a84103612ea4 AS build
 
 WORKDIR /opt/app-root/src
 ENV NEXT_TELEMETRY_DISABLED=1 NEXT_STANDALONE=1
