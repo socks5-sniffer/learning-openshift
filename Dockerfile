@@ -7,7 +7,7 @@ RUN npm ci --include=dev
 COPY --chown=1001:0 . .
 RUN npm run build
 
-FROM registry.access.redhat.com/ubi9/nodejs-22-minimal:latest@sha256:03b7dd64cafaaca5019c4cc1c36e05140b1650dab6cd5c4ab1fde9d88c0537ca AS runtime
+FROM registry.access.redhat.com/ubi9/nodejs-22-minimal:latest@sha256:9bc9d54f10843939a83296f618f826ce7532071d6d99136bd27b475a2696d568 AS runtime
 
 WORKDIR /opt/app-root/src
 ENV NODE_ENV=production \
